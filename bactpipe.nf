@@ -16,8 +16,8 @@ Channel
 
 process bbduk {
         tag {pair_id}
-        publishDir 'bbduk'
-
+        publishDir "${params.output_dir}/bbduk", mode: 'copy'
+        
         input:
         set pair_id, file(reads) from read_pairs
         file adapters_file
@@ -55,14 +55,14 @@ process bbduk {
 process fastqc {
 	
 		tag "$name"
-		publishDir 'fastqc_results'
+		publishDir "${params.output_dir}/fastqc", mode: 'copy'
                 
 		
 		input:
 		set val(name), file(clean_reads) from fastqc_input
 		
 		output:
-		file "*_fastqc.{zip,html}" into fastqc_output
+		file("*_fastqc.{zip,html}") into fastqc_output
 		
 		
 		"""
@@ -76,14 +76,14 @@ process fastqc {
 
 //Step 3 SPAdes
 process spades {
-        tag {pair_id}
-        publishDir "spades/${pair_id}"
+        tag {sample_id}
+        publishDir "${params.output_dir}/spades", mode: 'copy'
 
         input:
-        set pair_id, file(reads) from spades_input
+        set sample_id, file(reads) from spades_input
         
         output:
-        set pair_id, file("spades_output/scaffolds.fasta") into spades_result
+        set sample_id, file("spades_output/scaffolds.fasta") into spades_result
      	file("spades_output/*.{fasta,fastg}") 
         
         
@@ -102,19 +102,83 @@ process spades {
 
 process filter_scaffolds {
             
-        tag {pair_id}
-        publishDir "filtered_scaffolds/${pair_id}"
+        tag {sample_id}
+        publishDir "${params.output_dir}/filtered_scaffolds", mode: 'copy'
         
         input:
-        set pair_id, file(scaffolds) from spades_result
+        set sample_id, file(scaffolds) from spades_result
         
         output:
-        set pair_id, file("${pair_id}_covfiltered.fasta") into filtered_channel
+        set sample_id, file("${sample_id}_covfiltered.fasta") into filtered_channel 
         
         
         """
-        FilterAssembly.pl \
-            $scaffold \  
-            ${pair_id} \
+        FilterAssembly.pl $scaffolds ${sample_id}
         """
 }
+
+//Mauve_process
+
+process mauve {
+        tag {sample_id}
+        publishDir "${params.output_dir}/mauve", mode: 'copy'
+
+        input:
+        set sample_id, file(contigs_file) from filtered_channel
+
+        output:
+        set sample_id, file("${sample_id}_ordered.fasta") into rename_channel
+               
+        """
+        java -Xmx500m -cp ${params.mauve_path} \
+        	org.gel.mauve.contigs.ContigOrderer \
+			-output mauve_output \
+			-ref ${params.mauve_ref}  \
+			-draft $contigs_file
+        ln -vs \$(ls -d mauve_output/alignment* | sort -Vr | head -1)/${contigs_file} "${sample_id}_ordered.fasta"        
+        """
+}
+
+//rename_contigs_for_prokka
+
+process rename {
+
+        tag {sample_id}
+        publishDir "${params.output_dir}/renamed_contigs", mode: 'copy'
+
+        input:
+        set sample_id, file(rename_contigs) from rename_channel 
+
+        output:
+        set sample_id, file("${sample_id}_renamed.fasta") into prokka_channel
+
+        """
+        rename_fasta.py --input $rename_contigs \
+        --output ${sample_id}_renamed.fasta
+	
+        """
+}
+
+//Annotation with prokka
+
+process prokka {
+        
+        tag {pair_id}
+        publishDir "${params.output_dir}/prokka", mode: 'copy'
+
+        input:
+        set sample_id, file(renamed_contigs) from prokka_channel
+                   
+     
+        output:
+        set sample_id, file("prokka/${sample_id}*")          
+
+        """
+        prokka $renamed_contigs \
+              --proteins ${params.prokka_ref} \
+              --outdir prokka \
+              --prefix ${sample_id}           
+        """
+}
+
+
