@@ -76,14 +76,14 @@ process fastqc {
 
 //Step 3 SPAdes
 process spades {
-        tag {sample_id}
+        tag {pair_id}
         publishDir "${params.output_dir}/spades", mode: 'copy'
 
         input:
-        set sample_id, file(reads) from spades_input
+        set pair_id, file(reads) from spades_input
         
         output:
-        set sample_id, file("spades_output/scaffolds.fasta") into spades_result
+        set pair_id, file("spades_output/scaffolds.fasta") into spades_result
      	file("spades_output/*.{fasta,fastg}") 
         
         
