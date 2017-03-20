@@ -130,11 +130,12 @@ process mauve {
         set sample_id, file("${sample_id}_ordered.fasta") into rename_channel
                
         """
-        java -Xmx500m -cp ${params.mauve_path} \
-        	org.gel.mauve.contigs.ContigOrderer \
-			-output mauve_output \
-			-ref ${params.mauve_ref}  \
-			-draft $contigs_file
+        java -Xmx500m -Djava.awt.headless=true \
+            -cp ${params.mauve_path} \
+                org.gel.mauve.contigs.ContigOrderer \
+	           -output mauve_output \
+	           -ref ${params.mauve_ref}  \
+	           -draft $contigs_file
         ln -vs \$(ls -d mauve_output/alignment* | sort -Vr | head -1)/${contigs_file} "${sample_id}_ordered.fasta"        
         """
 }
