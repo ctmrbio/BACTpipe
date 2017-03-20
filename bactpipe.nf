@@ -164,7 +164,7 @@ process rename {
 
 process prokka {
         
-        tag {pair_id}
+        tag {sample_id}
         publishDir "${params.output_dir}/prokka", mode: 'copy'
 
         input:
