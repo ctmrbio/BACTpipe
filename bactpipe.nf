@@ -175,10 +175,15 @@ process prokka {
         set sample_id, file("prokka/${sample_id}*")          
 
         """
-        prokka $renamed_contigs \
-              --proteins ${params.prokka_ref} \
-              --outdir prokka \
-              --prefix ${sample_id}           
+        prokka \
+        --outdir prokka --force --gram neg \
+        --prefix ${sample_id} --addgenes --locustag ${sample_id} \
+        --genus Helicobacter --species pylori --strain ${sample_id} \
+        --kingdom Bacteria --usegenus \
+        --proteins ${params.prokka_ref} \
+        --evalue 1e-12 \
+        $renamed_contigs
+                       
         """
 }
 
