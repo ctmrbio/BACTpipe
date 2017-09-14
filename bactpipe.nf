@@ -154,9 +154,7 @@ process rename {
         set sample_id, file("${sample_id}_clean_for_prokka.fasta") into prokka_channel
 
         """
-        rename_fasta.py --input $rename_contigs \
-        --pre ${sample_id}_contig \ 
-        --output ${sample_id}_clean_for_prokka.fasta 	
+        rename_fasta.py --input $rename_contigs --pre ${sample_id}_contig --output ${sample_id}_clean_for_prokka.fasta 	
         """
 }
 
