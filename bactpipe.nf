@@ -140,7 +140,7 @@ process mauve {
         """
 }
 
-//rename_contigs_for_prokka
+//rename_contigs_for_prokka with a strain id in the fasta header
 
 process rename {
 
