@@ -155,8 +155,8 @@ process rename {
 
         """
         rename_fasta.py --input $rename_contigs \
-        --output ${sample_id}_renamed.fasta 
-        sed 's/^>/>'${sample_id}'_contig/' ${sample_id}_renamed.fasta > "${sample_id}_clean_for_prokka.fasta"	
+        --pre ${sample_id}_contig \ 
+        --output ${sample_id}_clean_for_prokka.fasta 	
         """
 }
 
