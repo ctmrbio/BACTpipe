@@ -64,6 +64,9 @@ This pipeline is published under the MIT license 2017
 ## Authors
 
 Joseph Kirangwa
+
 Sandra Alvarez-Carretero
+
 Fredrik Boulund
+
 Kaisa Thorell
