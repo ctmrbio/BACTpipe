@@ -1,11 +1,13 @@
 # bactpipe_nextflow
 BACTpipe  implemented in Nextflow
 
+
 ## Requirements
 * nextflow.config file
 * Reference genomes for both Mauve and prokka
 * Raw fastq format paired end read files
 * Adapters file
+
 
 ## Dependencies
 
@@ -33,6 +35,7 @@ The rest of the dependencies are loaded as modules from the Uppmax Milou server.
 * prokka annotation pipeline including dependencies as `bioinfo-tools:prokka:BioPerl/1.6.924_Perl5.18.4:hmmer/3.1b2:barrnap/0.8:SignalP/4.1c:aragorn/1.2.36:prodigal/2.60'`
 
 
+
 ## Run bactpipe.nf 
 
 1. Modify the nextflow.config file including the 
@@ -50,3 +53,17 @@ The rest of the dependencies are loaded as modules from the Uppmax Milou server.
 3. Invoke the nextflow script
 *  `nextflow run bactpipe.nf`
 *  Options: `-resume` (in case you make a rerun from any step of the pipeline)
+
+
+
+## Licence
+
+This pipeline is published under the MIT license 2017
+
+
+## Authors
+
+Joseph Kirangwa
+Sandra Alvarez-Carretero
+Fredrik Boulund
+Kaisa Thorell
