@@ -56,7 +56,7 @@ The rest of the dependencies are loaded as modules from the Uppmax Milou server.
 
 
 
-## Licence
+## License
 
 This pipeline is published under the MIT license 2017
 
