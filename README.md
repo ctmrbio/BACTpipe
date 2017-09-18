@@ -1,6 +1,8 @@
 # bactpipe_nextflow
 BACTpipe  implemented in Nextflow
 
+Bactpipe uses Nexflow as a workflow tool manager. It takes paired end fastq files as input and performs pre-processing, quality assesment, de novo assembly and genome annotation. 
+
 
 ## Requirements
 * nextflow.config file
