@@ -1,7 +1,7 @@
 # BACTpipe
 BACTpipe  implemented in Nextflow
 
-Bactpipe uses Nexflow as a workflow tool manager. It takes paired end fastq files as input and performs pre-processing, quality assesment, de novo assembly and genome annotation. 
+Bactpipe uses Nexflow as a workflow tool manager. It takes paired end fastq files as input and performs pre-processing, quality assessment, de novo assembly, filtering for coverage and contig length, ordering the contigs to a reference genome, and annotation of the genome. 
 
 
 ## Requirements
@@ -45,9 +45,9 @@ The rest of the dependencies are loaded as modules from the Uppmax Milou server.
 * project - SLURM project
 * reads - Read input file format file, default `"*_{R1,R2}.fastq.gz"`
 * adapters - Path to bbduk `adapters.fa` file
-* mauve_ref - Path to the complete genome file to be used by Mauve order_contigs tool
+* mauve_ref - Path to the complete genome fasta file to be used by Mauve order_contigs tool (http://darlinglab.org/mauve/user-guide/reordering.html)
 * mauve_path - Path to Mauve executable `Mauve.jar`
-* prokka_ref - Path to the protein fasta file to be used as primary annotation source
+* prokka_ref - Path to the protein fasta file to be used as primary annotation source, for details, see https://github.com/tseemann/prokka#fasta-database-format
 * output_dir - Path to the directory for output, default `./results`
 
 2. Place the `bactpipe.nf` and the `nextflow.config` file or symbolic links to them in the folder containing the raw read files
