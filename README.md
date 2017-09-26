@@ -8,6 +8,10 @@ reference genome, and annotation of the genome.
 
 ![BACTpipe flowchart](./docs/source/img/flowchart.png)
 
+## Documentation
+Complete documentation is available at https://bactpipe.readthedocs.io. 
+
+
 ## Requirements
 * nextflow.config file
 * Reference genomes for both Mauve and prokka
