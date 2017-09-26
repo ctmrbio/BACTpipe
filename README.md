@@ -1,8 +1,12 @@
 # BACTpipe
-BACTpipe  implemented in Nextflow
+BACTpipe implemented in Nextflow.
 
-Bactpipe uses Nexflow as a workflow tool manager. It takes paired end fastq files as input and performs pre-processing, quality assessment, de novo assembly, filtering for coverage and contig length, ordering the contigs to a reference genome, and annotation of the genome. 
+Bactpipe uses Nexflow as a workflow tool manager. It takes paired end fastq
+files as input and performs pre-processing, quality assessment, de novo
+assembly, filtering for coverage and contig length, ordering the contigs to a
+reference genome, and annotation of the genome. 
 
+![BACTpipe flowchart](./docs/source/img/flowchart.png)
 
 ## Requirements
 * nextflow.config file
@@ -12,34 +16,23 @@ Bactpipe uses Nexflow as a workflow tool manager. It takes paired end fastq file
 
 
 ## Dependencies
-
 Make sure to install the following software and have the executables in your `$PATH`:
 
 * Nextflow (https://www.nextflow.io/) `nextflow` executable to run the pipeline
-
 * Mauve's (http://darlinglab.org/mauve/download.html) `progressiveMauve` executable
-
 * tbl2asn (https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/) `tbl2asn` executable
-
 * `bbduk` executable from BBMap (https://github.com/BioInfoTools/BBMap)
-
 
 The rest of the dependencies are loaded as modules from the Uppmax Milou server. These include:
 
 * FastQC as `module = 'bioinfo-tools:FastQC'`
-
 * SPAdes assembler as `module = 'bioinfo-tools:spades/3.8.1'`
-
 * Java (prerequisite for nextflow and Mauve) as `module = 'java/sun_jdk1.8.0_40'`
-
 * Python 2.7 (prerequisite for rename_fasta.py) as `module = 'bioinfo-tools:python'`
-
 * prokka annotation pipeline including dependencies as `bioinfo-tools:prokka:BioPerl/1.6.924_Perl5.18.4:hmmer/3.1b2:barrnap/0.8:SignalP/4.1c:aragorn/1.2.36:prodigal/2.60'`
 
 
-
 ## Run bactpipe.nf 
-
 1. Modify the nextflow.config file including the 
 
 * project - SLURM project
@@ -57,18 +50,12 @@ The rest of the dependencies are loaded as modules from the Uppmax Milou server.
 *  Options: `-resume` (in case you make a rerun from any step of the pipeline)
 
 
-
 ## License
-
 This pipeline is published under the MIT license 2017
 
 
 ## Authors
-
-Joseph Kirangwa
-
-Sandra Alvarez-Carretero
-
-Fredrik Boulund
-
-Kaisa Thorell
+Joseph Kirangwa (@b16joski), 
+Sandra Alvarez-Carretero (@sabifo4),
+Fredrik Boulund (@boulund),
+Kaisa Thorell (@thorellk)
