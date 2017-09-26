@@ -6,7 +6,7 @@ files as input and performs pre-processing, quality assessment, de novo
 assembly, filtering for coverage and contig length, ordering the contigs to a
 reference genome, and annotation of the genome. 
 
-![BACTpipe flowchart overview](./docs/source/img/flowchart.png =300)
+![BACTpipe flowchart](./docs/source/img/flowchart.png)
 
 ## Requirements
 * nextflow.config file
