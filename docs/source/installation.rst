@@ -12,7 +12,6 @@ In order to run BACTpipe, you need to have the following programs installed:
 - `BBMap`_ (specifically; ``bbduk.sh``, ``reformat.sh``, ``stats.sh``/``statswrapper.sh``) 
   for quality filtering/trimming, and general format wrangling
 - `FastQC`_ for quality control
-- `SPAdes`_ for sequence assembly
 - `prokka`_ for contig annotation
 - `Shovill`_ for sequence assembly
 
