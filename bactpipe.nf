@@ -23,7 +23,7 @@ process bbduk {
         file adapters_file
 
         output:
-        set pair_id, file("*.bbduk.fastq") into fastqc_input, shovill
+        set pair_id, file("*.bbduk.fastq.gz") into fastqc_input, shovill
         file "${pair_id}.stats.txt"
        
 		
@@ -33,8 +33,8 @@ process bbduk {
              in1=${reads[0]} \
              in2=${reads[1]} \
              ref=${adapters_file} \
-	     out1=${reads[0].baseName}.bbduk.fastq \
-             out2=${reads[1].baseName}.bbduk.fastq \
+	     out1=${reads[0].baseName}.bbduk.fastq.gz \
+             out2=${reads[1].baseName}.bbduk.fastq.gz \
              stats=${pair_id}.stats.txt \
              threads=${task.cpus} \
              minlen=30 \
