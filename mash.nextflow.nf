@@ -78,7 +78,7 @@ process bbduk {
              mink=11 \
              hdist=1 \
              trimbyoverlap \
-             trimpairsevenly \
+             trimpairsevenly 
 	fi
 
         """
