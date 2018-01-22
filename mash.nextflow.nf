@@ -36,7 +36,6 @@ process assess_mash_screen {
 
     """
     mash screen -w -p 8 ${ref_database[0]} ${reads[0]} ${reads[1]} > ${pair_id}.mash_screen.tsv
-    sort -gr ${pair_id}.mash_screen.tsv | head -5
     python /home/joseph.kirangwa/mash-script/mash_scripts/assess_mash_screen.py ${pair_id}.mash_screen.tsv -o ${pair_id}.screening_results.txt
  
     """
@@ -46,6 +45,7 @@ process assess_mash_screen {
 //process 3: Adapter and quality trimming
 
 process bbduk {
+        errorStrategy {task.exitStatus == 4 ? 'ignore' : 'finish' } 
         tag {pair_id}
         publishDir "./bbduk", mode: 'copy'
 
@@ -54,7 +54,7 @@ process bbduk {
         file adapters_file
 
         output:
-        set pair_id, file("*.trimmed.fastq.gz") into fastqc_input, shovill
+        set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
         file "${pair_id}.stats.txt"
 
 
@@ -66,8 +66,8 @@ process bbduk {
              in1=${reads[0]} \
              in2=${reads[1]} \
              ref=${adapters_file} \
-             out1=${reads[0].baseName}_1.trimmed.fastq.gz \
-             out2=${reads[1].baseName}_2.trimmed.fastq.gz \
+             out1=${pair_id}_1.trimmed.fastq.gz \
+             out2=${pair_id}_2.trimmed.fastq.gz \
              stats=${pair_id}.stats.txt \
              threads=${task.cpus} \
              minlen=30 \
@@ -79,7 +79,9 @@ process bbduk {
              hdist=1 \
              trimbyoverlap \
              trimpairsevenly 
-	fi
+	else 
+             exit 4 
+        fi
 
         """
 
