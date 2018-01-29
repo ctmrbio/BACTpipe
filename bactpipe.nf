@@ -1,40 +1,65 @@
 #!/usr/bin/env nextflow
 
-//create input channel
-
-adapters_file = file(params.adapters) 
-
 //Creates the `read_pairs` channel that emits for each read-pair a tuple containing
 //three elements: the pair ID, the first read-pair file and the second read-pair file
 
 Channel
     .fromFilePairs( params.reads )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
-    .set { read_pairs }
+    .set { mash_input }
 
-//process 1: Adapter and quality trimming
+//Parsing the input parameters
+
+ref_database = file( params.mashscreen_database )
+adapters_file = file( params.adapters )
+
+//process 1: Mash screen sample read files for pure isolates
+
+process assess_decontamination {
+    validExitStatus 0,2
+    tag { pair_id }
+    publishDir "${params.output_dir}/mash.screen", mode: 'copy'
+
+    input:
+    set pair_id, file(reads) from mash_input
+
+    output:
+    set pair_id, file(reads), file("${pair_id}.screening_results.txt") into bbduk_input
+    file("${pair_id}.mash_screen.tsv")
+
+    script:
+    """
+    mash screen -w -p 8 ${ref_database} ${reads[0]} ${reads[1]} > ${pair_id}.mash_screen.tsv
+    assess_mash_screen.py ${pair_id}.mash_screen.tsv -o ${pair_id}.screening_results.txt
+    """
+ }
+
+//process 2: Adapter and quality trimming
 
 process bbduk {
+        errorStrategy {task.exitStatus == 4 ? 'ignore' : 'finish' }
         tag {pair_id}
         publishDir "${params.output_dir}/bbduk", mode: 'copy'
-        
+
         input:
-        set pair_id, file(reads) from read_pairs
+	set pair_id, file(reads), file(screening_results) from bbduk_input
         file adapters_file
 
         output:
-        set pair_id, file("*.bbduk.fastq.gz") into fastqc_input, shovill
+        set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
         file "${pair_id}.stats.txt"
-       
-		
+
+
         script:
-	"""
-        bbduk.sh \
+        """
+
+	if grep --quiet "PASS" ${screening_results}; then
+             bbduk.sh \
              in1=${reads[0]} \
              in2=${reads[1]} \
              ref=${adapters_file} \
-	     out1=${reads[0].baseName}.bbduk.fastq.gz \
-             out2=${reads[1].baseName}.bbduk.fastq.gz \
+             out1=${pair_id}_1.trimmed.fastq.gz \
+             out2=${pair_id}_2.trimmed.fastq.gz \
              stats=${pair_id}.stats.txt \
              threads=${task.cpus} \
              minlen=30 \
@@ -45,8 +70,12 @@ process bbduk {
              mink=11 \
              hdist=1 \
              trimbyoverlap \
-             trimpairsevenly \
-        """
+             trimpairsevenly
+        else
+             exit 4
+        fi
+
+	"""
 
 }
  
@@ -90,7 +119,7 @@ process shovill {
         """
         shovill \
              --depth 100 \
-             --kmers 21,33,55,77,99,127 \
+             --kmers 31,33,55,77,99,127 \
              --minlen 500 \
              --R1 ${reads[0]} \
              --R2 ${reads[1]} \
