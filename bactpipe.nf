@@ -51,7 +51,7 @@ process screen_for_contaminants {
     set pair_id, file(reads) from mash_input
 
     output:
-    set pair_id, stdout into ch1
+    set pair_id, stdout into screening_results
     file("${pair_id}.mash_screen.tsv")
     file("${pair_id}.screening_results.tsv")
 
@@ -75,9 +75,9 @@ process screen_for_contaminants {
 
 /*
  * Check screening results. Print warning for samples that did not pass.
- * Continue only with samples that passes the contaminant screening step.
+ * Continue only with samples that pass the contaminant screening step.
  */
-pure_isolates = ch1.filter { 
+pure_isolates = screening_results.filter { 
     def passed=it[1] == "PASS"
     if ( ! passed ) {
         log.warn "'${it[0]}' might not be a pure isolate! Check screening results in the output folder."
