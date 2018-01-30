@@ -6,7 +6,8 @@ nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
 log.info "BACTpipe".center(60)
-log.info "Bacterial whole genome analysis pipeline v${bactpipe_version}".center(60)
+log.info "Version ${bactpipe_version}".center(60)
+log.info "Bacterial whole genome analysis pipeline".center(60)
 log.info "https://bactpipe.readthedocs.io".center(60)
 log.info "".center(60, "=")
 
@@ -19,7 +20,7 @@ try {
               "".center(60, "=") + "\n" +
               "BACTpipe requires Nextflow version $nf_required_version!".center(60) + "\n" +
               "You are running version $workflow.nextflow.version.".center(60) + "\n" +
-              " Please run `nextflow self-update` to update Nextflow.".center(60) + "\n" +
+              "Please run `nextflow self-update` to update Nextflow.".center(60) + "\n" +
               "".center(60, "=") + "\n"
     exit(1)
 }
@@ -34,6 +35,7 @@ Channel
     }
     .into { mash_input;
             read_pairs }
+
 
 // Set up the file objects required by some processes
 ref_sketches = file( params.mashscreen_database )
@@ -90,7 +92,7 @@ process bbduk {
     publishDir "${params.output_dir}/bbduk", mode: 'copy'
 
     input:
-    set pair_id, file(reads), file(screening_results) from bbduk_input
+    set pair_id, file(reads) from bbduk_input
     file bbduk_adapters
 
     output:
@@ -102,7 +104,7 @@ process bbduk {
     bbduk.sh \
         in1=${reads[0]} \
         in2=${reads[1]} \
-        ref=${adapters_file} \
+        ref=${bbduk_adapters} \
         out1=${pair_id}_1.trimmed.fastq.gz \
         out2=${pair_id}_2.trimmed.fastq.gz \
         stats=${pair_id}.stats.txt \
