@@ -141,12 +141,12 @@ if __name__ == "__main__":
         outfile = stdout
     if single_species:
         if args.pipeline:
-            print("PASS")
+            print("PASS", end="")
         print("{}\t{}\t{}".format(sample_name, "PASS", list(found_species)[0]), file=outfile)
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
         if args.pipeline:
-            print("FAIL")
+            print("FAIL", end="")
         print("{}\t{}\t{}".format(sample_name, "FAIL", multiple_species_names), file=outfile)
         exit(3)
