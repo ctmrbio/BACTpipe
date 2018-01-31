@@ -4,7 +4,7 @@ Assess MASH screening results.
 """
 __author__ = "Fredrik Boulund"
 __date__ = "2017"
-__version__ = "0.4.0b"
+__version__ = "0.5.0b"
 
 from sys import argv, exit, stdout
 from collections import namedtuple
@@ -32,9 +32,12 @@ def parse_args():
             default="phage,plasmid,virus",
             help="Ignore matches to genomes containing STRING "
                  "(multiple strings can be separated by comma) [%(default)s].")
+    parser.add_argument("-g", "--gram", metavar="FILENAME", dest="gram",
+            default="",
+            help="Path to gram positive/negative assignments of genera (two-column: genus-{pos,neg}) [%(default)s].")
     parser.add_argument("-p", "--pipeline", action="store_true",
             default=False,
-            help="Simplify output to stdout (just PASS/FAIL) for use in pipelines [%(default)s].")
+            help="Simplify output to stdout (just PASS/FAIL) for use in pipelines. Do not use without specifying --outfile [%(default)s].")
     parser.add_argument("-o", "--outfile", metavar="FILENAME", 
             default="", 
             help="Output filename [%(default)s].")
@@ -125,11 +128,23 @@ def determine_same_species(hits, ignore_set):
         return True, found_species
 
 
+def parse_gram_stains(gram_file):
+    """
+    Produce a simple lookup dictionary for genus:gram_stain.
+    """
+    gram_stain = {}
+    with open(gram_file) as f:
+        for line in f:
+            genus, gram = line.strip().split()
+            gram_stain[genus] = gram
+    return gram_stain
+
 
 if __name__ == "__main__":
     args = parse_args()
     sample_name = os.path.basename(args.screen).split(".")[0]
     ignore_set = set(args.ignore.split(","))
+    gram_stains = parse_gram_stains(args.gram)
     top_hits = list(get_top_hits(parse_screen(args.screen), 
                                  min_identity=args.min_identity, 
                                  classification_score_threshold_factor=args.modifier,
@@ -140,13 +155,16 @@ if __name__ == "__main__":
     else:
         outfile = stdout
     if single_species:
+        genus = list(found_species)[0].split()[0]
+        gram_stain = gram_stains.get(genus, "")
         if args.pipeline:
             print("PASS", end="")
-        print("{}\t{}\t{}".format(sample_name, "PASS", list(found_species)[0]), file=outfile)
+        print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, list(found_species)[0]), file=outfile)
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
+        multiple_gram_stain = ", ".join(gram_stains.get(name.split()[0], "") for name in found_species)
         if args.pipeline:
             print("FAIL", end="")
-        print("{}\t{}\t{}".format(sample_name, "FAIL", multiple_species_names), file=outfile)
+        print("{}\t{}\t{}\t{}".format(sample_name, "FAIL", multiple_gram_stain, multiple_species_names), file=outfile)
         exit(3)
