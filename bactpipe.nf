@@ -151,6 +151,7 @@ process shovill {
     output:
     set pair_id, file("${pair_id}.contigs.fa") into prokka_channel
     file("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}") 
+    file("${pair_id}".assembly_stats.txt")
     
     """
     shovill \
@@ -165,7 +166,7 @@ process shovill {
     && \
     statswrapper.sh \
         in=${pair_id}.contigs.fa \
-        > ${pair_id}.stats.txt
+        > ${pair_id}.assembly_stats.txt
     """
 }
 
