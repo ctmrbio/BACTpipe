@@ -32,6 +32,9 @@ def parse_args():
             default="phage,plasmid,virus",
             help="Ignore matches to genomes containing STRING "
                  "(multiple strings can be separated by comma) [%(default)s].")
+    parser.add_argument("-p", "--pipeline", action="store_true",
+            default=False,
+            help="Simplify output to stdout (just PASS/FAIL) for use in pipelines [%(default)s].")
     parser.add_argument("-o", "--outfile", metavar="FILENAME", 
             default="", 
             help="Output filename [%(default)s].")
@@ -137,9 +140,13 @@ if __name__ == "__main__":
     else:
         outfile = stdout
     if single_species:
+        if args.pipeline:
+            print("PASS", end="")
         print("{}\t{}\t{}".format(sample_name, "PASS", list(found_species)[0]), file=outfile)
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
+        if args.pipeline:
+            print("FAIL", end="")
         print("{}\t{}\t{}".format(sample_name, "FAIL", multiple_species_names), file=outfile)
-        exit(2)
+        exit(3)
