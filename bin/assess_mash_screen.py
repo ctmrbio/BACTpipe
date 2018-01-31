@@ -133,6 +133,8 @@ def parse_gram_stains(gram_file):
     Produce a simple lookup dictionary for genus:gram_stain.
     """
     gram_stain = {}
+    if not gram_file:
+        return gram_stain
     with open(gram_file) as f:
         for line in f:
             genus, gram = line.strip().split()
