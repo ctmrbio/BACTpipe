@@ -179,7 +179,7 @@ process prokka {
     set sample_id, file(renamed_contigs) from prokka_channel
 
     output:
-    set sample_id, file("${sample_id}_prokka")
+    set sample_id, file("${sample_id}_prokka") into prokka_out
 
     """
     prokka \
@@ -192,6 +192,25 @@ process prokka {
         --prefix ${sample_id} \
         --strain ${sample_id} \
         $renamed_contigs
+    """
+}
+
+process multiqc {
+    publishDir "${params.output_dir}/multiqc", mode: 'copy'
+
+    input:
+    file(fastqc:'fastqc/*') from fastqc_output.collect()
+    file(prokka:'prokka/*') from prokka_out.collect()
+
+    output:
+    file('multiqc_report.html')  
+
+    script:
+
+    """
+    
+    multiqc . --filename multiqc_report.html
+
     """
 }
 
