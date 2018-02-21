@@ -184,8 +184,7 @@ process prokka {
     """
     prokka \
         --force \
-        --addgenes \
-        --evalue 1e-12 \
+        --evalue 1e-09 \
         --kingdom Bacteria \
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
