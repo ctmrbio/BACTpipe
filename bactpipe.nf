@@ -135,15 +135,15 @@ process bbduk {
         out2=${pair_id}_2.trimmed.fastq.gz \
         stats=${pair_id}.stats.txt \
         threads=${task.cpus} \
-        minlen=${bbduk_minlen} \
-        qtrim=${bbduk_qtrim} \
-        trimq=${bbduk_trimq} \
-        ktrim=${bbduk_ktrim} \
-        k=${bbduk_k} \
-        mink=${bbduk_mink} \
-        hdist=${bbduk_hdist} \
-        ${bbduk_trimbyoverlap} \
-        ${bbduk_trimpairsevenly}
+        minlen=${params.bbduk_minlen} \
+        qtrim=${params.bbduk_qtrim} \
+        trimq=${params.bbduk_trimq} \
+        ktrim=${params.bbduk_ktrim} \
+        k=${params.bbduk_k} \
+        mink=${params.bbduk_mink} \
+        hdist=${params.bbduk_hdist} \
+        ${params.bbduk_trimbyoverlap} \
+        ${params.bbduk_trimpairsevenly}
     """
 }
 
