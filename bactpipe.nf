@@ -181,9 +181,9 @@ process shovill {
     
     """
     shovill \
-         --depth 100 \
-         --kmers 31,33,55,77,99,127 \
-         --minlen 500 \
+         --depth ${params.shovill_depth} \
+         --kmers ${params.shovill_kmers} \
+         --minlen ${params.shovill_minlen} \
          --R1 ${reads[0]} \
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill \
