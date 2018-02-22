@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.1b-dev'
+bactpipe_version = '2.2b-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -35,6 +35,32 @@ Channel
     }
     .into { mash_input;
             read_pairs }
+
+
+missing_parameters = []
+if ( ! params.bbduk_adapters ){
+    log.error "Parameter 'bbduk_adapters' not specified".center(60) + "\n" +
+              "You can specify the path to BBDuk's adapters.fa using:".center(60) +"\n" +
+              "--bbduk_adapters path/to/adapters.fa".center(60)
+    missing_parameters += "bbduk_adapters"
+}
+if ( ! params.mashscreen_database ){
+    log.error "Parameter 'mashscreen_database' not specified".center(60) + "\n" +
+              "You can specify the path to the Mash screen database using:".center(60) +"\n" +
+              "--mashscreen_database path/to/sketches.msh".center(60)
+    missing_parameters += "mashscreen_database"
+}
+if ( missing_parameters ) {
+    log.error "\n" +
+              "".center(60, "=") + "\n" +
+              "The following required parameters were not set:".center(60) + "\n" +
+              missing_parameters.join(", ").center(60) + "\n" +
+              "\n" +
+              "Set parameters on the command line using:".center(60) + "\n" +
+              "'--<parameter_name> <argument>'".center(60) + "\n" +
+              "and rerun BACTpipe.".center(60)
+    exit(1)
+}
 
 
 // Set up the file objects required by some processes
