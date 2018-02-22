@@ -210,8 +210,8 @@ process prokka {
     """
     prokka \
         --force \
-        --evalue 1e-09 \
-        --kingdom Bacteria \
+        --evalue ${params.prokka_evalue} \
+        --kingdom ${params.prokka_kingdom} \
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
         --prefix ${sample_id} \
