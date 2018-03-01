@@ -67,7 +67,6 @@ if ( missing_parameters ) {
 ref_sketches = file( params.mashscreen_database )
 bbduk_adapters = file( params.bbduk_adapters )
 
-
 process screen_for_contaminants {
     validExitStatus 0,3
     tag { pair_id }
@@ -94,7 +93,8 @@ process screen_for_contaminants {
     assess_mash_screen.py \
         --pipeline \
         --outfile ${pair_id}.screening_results.tsv \
-        ${pair_id}.mash_screen.tsv 
+        ${pair_id}.mash_screen.tsv \
+        --gram "$baseDir/resources/gram_stain.txt" 
     """
 }
 
@@ -207,15 +207,23 @@ process prokka {
     output:
     set sample_id, file("${sample_id}_prokka") into prokka_out
 
+    script:
+    prokka_reference = ""
+    if (params.prokka_reference) {
+        prokka_reference = "--proteins ${params.prokka_reference}"
+    }    
+    
     """
     prokka \
         --force \
         --evalue ${params.prokka_evalue} \
         --kingdom ${params.prokka_kingdom} \
+        --proteins ${params.prokka_reference} \
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
         --prefix ${sample_id} \
         --strain ${sample_id} \
+        ${prokka_reference} \
         $renamed_contigs
     """
 }
