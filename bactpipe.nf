@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.1b-dev'
+bactpipe_version = '2.2b-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -35,6 +35,32 @@ Channel
     }
     .into { mash_input;
             read_pairs }
+
+
+missing_parameters = []
+if ( ! params.bbduk_adapters ){
+    log.error "Parameter 'bbduk_adapters' not specified".center(60) + "\n" +
+              "You can specify the path to BBDuk's adapters.fa using:".center(60) +"\n" +
+              "--bbduk_adapters path/to/adapters.fa".center(60)
+    missing_parameters += "bbduk_adapters"
+}
+if ( ! params.mashscreen_database ){
+    log.error "Parameter 'mashscreen_database' not specified".center(60) + "\n" +
+              "You can specify the path to the Mash screen database using:".center(60) +"\n" +
+              "--mashscreen_database path/to/sketches.msh".center(60)
+    missing_parameters += "mashscreen_database"
+}
+if ( missing_parameters ) {
+    log.error "\n" +
+              "".center(60, "=") + "\n" +
+              "The following required parameters were not set:".center(60) + "\n" +
+              missing_parameters.join(", ").center(60) + "\n" +
+              "\n" +
+              "Set parameters on the command line using:".center(60) + "\n" +
+              "'--<parameter_name> <argument>'".center(60) + "\n" +
+              "and rerun BACTpipe.".center(60)
+    exit(1)
+}
 
 
 // Set up the file objects required by some processes
@@ -109,15 +135,15 @@ process bbduk {
         out2=${pair_id}_2.trimmed.fastq.gz \
         stats=${pair_id}.stats.txt \
         threads=${task.cpus} \
-        minlen=30 \
-        qtrim=rl \
-        trimq=10 \
-        ktrim=r \
-        k=30 \
-        mink=11 \
-        hdist=1 \
-        trimbyoverlap \
-        trimpairsevenly
+        minlen=${params.bbduk_minlen} \
+        qtrim=${params.bbduk_qtrim} \
+        trimq=${params.bbduk_trimq} \
+        ktrim=${params.bbduk_ktrim} \
+        k=${params.bbduk_k} \
+        mink=${params.bbduk_mink} \
+        hdist=${params.bbduk_hdist} \
+        ${params.bbduk_trimbyoverlap} \
+        ${params.bbduk_trimpairsevenly}
     """
 }
 
@@ -155,9 +181,9 @@ process shovill {
     
     """
     shovill \
-         --depth 100 \
-         --kmers 31,33,55,77,99,127 \
-         --minlen 500 \
+         --depth ${params.shovill_depth} \
+         --kmers ${params.shovill_kmers} \
+         --minlen ${params.shovill_minlen} \
          --R1 ${reads[0]} \
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill \
@@ -190,9 +216,9 @@ process prokka {
     """
     prokka \
         --force \
+        --evalue ${params.prokka_evalue} \
+        --kingdom ${params.prokka_kingdom} \
         --proteins ${params.prokka_reference} \
-        --evalue 1e-09 \
-        --kingdom Bacteria \
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
         --prefix ${sample_id} \
