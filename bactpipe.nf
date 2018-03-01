@@ -191,7 +191,7 @@ process prokka {
     prokka \
         --force \
         --proteins ${params.prokka_reference} \
-        --evalue 1e-9 \
+        --evalue 1e-09 \
         --kingdom Bacteria \
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
