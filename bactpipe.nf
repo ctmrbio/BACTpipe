@@ -231,8 +231,8 @@ process prokka {
     }
     if (params.prokka_gram_stain) {
         gram_stain_argument = "--gram ${params.prokka_gram_stain}"
-        log.info "Overriding automatically determined gram stain (${gram_stain})" +
-                 "due to user configured setting (${params.prokka_gram_stain})."
+        log.warning "Overriding automatically determined gram stain (${gram_stain}) " +
+                    "due to user configured setting (${params.prokka_gram_stain})."
     }
     
     """
