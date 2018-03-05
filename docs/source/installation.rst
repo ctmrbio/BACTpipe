@@ -26,10 +26,10 @@ In order to run BACTpipe, you need to have the following programs installed:
 .. _Shovill: https://github.com/tseemann/shovill
 .. _prokka: https://github.com/tseemann/prokka
 
-   * The following additional prokka dependencies should be installed as well
+The following additional prokka dependencies should be installed as well
 
-      	- .. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
-      	- .. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
+    .. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
+    .. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
 	 
 .. _MultiQC: https://anaconda.org/bioconda/multiqc
 
