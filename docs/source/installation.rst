@@ -25,9 +25,9 @@ In order to run BACTpipe, you need to have the following programs installed:
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Shovill: https://github.com/tseemann/shovill
 .. _prokka: https://github.com/tseemann/prokka
-.. _MultiQC: http://multiqc.info
 .. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
-.. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
+.. _signalP: http://www.cbs.dtu.dk/services/SignalP/
+.. _MultiQC: http://multiqc.info
 	 
 Install BACTpipe
 ****************
@@ -40,10 +40,10 @@ the `Github repository`_.
 Quick guide on how to install most tools
 ****************************************
 
-.. _Java v8+: https://anaconda.org/cyclus/java-jdk
-.. _mash: https://anaconda.org/bioconda/mash
-.. _MultiQC: https://anaconda.org/bioconda/multiqc
-.. _Shovill: https://anaconda.org/bioconda/shovill
-.. _BBMap: https://anaconda.org/bioconda/bbmap
-.. _FastQC: https://anaconda.org/biobuilds/fastqc
-.. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
+1. Java v8+: https://anaconda.org/cyclus/java-jdk
+2. mash: https://anaconda.org/bioconda/mash
+3. MultiQC: https://anaconda.org/bioconda/multiqc
+4. Shovill: https://anaconda.org/bioconda/shovill
+5. BBMap: https://anaconda.org/bioconda/bbmap
+6. FastQC: https://anaconda.org/biobuilds/fastqc
+7. signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
