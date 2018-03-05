@@ -18,17 +18,14 @@ In order to run BACTpipe, you need to have the following programs installed:
 - `signalP`_ for prediction of signal peptides features in CDS of both gram neg and gram pos bacteria
 - `MultiQC`_ for general statistics
 
-.. _Java v8+: https://anaconda.org/cyclus/java-jdk
+.. _Java v8+: https://www.java.com/sv/download/help/download_options.xml
 .. _Nextflow: https://www.nextflow.io/
-.. _mash: https://anaconda.org/bioconda/mash
+.. _mash: https://genomeinformatics.github.io/mash-screen/
 .. _BBmap: https://sourceforge.net/projects/bbmap/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Shovill: https://github.com/tseemann/shovill
 .. _prokka: https://github.com/tseemann/prokka
-.. _MultiQC: https://anaconda.org/bioconda/multiqc
-
-The following additional prokka dependencies should be installed as well
-
+.. _MultiQC: http://multiqc.info
 .. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
 .. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
 	 
@@ -42,3 +39,11 @@ the `Github repository`_.
 
 Quick guide on how to install most tools
 ****************************************
+
+.. _Java v8+: https://anaconda.org/cyclus/java-jdk
+.. _mash: https://anaconda.org/bioconda/mash
+.. _MultiQC: https://anaconda.org/bioconda/multiqc
+.. _Shovill: https://anaconda.org/bioconda/shovill
+.. _BBMap: https://anaconda.org/bioconda/bbmap
+.. _FastQC: https://anaconda.org/biobuilds/fastqc
+.. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
