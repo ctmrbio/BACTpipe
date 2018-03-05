@@ -25,14 +25,13 @@ In order to run BACTpipe, you need to have the following programs installed:
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Shovill: https://github.com/tseemann/shovill
 .. _prokka: https://github.com/tseemann/prokka
+.. _MultiQC: https://anaconda.org/bioconda/multiqc
 
 The following additional prokka dependencies should be installed as well
 
-    .. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
-    .. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
+.. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
+.. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
 	 
-.. _MultiQC: https://anaconda.org/bioconda/multiqc
-
 Install BACTpipe
 ****************
 After installing all the beforementioned dependencies, you need to get the BACTpipe code from
