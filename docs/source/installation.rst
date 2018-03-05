@@ -1,28 +1,33 @@
 Installation
 ============
-BACTpipe is written in Nextflow and is designed to run on Linux systems.
+BACTpipe pipeline is written in Nextflow and runs on Linux and Mac OSX systems.
 
 Dependencies
 ************
 In order to run BACTpipe, you need to have the following programs installed:
 
+- `Java v8+`_ for nextflow 
 - `Nextflow`_ for workflow management
-- `Mauve`_ for contig reordering
-- `tbl2asn2`_ for annotation format convertion
+- `mash`_ for fast sequence contamination screening
 - `BBMap`_ (specifically; ``bbduk.sh``, ``reformat.sh``, ``stats.sh``/``statswrapper.sh``) 
   for quality filtering/trimming, and general format wrangling
 - `FastQC`_ for quality control
-- `prokka`_ for contig annotation
 - `Shovill`_ for sequence assembly
+- `prokka`_ for contig annotation
+- `tbl2asn2`_ for annotation format convertion
+- `signalP`_ for prediction of signal peptides features in CDS of both gram neg and gram pos bacteria
+- `MultiQC`_ for general statistics
 
+.. _Java v8+: https://anaconda.org/cyclus/java-jdk
 .. _Nextflow: https://www.nextflow.io/
-.. _Mauve: http://darlinglab.org/mauve/mauve.html
-.. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
+.. _mash: https://anaconda.org/bioconda/mash
 .. _BBmap: https://sourceforge.net/projects/bbmap/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
-.. _SPAdes: http://bioinf.spbau.ru/spades
-.. _prokka: https://github.com/tseemann/prokka
 .. _Shovill: https://github.com/tseemann/shovill
+.. _prokka: https://github.com/tseemann/prokka
+.. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
+.. _signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp	 
+.. _MultiQC: https://anaconda.org/bioconda/multiqc
 
 Install BACTpipe
 ****************
