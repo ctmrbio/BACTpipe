@@ -78,15 +78,20 @@ Change many settings at once
 ............................
 If you want to change many different settings at the same time when running
 BACTpipe, it can quickly result in very long command lines. A way to make it
-easier to change several parameters at once is to download ``params.config`` from
-``conf`` folder of the `BACTpipe repository`_ and make a custom version of this
-that you store locally. You can then supply your custom parameter configuration
-file to BACTpipe when running it::
+easier to change several parameters at once is to create a custom configuration
+file in YAML or JSON format that you give to BACTpipe using ``-params-file``::
 
-    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
+    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.yaml --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
 This parameter settings in your custom configuration file will override the
-default settings.
+default settings. The simplest format for the custom parameters file is probably
+YAML. Here is an example that modifies some shovill parameters and the BBDuk quality
+trimming value::
+
+    bbduk_qtrim: "20"
+    shovill_depth: "100"
+    shovill_kmers: "31,33,55,77,99,111,127"
+    shovill_minlen: "400"
 
 
 Profiles
