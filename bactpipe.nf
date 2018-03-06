@@ -11,6 +11,40 @@ log.info "Bacterial whole genome analysis pipeline".center(60)
 log.info "https://bactpipe.readthedocs.io".center(60)
 log.info "".center(60, "=")
 
+params.help = false
+def printHelp() {
+    log.info """
+    Example usage:
+    nextflow run ctmrbio/BACTpipe --reads '*_R{1,2}.fastq.gz'
+
+    Mandatory arguments:
+      --reads            Path to input data (must be surrounded with single quotes).
+
+    Reference databases:
+      --mashscreen_database  Path to mash screen database (will be downloaded if not specified).
+      --bbduk_adapters       Path to reference adapter sequences for BBDuk (will be downloaded 
+                             if not specified).
+
+    Output options:
+      --output_dir           Output directory, where results will be saved.
+
+    Refer to the online manual for more information on available options:
+               https://bactpipe.readthedocs.io
+    """
+}
+
+def printSettings() {
+    log.info "Running with the following settings:".center(60)
+    for (option in params) {
+        if (option.key in ['cluster-options', 'help']) {
+            continue
+        }
+        log.info "${option.key}: ".padLeft(30) + "${option.value}"
+    }
+    log.info "".center(60, "=")
+}
+
+
 try {
     if ( ! nextflow.version.matches(">= $nf_required_version") ){
         throw GroovyException('Nextflow version too old')
@@ -26,21 +60,33 @@ try {
 }
 
 
+if ( params.help ) {
+    printHelp()
+    exit(0)
+}
+printSettings()
+
+
 try {
     Channel
         .fromFilePairs( params.reads )
         .ifEmpty { 
             log.error "Cannot find any reads matching: '${params.reads}'\n\n" + 
-                      "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)"
+                      "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+                      "Specify --help for a summary of available commands."
+            printHelp()
             exit(1)
         }
         .into { mash_input;
                 read_pairs }
 } catch (all) {
     log.error "It appears params.reads is empty!\n" + 
-              "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)"
+              "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+              "Specify --help for a summary of available commands."
     exit(1)
 }
+
+
 
 /*
  * If params.bbduk_adapters is set, we don't have to download the BBDuk adapters file.
