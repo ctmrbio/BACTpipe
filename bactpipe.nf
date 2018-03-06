@@ -26,16 +26,21 @@ try {
 }
 
 
-Channel
-    .fromFilePairs( params.reads )
-    .ifEmpty { 
-        log.error "Cannot find any reads matching: ${params.reads}\n\n" + 
-                  "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)"
-        exit(1)
-    }
-    .into { mash_input;
-            read_pairs }
-
+try {
+    Channel
+        .fromFilePairs( params.reads )
+        .ifEmpty { 
+            log.error "Cannot find any reads matching: '${params.reads}'\n\n" + 
+                      "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)"
+            exit(1)
+        }
+        .into { mash_input;
+                read_pairs }
+} catch (all) {
+    log.error "It appears params.reads is empty!\n" + 
+              "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)"
+    exit(1)
+}
 
 /*
  * If params.bbduk_adapters is set, we don't have to download the BBDuk adapters file.
