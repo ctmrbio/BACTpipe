@@ -365,14 +365,14 @@ process multiqc {
 
 
 workflow.onComplete { 
-    println ( "".center(60, "=") )
+    log.info "".center(60, "=")
     if ( workflow.success ) {
-        println ( "BACTpipe workflow completed without errors".center(60) )
+        log.info "BACTpipe workflow completed without errors".center(60)
     } else {
-        println ( "Oops .. something went wrong!".center(60) )
+        log.error "Oops .. something went wrong!".center(60)
     }
-    println ( "Check output files in folder:".center(60) )
-    println ( "${params.output_dir}".center(60) )
-    println ( "".center(60, "=") )
+    log.info "Check output files in folder:".center(60)
+    log.info "${params.output_dir}".center(60)
+    log.info "".center(60, "=")
 }
 
