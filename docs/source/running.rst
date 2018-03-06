@@ -9,17 +9,25 @@ easiest::
 This will instruct Nextflow to go to the ``ctmrbio`` Github organization to
 download and run the ``BACTpipe`` workflow. The argument ``--reads`` is used to
 tell the workflow which input files you want to run BACTpipe on. Note that the
-path to the reads must be enclosed in single quotes `'`, to prevent the shell
-to automatically expand asterisks `*` and curly braces `{}`. In the example above, 
-the part of the filename matched by the asterisk will be used as the sample name
-in BACTpipe, and `{1,2}` refers to the pair of FASTQ files for paired-end data.
-Input data should be in FASTQ, and can be either plain FASTQ, or compressed with
-gzip or bzip2 (with `.gz` or `.bz2` file suffixes). 
+path to the reads must be enclosed in single quotes (``'``), to prevent the
+shell from automatically expanding asterisks (``*``) and curly braces (``{}``).
+In the above example, the part of the filename matched by the asterisk will be
+used as the sample name in BACTpipe, and ``{1,2}`` refers to the pair of FASTQ
+files for paired-end data.  Input data should be in FASTQ, and can be either
+plain FASTQ, or compressed with gzip or bzip2 (with ``.gz`` or ``.bz2`` file
+suffixes). 
 
 When BACTpipe is run like this, it by default assumes you want to run
-everything locally, on the current machine. However, BACTpipe is capable of
-running on practically any machine, ranging from laptops to powerful multicore
-machines to high-performance computing (HPC) clusters. 
+everything locally, on the current machine. Since we didn't specify the paths
+to the sketches for mash screen or the adapters for BBDuk, BACTpipe will detect
+this and download the missing reference files. They can be specified using
+``--mashscreen_database`` and ``--bbduk_adapters`` for future runs, or by
+adding the paths to a configuration file (see more details about configuration
+files below).
+
+Note thatBACTpipe is capable of running on practically any machine, ranging
+from laptops to powerful multicore machines to high-performance computing (HPC)
+clusters. 
 
 .. _BACTpipe repository: https://www.github.com/ctmrbio/BACTpipe
 
@@ -66,13 +74,29 @@ the ``conf`` directory of the `BACTpipe repository`_ for a complete up-to-date
 listing of all available parameters. 
 
 
+Change many settings at once
+............................
+If you want to change many different settings at the same time when running
+BACTpipe, it can quickly result in very long command lines. A way to make it
+easier to change several parameters at once is to download ``params.config`` from
+``conf`` folder of the `BACTpipe repository`_ and make a custom version of this
+that you store locally. You can then supply your custom parameter configuration
+file to BACTpipe when running it::
+
+    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
+
+This parameter settings in your custom configuration file will override the
+default settings.
+
+
 Profiles
 --------
 A convenient way to modify the way BACTpipe is run is to load a profile. BACTpipe 
 comes with a few pre-installed profiles:
 
+* ``standard`` -- For local use on e.g. a laptop or Linux server.
 * ``rackham`` -- For use on UPPMAX's Rackham HPC system. Note however, that it
-  is preconfigured specifically for use within CTMR project folders.
+  is currently preconfigured specifically for use within CTMR project folders.
 * ``milou`` -- For use on UPPMAX's now decomissioned Milou HPC system.
 * ``ctmrnas`` -- For use on CTMR's internal analysis server.
  
@@ -83,7 +107,8 @@ when running, e.g.::
 
 This will run BACTpipe using the ``rackham`` profile, which automatically
 configures settings so BACTpipe can find all the required software and
-databases in the CTMR project folders.
+databases in the CTMR project folders. Running BACTpipe without a ``-profile``
+argument will default to running the ``standard`` profile.
 
 
 Custom profile
@@ -108,16 +133,3 @@ parameters for the different processes. It is also possible to just use a config
 file that changes settings, without modifying how the workflow is run, see below.
 
 
-Change many settings at once
-............................
-If you want to change many different settings at the same time when running
-BACTpipe, it quickly results in very long command lines. A way to make it
-easier to change many parameters at once is to download ``params.config`` from
-``conf`` folder of the `BACTpipe repository`_ and make a custom version of this
-that you store locally. You can then supply your custom parameter configuration
-file to BACTpipe when running it::
-
-    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
-
-This parameter settings in your custom configuration file will override the
-default settings.
