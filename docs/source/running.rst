@@ -79,29 +79,50 @@ Change many settings at once
 If you want to change many different settings at the same time when running
 BACTpipe, it can quickly result in very long command lines. A way to make it
 easier to change several parameters at once is to create a custom configuration
-file in YAML or JSON format that you give to BACTpipe using ``-params-file``::
+file in YAML or JSON format that you give to BACTpipe using ``-params-file``.
 
-    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.yaml --reads 'path/to/reads/*_{1,2}.fastq.gz'
-
-This parameter settings in your custom configuration file will override the
-default settings. The simplest format for the custom parameters file is probably
-YAML. Here is an example that modifies some shovill parameters and the BBDuk quality
-trimming value::
+The parameter settings you define in your custom configuration file will
+override the default settings. Custom configuration files can be written in
+either YAML or JSON format.  The simplest format for the custom parameters file
+is probably YAML, and is the recommended choice. Here is an example YAML
+configuration file that modifies some shovill parameters and the BBDuk quality
+trimming value, and leaves all other settings to their default values::
 
     bbduk_qtrim: "20"
     shovill_depth: "100"
     shovill_kmers: "31,33,55,77,99,111,127"
     shovill_minlen: "400"
 
+If you save the above into a plain text file called ``custom_bactpipe_config.yaml`` you
+can provide it when running BACTpipe using the ``--params-file`` command line argument::
+
+    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.yaml --reads 'path/to/reads/*_{1,2}.fastq.gz'
+
+There is also another way to modify parameters that uses Nextflow's own
+configuration format. This can be useful if you want to modify *a lot* of
+settings at once, since it is possible to download a copy of the default
+configuration settings file directly from Github, `params.config`_, and make
+any changes you want directly in your custom version of ``params.config``. The
+file actually contains some comments explaining how the different variables
+work, to help out when modifying the settings. To run BACTpipe with a custom configuration
+in the Nextflow format, you use ``-c`` on the command line::
+
+    $ nextflow run ctmrbio/BACTpipe -c path/to/custom_params.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
+
+.. _params.config: https://github.com/ctmrbio/BACTpipe/blob/master/conf/params.config
+
 
 Profiles
 --------
-A convenient way to modify the way BACTpipe is run is to load a profile. BACTpipe 
-comes with a few pre-installed profiles:
+A convenient way to modify the way BACTpipe is run in your environment is to
+load a profile. BACTpipe comes with a few pre-installed profiles:
 
-* ``standard`` -- For local use on e.g. a laptop or Linux server.
+* ``standard`` -- For local use on e.g. a laptop or Linux server. This is the
+  default profile used if no profile is explicitly specified.
 * ``rackham`` -- For use on UPPMAX's Rackham HPC system. Note however, that it
-  is currently preconfigured specifically for use within CTMR project folders.
+  is currently preconfigured specifically for use within CTMR project folders,
+  and non CTMR users will have to modify some paths (at least mash screen and
+  bbduk references).
 * ``milou`` -- For use on UPPMAX's now decomissioned Milou HPC system.
 * ``ctmrnas`` -- For use on CTMR's internal analysis server.
  
@@ -119,22 +140,28 @@ argument will default to running the ``standard`` profile.
 Custom profile
 --------------
 It is possible to create a custom profile to use instead of the preconfigured
-ones. The best way to start is probably to download one of the pre-existing
-profiles from ``conf`` directory of the `BACTpipe repository`_. 
+ones. This is useful if you want to run BACTpipe on another cluster system than
+UPPMAX's Rackham, or if the data you are analyzing requires you to change the
+pre-defined expected CPU, memory, and time requirements for processes on the
+cluster. The best way to start is probably to download one of the pre-existing
+profiles from `conf directory`_ of the `BACTpipe repository`_. 
+
+.. _conf directory: https://github.com/ctmrbio/BACTpipe/tree/master/conf
 
 If you are working on a Slurm-managed system, starting with ``rackham.config``
 would be a good choice, as Rackham is also a Slurm-managed HPC system. Download 
-the configuration file from the ``conf`` directory of the `BACTpipe repository`_
+the configuration file from the `conf directory`_ of the `BACTpipe repository`_
 and modify settings to your preference. Then, to run BACTpipe using your custom
 configuration file, you need to tell Nextflow to read parameters from your file instead
 of the default parameters::
 
-    $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/profile.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
+    $ nextflow run ctmrbio/BACTpipe -c path/to/your/custom/profile.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
-The custom profile is not limited to configuring time, cpu, and memory limits
+The custom profile is not limited to configuring CPU, memory and time limits
 for the different processes. It is also possible to set parameter values inside
-the custom profile, to change e.g. paths to reference databases or runtime
-parameters for the different processes. It is also possible to just use a configuration
-file that changes settings, without modifying how the workflow is run, see below.
+the custom profile, i.e. to change paths to reference databases or adjust
+runtime parameters for the different processes. It is also possible to just use
+a configuration file that changes settings without modifying how the workflow
+is run, see :ref:`Change many settings at once`.
 
 
