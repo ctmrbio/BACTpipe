@@ -166,7 +166,7 @@ if __name__ == "__main__":
         gram_stain = gram_stains.get(genus, "")
         if args.pipeline:
             print("PASS", end="")
-        print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, found_species_first, file=outfile)
+        print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, found_species_first, file=outfile))
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
