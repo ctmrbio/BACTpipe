@@ -92,70 +92,72 @@ try {
  * If params.bbduk_adapters is set, we don't have to download the BBDuk adapters file.
  * We do, however, need to set up a file object for the BBDuk adapter file.
  */
-if ( params.bbduk_adapters ) {
-    bbduk_adapters = file( params.bbduk_adapters )
-}
-bbduk_adapters_already_downloaded = false
-expected_bbduk_adapters_location = "${params.output_dir}/databases/adapters.fa"
-if ( file(expected_bbduk_adapters_location).exists() ) {
-    log.warn "BBDuk adapters file has already previously been automatically downloaded to:" + "\n" +
-             "${expected_bbduk_adapters_location}" + "\n" +
-             "Not downloading BBDuk adapters again." + "\n" +
-             "Explicitly specify the path using --bbduk_adapters to get rid of this warning."
-    bbduk_adapters_already_downloaded = true
-}
-process download_bbduk_adapters {
-    publishDir "${params.output_dir}/databases", mode: 'copy'
+if ( params.bbduk_adapters != "" ) {
+    bbduk_adapters_ch = file( params.bbduk_adapters )
+} else {
+    bbduk_adapters_already_downloaded = false
+    expected_bbduk_adapters_location = "${params.output_dir}/databases/adapters.fa"
+    if ( file(expected_bbduk_adapters_location).exists() ) {
+        log.warn "BBDuk adapters file has already previously been automatically downloaded to:" + "\n" +
+                 "${expected_bbduk_adapters_location}" + "\n" +
+                 "Not downloading BBDuk adapters again." + "\n" +
+                 "Explicitly specify the path using --bbduk_adapters to get rid of this warning."
+        bbduk_adapters_already_downloaded = true
+    }
+    process download_bbduk_adapters {
+        publishDir "${params.output_dir}/databases", mode: 'copy'
 
-    output:
-    file("adapters.fa") into bbduk_adapters_ch
+        output:
+        file("adapters.fa") into bbduk_adapters_ch
 
-    when:
-    ! bbduk_adapters_already_downloaded && ! params.bbduk_adapters
+        when:
+        ! bbduk_adapters_already_downloaded && ! params.bbduk_adapters
 
-    script:
-    log.warn "BBDuk adapters not specified! Downloading 'adapters.fa' from BBMap (SourceForge)..." + "\n" +
-             "to ${params.output_dir}/databases/adapters.fa"
-    """
-    wget --output-document BBMap.tar.gz \
-        https://downloads.sourceforge.net/project/bbmap/BBMap_37.93.tar.gz
-    tar -xf BBMap.tar.gz
-    mv bbmap/resources/adapters.fa .
-    """
+        script:
+        log.warn "BBDuk adapters not specified! Downloading 'adapters.fa' from BBMap (SourceForge)..." + "\n" +
+                 "to ${params.output_dir}/databases/adapters.fa"
+        """
+        wget --output-document BBMap.tar.gz \
+            https://downloads.sourceforge.net/project/bbmap/BBMap_37.93.tar.gz
+        tar -xf BBMap.tar.gz
+        mv bbmap/resources/adapters.fa .
+        """
+    }
 }
 
 /*
  * If params.mashscreen_database is set, we don't have to download the mash screen db, but
  * we need to set up a file object for the mash screen database file.
  */
-if ( params.mashscreen_database ) {
-    ref_sketches = file( params.mashscreen_database )
-}
-mashscreen_db_already_downloaded = false
-expected_mashscreen_db_location = "${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
-if ( file(expected_mashscreen_db_location).exists() ) {
-    log.warn "Mash screen database has already previously been automatically downloaded to:" + "\n" +
-             "${expected_mashscreen_db_location}" + "\n" +
-             "Not downloading mash screen db again." + "\n" +
-             "Explicitly specify the path using --mashscreen_database to get rid of this warning."
-    mashscreen_db_already_downloaded = true
-}
-process download_mash_screen_db {
-    publishDir "${params.output_dir}/databases", mode: 'copy'
+if ( params.mashscreen_database != "" ) {
+    ref_sketches_ch = file( params.mashscreen_database )
+} else {
+    mashscreen_db_already_downloaded = false
+    expected_mashscreen_db_location = "${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
+    if ( file(expected_mashscreen_db_location).exists() ) {
+        log.warn "Mash screen database has already previously been automatically downloaded to:" + "\n" +
+                 "${expected_mashscreen_db_location}" + "\n" +
+                 "Not downloading mash screen db again." + "\n" +
+                 "Explicitly specify the path using --mashscreen_database to get rid of this warning."
+        mashscreen_db_already_downloaded = true
+    }
+    process download_mash_screen_db {
+        publishDir "${params.output_dir}/databases", mode: 'copy'
 
-    output:
-    file("mash_screen.refseq.genomes.k21s1000.msh") into ref_sketches_ch
+        output:
+        file("mash_screen.refseq.genomes.k21s1000.msh") into ref_sketches_ch
 
-    when:
-    ! mashscreen_db_already_downloaded && ! params.mashscreen_database
+        when:
+        ! mashscreen_db_already_downloaded && ! params.mashscreen_database
 
-    script:
-    log.warn "Mash screen database not specified! Downloading 'refseq.genomes.k21s1000.msh' ..."  + "\n" +
-             "to ${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
-    """
-    wget --output-document mash_screen.refseq.genomes.k21s1000.msh \
-        https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh
-    """
+        script:
+        log.warn "Mash screen database not specified! Downloading 'refseq.genomes.k21s1000.msh' ..."  + "\n" +
+                 "to ${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
+        """
+        wget --output-document mash_screen.refseq.genomes.k21s1000.msh \
+            https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh
+        """
+    }
 }
 
 
