@@ -157,15 +157,16 @@ if __name__ == "__main__":
     else:
         outfile = stdout
     if single_species:
+        found_species_first = list(found_species)[0]
         try:
-            genus = list(found_species)[0].split()[0]
+            genus = found_species_first.split()[0]
         except IndexError:
             print("Couldn't get genus name from found_species: {}".format(found_species), file=stderr)
             genus = ""
         gram_stain = gram_stains.get(genus, "")
         if args.pipeline:
             print("PASS", end="")
-        print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, list(found_species)[0]), file=outfile)
+        print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, found_species_first, file=outfile)
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
