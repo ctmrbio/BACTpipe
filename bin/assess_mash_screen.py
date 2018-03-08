@@ -157,9 +157,9 @@ if __name__ == "__main__":
     else:
         outfile = stdout
     if single_species:
-        found_species_first = list(found_species)[0]
+        found_species_first = list(found_species)
         try:
-            genus = found_species_first.split()[0]
+            genus = found_species_first[0].split()[0]
         except IndexError:
             print("Couldn't get genus name from found_species: {}".format(found_species), file=stderr)
             genus = ""
