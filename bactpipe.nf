@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.3b-dev'
+bactpipe_version = '2.4b-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -10,6 +10,40 @@ log.info "Version ${bactpipe_version}".center(60)
 log.info "Bacterial whole genome analysis pipeline".center(60)
 log.info "https://bactpipe.readthedocs.io".center(60)
 log.info "".center(60, "=")
+
+params.help = false
+def printHelp() {
+    log.info """
+    Example usage:
+    nextflow run ctmrbio/BACTpipe --reads '*_R{1,2}.fastq.gz'
+
+    Mandatory arguments:
+      --reads            Path to input data (must be surrounded with single quotes).
+
+    Reference databases:
+      --mashscreen_database  Path to mash screen database (will be downloaded if not specified).
+      --bbduk_adapters       Path to reference adapter sequences for BBDuk (will be downloaded 
+                             if not specified).
+
+    Output options:
+      --output_dir           Output directory, where results will be saved.
+
+    Refer to the online manual for more information on available options:
+               https://bactpipe.readthedocs.io
+    """
+}
+
+def printSettings() {
+    log.info "Running with the following settings:".center(60)
+    for (option in params) {
+        if (option.key in ['cluster-options', 'help']) {
+            continue
+        }
+        log.info "${option.key}: ".padLeft(30) + "${option.value}"
+    }
+    log.info "".center(60, "=")
+}
+
 
 try {
     if ( ! nextflow.version.matches(">= $nf_required_version") ){
@@ -26,46 +60,104 @@ try {
 }
 
 
-Channel
-    .fromFilePairs( params.reads )
-    .ifEmpty { 
-        log.error "Cannot find any reads matching: ${params.reads}\n\n" + 
-                  "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)"
-        exit(1)
-    }
-    .into { mash_input;
-            read_pairs }
+if ( params.help ) {
+    printHelp()
+    exit(0)
+}
+printSettings()
 
 
-missing_parameters = []
-if ( ! params.bbduk_adapters ){
-    log.error "Parameter 'bbduk_adapters' not specified".center(60) + "\n" +
-              "You can specify the path to BBDuk's adapters.fa using:".center(60) +"\n" +
-              "--bbduk_adapters path/to/adapters.fa".center(60)
-    missing_parameters += "bbduk_adapters"
-}
-if ( ! params.mashscreen_database ){
-    log.error "Parameter 'mashscreen_database' not specified".center(60) + "\n" +
-              "You can specify the path to the Mash screen database using:".center(60) +"\n" +
-              "--mashscreen_database path/to/sketches.msh".center(60)
-    missing_parameters += "mashscreen_database"
-}
-if ( missing_parameters ) {
-    log.error "\n" +
-              "".center(60, "=") + "\n" +
-              "The following required parameters were not set:".center(60) + "\n" +
-              missing_parameters.join(", ").center(60) + "\n" +
-              "\n" +
-              "Set parameters on the command line using:".center(60) + "\n" +
-              "'--<parameter_name> <argument>'".center(60) + "\n" +
-              "and rerun BACTpipe.".center(60)
+try {
+    Channel
+        .fromFilePairs( params.reads )
+        .ifEmpty { 
+            log.error "Cannot find any reads matching: '${params.reads}'\n\n" + 
+                      "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+                      "Specify --help for a summary of available commands."
+            printHelp()
+            exit(1)
+        }
+        .into { mash_input;
+                read_pairs }
+} catch (all) {
+    log.error "It appears params.reads is empty!\n" + 
+              "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+              "Specify --help for a summary of available commands."
     exit(1)
 }
 
 
-// Set up the file objects required by some processes
-ref_sketches = file( params.mashscreen_database )
-bbduk_adapters = file( params.bbduk_adapters )
+
+/*
+ * If params.bbduk_adapters is set, we don't have to download the BBDuk adapters file.
+ * We do, however, need to set up a file object for the BBDuk adapter file.
+ */
+if ( params.bbduk_adapters ) {
+    bbduk_adapters = file( params.bbduk_adapters )
+}
+bbduk_adapters_already_downloaded = false
+expected_bbduk_adapters_location = "${params.output_dir}/databases/adapters.fa"
+if ( file(expected_bbduk_adapters_location).exists() ) {
+    log.warn "BBDuk adapters file has already previously been automatically downloaded to:" + "\n" +
+             "${expected_bbduk_adapters_location}" + "\n" +
+             "Not downloading BBDuk adapters again." + "\n" +
+             "Explicitly specify the path using --bbduk_adapters to get rid of this warning."
+    bbduk_adapters_already_downloaded = true
+}
+process download_bbduk_adapters {
+    publishDir "${params.output_dir}/databases", mode: 'copy'
+
+    output:
+    file("adapters.fa") into bbduk_adapters
+
+    when:
+    ! bbduk_adapters_already_downloaded && ! params.bbduk_adapters
+
+    script:
+    log.warn "BBDuk adapters not specified! Downloading 'adapters.fa' from BBMap (SourceForge)..." + "\n" +
+             "to ${params.output_dir}/databases/adapters.fa"
+    """
+    wget --output-document BBMap.tar.gz \
+        https://downloads.sourceforge.net/project/bbmap/BBMap_37.93.tar.gz
+    tar -xf BBMap.tar.gz
+    mv bbmap/resources/adapters.fa .
+    """
+}
+
+/*
+ * If params.mashscreen_database is set, we don't have to download the mash screen db, but
+ * we need to set up a file object for the mash screen database file.
+ */
+if ( params.mashscreen_database ) {
+    ref_sketches = file( params.mashscreen_database )
+}
+mashscreen_db_already_downloaded = false
+expected_mashscreen_db_location = "${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
+if ( file(expected_mashscreen_db_location).exists() ) {
+    log.warn "Mash screen database has already previously been automatically downloaded to:" + "\n" +
+             "${expected_mashscreen_db_location}" + "\n" +
+             "Not downloading mash screen db again." + "\n" +
+             "Explicitly specify the path using --mashscreen_database to get rid of this warning."
+    mashscreen_db_already_downloaded = true
+}
+process download_mash_screen_db {
+    publishDir "${params.output_dir}/databases", mode: 'copy'
+
+    output:
+    file("mash_screen.refseq.genomes.k21s1000.msh") into ref_sketches
+
+    when:
+    ! mashscreen_db_already_downloaded && ! params.mashscreen_database
+
+    script:
+    log.warn "Mash screen database not specified! Downloading 'refseq.genomes.k21s1000.msh' ..."  + "\n" +
+             "to ${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
+    """
+    wget --output-document mash_screen.refseq.genomes.k21s1000.msh \
+        https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh
+    """
+}
+
 
 process screen_for_contaminants {
     validExitStatus 0,3
@@ -74,6 +166,7 @@ process screen_for_contaminants {
 
     input:
     set pair_id, file(reads) from mash_input
+    file ref_sketches
 
     output:
     set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka
@@ -272,14 +365,14 @@ process multiqc {
 
 
 workflow.onComplete { 
-    println ( "".center(60, "=") )
+    log.info "".center(60, "=")
     if ( workflow.success ) {
-        println ( "BACTpipe workflow completed without errors".center(60) )
+        log.info "BACTpipe workflow completed without errors".center(60)
     } else {
-        println ( "Oops .. something went wrong!".center(60) )
+        log.error "Oops .. something went wrong!".center(60)
     }
-    println ( "Check output files in folder:".center(60) )
-    println ( "${params.output_dir}".center(60) )
-    println ( "".center(60, "=") )
+    log.info "Check output files in folder:".center(60)
+    log.info "${params.output_dir}".center(60)
+    log.info "".center(60, "=")
 }
 
