@@ -4,9 +4,9 @@ Assess MASH screening results.
 """
 __author__ = "Fredrik Boulund"
 __date__ = "2017"
-__version__ = "0.5.0b"
+__version__ = "0.5.1b"
 
-from sys import argv, exit, stdout
+from sys import argv, exit, stdout, stderr
 from collections import namedtuple
 import argparse
 import logging
@@ -157,7 +157,11 @@ if __name__ == "__main__":
     else:
         outfile = stdout
     if single_species:
-        genus = list(found_species)[0].split()[0]
+        try:
+            genus = list(found_species)[0].split()[0]
+        except IndexError:
+            print("Couldn't get genus name from found_species: {}".format(found_species), file=stderr)
+            genus = ""
         gram_stain = gram_stains.get(genus, "")
         if args.pipeline:
             print("PASS", end="")
