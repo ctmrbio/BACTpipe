@@ -88,12 +88,13 @@ try {
 
 
 
+
 /*
  * If params.bbduk_adapters is set, we don't have to download the BBDuk adapters file.
  * We do, however, need to set up a file object for the BBDuk adapter file.
  */
 if ( params.bbduk_adapters != "" ) {
-    bbduk_adapters_ch = file( params.bbduk_adapters )
+    bbduk_adapters = file( params.bbduk_adapters )
 } else {
     bbduk_adapters_already_downloaded = false
     expected_bbduk_adapters_location = "${params.output_dir}/databases/adapters.fa"
@@ -108,10 +109,10 @@ if ( params.bbduk_adapters != "" ) {
         publishDir "${params.output_dir}/databases", mode: 'copy'
 
         output:
-        file("adapters.fa") into bbduk_adapters_ch
+        file("adapters.fa")
 
         when:
-        ! bbduk_adapters_already_downloaded && ! params.bbduk_adapters
+        (! bbduk_adapters_already_downloaded) && (params.bbduk_adapters == "")
 
         script:
         log.warn "BBDuk adapters not specified! Downloading 'adapters.fa' from BBMap (SourceForge)..." + "\n" +
@@ -123,6 +124,7 @@ if ( params.bbduk_adapters != "" ) {
         mv bbmap/resources/adapters.fa .
         """
     }
+    bbduk_adapters = file(expected_bbduk_adapters_location)
 }
 
 /*
@@ -130,7 +132,7 @@ if ( params.bbduk_adapters != "" ) {
  * we need to set up a file object for the mash screen database file.
  */
 if ( params.mashscreen_database != "" ) {
-    ref_sketches_ch = file( params.mashscreen_database )
+    ref_sketches_ch = Channel.fromPath(params.mashscreen_database)
 } else {
     mashscreen_db_already_downloaded = false
     expected_mashscreen_db_location = "${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
@@ -140,6 +142,7 @@ if ( params.mashscreen_database != "" ) {
                  "Not downloading mash screen db again." + "\n" +
                  "Explicitly specify the path using --mashscreen_database to get rid of this warning."
         mashscreen_db_already_downloaded = true
+        ref_sketches_ch = Channel.fromPath(expected_mashscreen_db_location)
     }
     process download_mash_screen_db {
         publishDir "${params.output_dir}/databases", mode: 'copy'
@@ -168,7 +171,7 @@ process screen_for_contaminants {
 
     input:
     set pair_id, file(reads) from mash_input
-    file ref_sketches from ref_sketches_ch
+    each file(ref_sketches) from ref_sketches_ch
 
     output:
     set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka
@@ -214,7 +217,7 @@ process bbduk {
 
     input:
     set pair_id, file(reads) from bbduk_input
-    file bbduk_adapters from bbduk_adapters_ch
+    file bbduk_adapters 
 
     output:
     set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
