@@ -132,7 +132,7 @@ if ( params.bbduk_adapters != "" ) {
  * we need to set up a file object for the mash screen database file.
  */
 if ( params.mashscreen_database != "" ) {
-    ref_sketches_ch = Channel.fromPath(params.mashscreen_database)
+    ref_sketches = file(params.mashscreen_database)
 } else {
     mashscreen_db_already_downloaded = false
     expected_mashscreen_db_location = "${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
@@ -171,7 +171,7 @@ process screen_for_contaminants {
 
     input:
     set pair_id, file(reads) from mash_input
-    each file(ref_sketches) from ref_sketches_ch
+    file ref_sketches
 
     output:
     set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka
