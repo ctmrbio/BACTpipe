@@ -47,3 +47,4 @@ Quick guide on how to install most tools
 5. BBMap: https://anaconda.org/bioconda/bbmap
 6. FastQC: https://anaconda.org/biobuilds/fastqc
 7. signalP: http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
+8. prokka: https://github.com/tseemann/prokka#installation
