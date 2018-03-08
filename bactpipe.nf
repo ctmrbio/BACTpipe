@@ -108,7 +108,7 @@ process download_bbduk_adapters {
     publishDir "${params.output_dir}/databases", mode: 'copy'
 
     output:
-    file("adapters.fa") into bbduk_adapters
+    file("adapters.fa") into bbduk_adapters_ch
 
     when:
     ! bbduk_adapters_already_downloaded && ! params.bbduk_adapters
@@ -144,7 +144,7 @@ process download_mash_screen_db {
     publishDir "${params.output_dir}/databases", mode: 'copy'
 
     output:
-    file("mash_screen.refseq.genomes.k21s1000.msh") into ref_sketches
+    file("mash_screen.refseq.genomes.k21s1000.msh") into ref_sketches_ch
 
     when:
     ! mashscreen_db_already_downloaded && ! params.mashscreen_database
@@ -166,7 +166,7 @@ process screen_for_contaminants {
 
     input:
     set pair_id, file(reads) from mash_input
-    file ref_sketches
+    file ref_sketches from ref_sketches_ch
 
     output:
     set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka
@@ -212,7 +212,7 @@ process bbduk {
 
     input:
     set pair_id, file(reads) from bbduk_input
-    file bbduk_adapters
+    file bbduk_adapters from bbduk_adapters_ch
 
     output:
     set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
