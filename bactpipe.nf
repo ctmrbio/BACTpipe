@@ -175,7 +175,7 @@ process screen_for_contaminants {
 
     input:
     set pair_id, file(reads) from mash_input
-    file ref_sketches from ref_sketches_ch.collect()
+    each file(ref_sketches) from ref_sketches_ch
 
     output:
     set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka
@@ -221,7 +221,7 @@ process bbduk {
 
     input:
     set pair_id, file(reads) from bbduk_input
-    file bbduk_adapters from bbduk_adapters_ch.collect()
+    each file(bbduk_adapters) from bbduk_adapters_ch
 
     output:
     set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
