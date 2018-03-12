@@ -60,6 +60,6 @@ Installing into a specific ``bactpipe_env`` conda environment:
 
 ``$ conda create -n bactpipe_env python=3 java mash multiqc shovill bbmap fastqc 
   $ conda activate bactpipe_env 
-  (bactpipe_env)$`
+  (bactpipe_env)$``
 
 N.B Note that ``signalP`` is not available for installation via conda, and must be installed manually according to instructions from the ``signalP`` authors.
