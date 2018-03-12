@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.4b-dev'
+bactpipe_version = '2.5b-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -86,48 +86,6 @@ try {
     exit(1)
 }
 
-
-
-
-/*
- * If params.bbduk_adapters is set, we don't have to download the BBDuk
- * adapters file. However, we do need to set up a Channel containing the file
- * object for the BBDuk adapter file.
- */
-if ( params.bbduk_adapters != "" ) {
-    bbduk_adapters_ch = Channel.fromPath(params.bbduk_adapters)
-} else {
-    bbduk_adapters_already_downloaded = false
-    expected_bbduk_adapters_location = "${params.output_dir}/databases/adapters.fa"
-    if ( file(expected_bbduk_adapters_location).exists() ) {
-        log.warn "BBDuk adapters file has already previously been automatically downloaded to:\n" +
-                 "${expected_bbduk_adapters_location}\n" +
-                 "Not downloading BBDuk adapters again.\n" +
-                 "Explicitly specify the path using --bbduk_adapters to get rid of this warning."
-        bbduk_adapters_already_downloaded = true
-        bbduk_adapters_ch = Channel.fromPath(expected_bbduk_adapters_location)
-    } else {
-        process download_bbduk_adapters {
-            publishDir "${params.output_dir}/databases", mode: 'copy'
-
-            output:
-            file("adapters.fa") into bbduk_adapters_ch
-
-            when:
-            (! bbduk_adapters_already_downloaded) && (params.bbduk_adapters == "")
-
-            script:
-            log.warn "BBDuk adapters not specified! Downloading 'adapters.fa' from BBMap (SourceForge)..." + "\n" +
-                     "to ${params.output_dir}/databases/adapters.fa"
-            """
-            wget --output-document BBMap.tar.gz \
-                https://downloads.sourceforge.net/project/bbmap/BBMap_37.93.tar.gz
-            tar -xf BBMap.tar.gz
-            mv bbmap/resources/adapters.fa .
-            """
-        }
-    }
-}
 
 /*
  * If params.mashscreen_database is set, we don't have to download the
@@ -221,13 +179,17 @@ process bbduk {
 
     input:
     set pair_id, file(reads) from bbduk_input
-    each file(bbduk_adapters) from bbduk_adapters_ch
 
     output:
     set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
     file "${pair_id}.stats.txt"
 
     script:
+    if (params.bbduk_adapters != "adapters") {
+        bbduk_adapters = file(params.bbduk_adapters)
+    } else {
+        bbduk_adapters = params.bbduk_adapters
+    }
     """
     bbduk.sh \
         in1=${reads[0]} \
