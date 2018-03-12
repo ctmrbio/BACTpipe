@@ -1,6 +1,6 @@
-Output
-======
-The pipeline outputs several files in specific folders within the ``BACTpipe_results`` directory:
+Output Files
+============
+BACTpipe pipeline outputs several files in specific folders within the ``BACTpipe_results`` directory:
 
 Output folders
 **************
@@ -44,6 +44,6 @@ Table below provides a description of the most relevant files in each above ment
 
 **N.B** 
 You will find ``BACTpipe_report.html`` within the main run folder after the pipeline is finished.
-The report shows the summary of the execution status i.e overall execution time, distributions of resource usages and all executed tasks with their run time metrics. 
+The report shows summary of overall execution time, distributions of resource usages and all executed tasks and their respective run time metrics. 
 
 
