@@ -64,4 +64,4 @@ $ conda activate bactpipe_env
 
 (bactpipe_env)$
 
-**N.B** Note that ``signalP`` is not available for installation via conda, and must be installed manually according to instructions from the ``signalP`` authors.
+**N.B** ``signalP`` is not available for installation via conda, and must be installed manually according to instructions from the ``signalP`` authors.
