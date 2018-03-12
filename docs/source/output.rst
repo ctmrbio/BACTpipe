@@ -20,7 +20,7 @@ Table below provides a description of the most relevant files in each above ment
 +-----------------+---------------------------+----------------------------------------------------------------------------------------------------------------+
 | Output Folder   | File output               | File Description                                                                                               |
 +=================+===========================+================================================================================================================+
-| mash.screen     | - *.screening_results.tsv | - species likely present in sample, indicated by ```PASS```or ``FAIL`` if pure or mixed isolate respectively   | 
+| mash.screen     | - *.screening_results.tsv | - species likely present in sample, indicated by ``PASS`` or ``FAIL`` if pure or mixed isolate respectively    | 
 +-----------------+---------------------------+----------------------------------------------------------------------------------------------------------------+
 | bbduk           | - *.trimmed.fastq.gz files| - contains a pair of trimmed ``fastq.gz`` reads for each sample                                                |
 |                 | - *.stats.txt             | - statistics relating to fraction of reads that matched each reference sequence                                |
