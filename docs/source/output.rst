@@ -1,11 +1,26 @@
 Output
 ======
-The pipeline outputs several files in various folders within the ``BACTpipe_results`` directory:
+The pipeline outputs several files in specific folders within the ``BACTpipe_results`` directory:
+
+Output folders
+**************
+
+1. mash.screen
+2. bbduk
+3. fastqc
+4. shovill
+5. prokka
+6. multiqc
+
+Description of file outputs
+***************************
+
+Table below provides a description of the most relevant files in each above mentioned folder.
 
 +-----------------+---------------------------+----------------------------------------------------------------------------------------------------------------+
 | Output Folder   | File output               | File Description                                                                                               |
 +=================+===========================+================================================================================================================+
-| mash.screen     | - *.screening_results.tsv | - species likely presesent in sample, indicated by ```PASS```or ``FAIL`` if pure or mixed isolate respectively | 
+| mash.screen     | - *.screening_results.tsv | - species likely present in sample, indicated by ```PASS```or ``FAIL`` if pure or mixed isolate respectively   | 
 +-----------------+---------------------------+----------------------------------------------------------------------------------------------------------------+
 | bbduk           | - *.trimmed.fastq.gz files| - contains a pair of trimmed ``fastq.gz`` reads for each sample                                                |
 |                 | - *.stats.txt             | - statistics relating to fraction of reads that matched each reference sequence                                |
@@ -27,6 +42,8 @@ The pipeline outputs several files in various folders within the ``BACTpipe_resu
 +-----------------+---------------------------+----------------------------------------------------------------------------------------------------------------+
 
 
-**N.B**
+**N.B** 
+You will find ``BACTpipe_report.html`` within the main run folder after the pipeline is finished.
+The report shows the summary of the execution status i.e overall execution time, distributions of resource usages and all executed tasks with their run time metrics. 
 
 
