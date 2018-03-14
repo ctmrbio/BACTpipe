@@ -185,10 +185,10 @@ process bbduk {
     file "${pair_id}.stats.txt"
 
     script:
-    if (params.bbduk_adapters != "adapters") {
-        bbduk_adapters = file(params.bbduk_adapters)
-    } else {
+    if (params.bbduk_adapters == "adapters") {
         bbduk_adapters = params.bbduk_adapters
+    } else {
+        bbduk_adapters = file(params.bbduk_adapters)
     }
     """
     bbduk.sh \
