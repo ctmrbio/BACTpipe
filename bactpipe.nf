@@ -87,42 +87,21 @@ try {
 }
 
 
-/*
- * If params.mashscreen_database is set, we don't have to download the
- * mash screen db, but we need to set up a Channel containing a file
- * object for the mash screen database file.
- */
-if ( params.mashscreen_database != "" ) {
-    ref_sketches_ch = Channel.fromPath(params.mashscreen_database)
-} else {
-    mashscreen_db_already_downloaded = false
-    expected_mashscreen_db_location = "${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
-    if ( file(expected_mashscreen_db_location).exists() ) {
-        log.warn "Mash screen database has already previously been automatically downloaded to:\n" +
-                 "${expected_mashscreen_db_location}\n" +
-                 "Not downloading mash screen db again.\n" +
-                 "Explicitly specify the path using --mashscreen_database to get rid of this warning."
-        mashscreen_db_already_downloaded = true
-        ref_sketches_ch = Channel.fromPath(expected_mashscreen_db_location)
-    } else {
-        process download_mash_screen_db {
-            publishDir "${params.output_dir}/databases", mode: 'copy'
-
-            output:
-            file("mash_screen.refseq.genomes.k21s1000.msh") into ref_sketches_ch
-
-            when:
-            ! mashscreen_db_already_downloaded && ! params.mashscreen_database
-
-            script:
-            log.warn "Mash screen database not specified! Downloading 'refseq.genomes.k21s1000.msh' ..."  + "\n" +
-                     "to ${params.output_dir}/databases/mash_screen.refseq.genomes.k21s1000.msh"
-            """
-            wget --output-document mash_screen.refseq.genomes.k21s1000.msh \
-                https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh
-            """
-        }
-    }
+try {
+    if (file(params.mashscreen_database).exists()) {
+    Channel
+        .fromPath(params.mashscreen_database)
+        .set { ref_sketches_ch }
+    } else { 
+        throw Exception("mashscreen_database error")
+   }
+} catch (all) {
+    mashscreen_db_url = "https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh"
+    log.error "Cannot load mashscreen_database: '${params.mashscreen_database}'\n" +
+              "Did you specify --mashscreen_database on the command line or set\n" +
+              "it in a config file? Download from:\n" +
+              "${mashscreen_db_url}"
+    exit(1)
 }
 
 
