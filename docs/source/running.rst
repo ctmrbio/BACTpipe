@@ -19,13 +19,14 @@ suffixes).
 
 When BACTpipe is run like this, it by default assumes you want to run
 everything locally, on the current machine. Since we didn't specify the paths
-to the sketches for mash screen or the adapters for BBDuk, BACTpipe will detect
-this and download the missing reference files. They can be specified using
-``--mashscreen_database`` and ``--bbduk_adapters`` for future runs, or by
-adding the paths to a configuration file (see more details about configuration
-files below).
+to the sketches for mash screen, BACTpipe will detect this and download the
+missing reference file. The mash screen reference sketches can be specified
+using ``--mashscreen_database``, and if the user wants to use other references
+for BBDuk, the reference file can be specified with the ``--bbduk_adapters``
+argument.  Another way of changing these parameters is by adding the paths to a
+configuration file (see more details about configuration files below).
 
-Note thatBACTpipe is capable of running on practically any machine, ranging
+Note that BACTpipe is capable of running on practically any machine, ranging
 from laptops to powerful multicore machines to high-performance computing (HPC)
 clusters. 
 
@@ -49,7 +50,7 @@ following parameters can be easily configured from the command line::
     output_dir            BACTpipe_results
     reads                 [empty]  
     mashscreen_database   Path to refseq minhash sketches for Mash screen
-    bbduk_adapters        Path to adapters.fa for BBDuk filtering
+    bbduk_adapters        [default BBDuk adapters]
     bbduk_minlen          30
     bbduk_qtrim           rl
     bbduk_trimq           10
