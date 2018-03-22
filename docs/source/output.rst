@@ -35,9 +35,9 @@ folder mentioned above.
 |                 | - ``*.assembly_stats.txt``     | - Summary of assembly statistics                                                                               |
 +-----------------+--------------------------------+----------------------------------------------------------------------------------------------------------------+
 | prokka          | - ``*.gff``                    | - Annotation in GFF3 format, containing both sequences and annotations                                         |
-|                 | - ``*.gbk``                    | - Standard Genbank file							                                                            |
-|                 | - ``*.fna``                    | - Nucleotide FASTA file of the input contig sequences						                                    |
-|                 | - ``*.faa``                    | - Protein FASTA file of the translated CDS sequences                             		                        |
+|                 | - ``*.gbk``                    | - Standard Genbank file                                                                                        |
+|                 | - ``*.fna``                    | - Nucleotide FASTA file of the input contig sequences                                                          |
+|                 | - ``*.faa``                    | - Protein FASTA file of the translated CDS sequences                                                           |
 |                 | - ``*.ffn``                    | - Nucleotide FASTA file of all the prediction transcripts (CDS, rRNA, tRNA, tmRNA, misc_RNA)                   |
 |                 | - ``*.txt``                    | - Statistics relating to the annotated features found                                                          |
 +-----------------+--------------------------------+----------------------------------------------------------------------------------------------------------------+
