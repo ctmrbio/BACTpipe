@@ -9,7 +9,7 @@ In order to run BACTpipe, you need to have the following programs installed:
 - `Java v8+`_ for nextflow 
 - `Nextflow`_ for workflow management
 - `mash`_ for fast sequence contamination screening
-- `BBMap`_ (specifically; ``bbduk.sh``, ``reformat.sh``, ``stats.sh``/``statswrapper.sh``) 
+- `BBMap`_ (specifically; ``bbduk.sh``, ``reformat.sh``, ``statswrapper.sh``) 
   for quality filtering/trimming, and general format wrangling
 - `FastQC`_ for quality control
 - `Shovill`_ for sequence assembly
@@ -28,7 +28,15 @@ In order to run BACTpipe, you need to have the following programs installed:
 .. _tbl2asn2: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
 .. _signalP: http://www.cbs.dtu.dk/services/SignalP/
 .. _MultiQC: http://multiqc.info
-	 
+
+Databases
+*********
+BACTpipe requires a file with mash sketches of refseq genomes. Download it from
+here::
+
+   https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh
+   
+
 Install BACTpipe
 ****************
 After installing all the beforementioned dependencies, you need to get the BACTpipe code from

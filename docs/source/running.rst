@@ -1,34 +1,27 @@
 Running BACTpipe
 ================
-After installing all the required dependencies, it is very easy to run
-BACTpipe. There are several ways to run BACTpipe, but we'll start with the
-easiest::
+After installing all the required dependencies and downloading the required
+mash sketches of refseq genomes, it is very easy to run BACTpipe. There are
+several ways to run BACTpipe, but we'll start with the easiest::
 
-    $ nextflow run cmtrbio/BACTpipe --reads 'path/to/reads/*_R{1,2}.fastq.gz'
+    $ nextflow run cmtrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads 'path/to/reads/*_R{1,2}.fastq.gz'
 
 This will instruct Nextflow to go to the ``ctmrbio`` Github organization to
-download and run the ``BACTpipe`` workflow. The argument ``--reads`` is used to
-tell the workflow which input files you want to run BACTpipe on. Note that the
-path to the reads must be enclosed in single quotes (``'``), to prevent the
-shell from automatically expanding asterisks (``*``) and curly braces (``{}``).
-In the above example, the part of the filename matched by the asterisk will be
-used as the sample name in BACTpipe, and ``{1,2}`` refers to the pair of FASTQ
-files for paired-end data.  Input data should be in FASTQ, and can be either
-plain FASTQ, or compressed with gzip or bzip2 (with ``.gz`` or ``.bz2`` file
-suffixes). 
+download and run the ``BACTpipe`` workflow. The ``--mashscreen_database`` tells
+Nextflow where to find the database for the mash screen step. The argument
+``--reads`` is used to tell the workflow which input files you want to run
+BACTpipe on. Note that the path to the reads must be enclosed in single quotes
+(``'``), to prevent the shell from automatically expanding asterisks (``*``)
+and curly braces (``{}``).  In the above example, the part of the filename
+matched by the asterisk will be used as the sample name in BACTpipe, and
+``{1,2}`` refers to the pair of FASTQ files for paired-end data.  Input data
+should be in FASTQ, and can be either plain FASTQ, or compressed with gzip or
+bzip2 (with ``.gz`` or ``.bz2`` file suffixes). 
 
 When BACTpipe is run like this, it by default assumes you want to run
-everything locally, on the current machine. Since we didn't specify the paths
-to the sketches for mash screen, BACTpipe will detect this and download the
-missing reference file. The mash screen reference sketches can be specified
-using ``--mashscreen_database``, and if the user wants to use other references
-for BBDuk, the reference file can be specified with the ``--bbduk_adapters``
-argument.  Another way of changing these parameters is by adding the paths to a
-configuration file (see more details about configuration files below).
-
-Note that BACTpipe is capable of running on practically any machine, ranging
-from laptops to powerful multicore machines to high-performance computing (HPC)
-clusters. 
+everything locally, on the current machine.  Note that BACTpipe is capable of
+running on practically any machine, ranging from laptops to powerful multicore
+machines to high-performance computing (HPC) clusters. 
 
 .. _BACTpipe repository: https://www.github.com/ctmrbio/BACTpipe
 
