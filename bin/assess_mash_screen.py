@@ -4,9 +4,9 @@ Assess MASH screening results.
 """
 __author__ = "Fredrik Boulund"
 __date__ = "2017"
-__version__ = "0.5.0b"
+__version__ = "0.5.1b"
 
-from sys import argv, exit, stdout
+from sys import argv, exit, stdout, stderr
 from collections import namedtuple
 import argparse
 import logging
@@ -151,17 +151,27 @@ if __name__ == "__main__":
                                  min_identity=args.min_identity, 
                                  classification_score_threshold_factor=args.modifier,
                                  ))
+    unknown_species = True
     single_species, found_species = determine_same_species(top_hits, ignore_set=ignore_set)
     if args.outfile:
         outfile = open(args.outfile, 'w')
     else:
         outfile = stdout
     if single_species:
-        genus = list(found_species)[0].split()[0]
+        found_species_first = list(found_species)
+        try:
+            genus = found_species_first[0].split()[0]
+            unknown_species = False
+        except IndexError:
+            print("Couldn't get genus name from found_species: {}".format(found_species), file=stderr)
+            genus = ""
         gram_stain = gram_stains.get(genus, "")
         if args.pipeline:
             print("PASS", end="")
-        print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, list(found_species)[0]), file=outfile)
+        if unknown_species:
+            print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, "Unknown species", file=outfile))
+        else:
+            print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, found_species_first, file=outfile))
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
