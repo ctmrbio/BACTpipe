@@ -28,8 +28,8 @@ Nextflow makes it easy to run BACTpipe:
 
     $ nextflow run ctmrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads 'path/to/reads/*_R{1,2}.fastq.gz'
 
-This will run BACTpipe locally. To run in other environments, see the
-documentation at https://bactpipe.readthedocs.io
+This will run BACTpipe locally. For more details on how to run BACTpipe, see
+the official documentation at https://bactpipe.readthedocs.io.
 
 ## License
 BACTpipe is published under the MIT license 2018
