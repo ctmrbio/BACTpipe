@@ -19,7 +19,6 @@ determine the best reference genome to use for contig ordering and annotation.
 
    introduction
    installation
-   tutorial
    running
    output
 
