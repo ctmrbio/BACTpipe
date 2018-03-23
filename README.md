@@ -1,7 +1,7 @@
 # BACTpipe
 BACTpipe is a whole genome sequencing workflow. It does quality assessment of
 paired input reads, tries to assess if the sample contains mixed or pure
-isolates, performs *de-novo* assembly, and annotates the assembled genome.
+isolates, performs *de novo* assembly, and annotates the assembled genome.
 BACTpipe uses Nexflow as a workflow manager. 
 
 ![BACTpipe flowchart](./docs/source/img/BACTpipe_workflow.jpg)
