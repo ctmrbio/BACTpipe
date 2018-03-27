@@ -3,8 +3,8 @@
 Assess MASH screening results.
 """
 __author__ = "Fredrik Boulund"
-__date__ = "2017"
-__version__ = "0.5.1b"
+__date__ = "2018"
+__version__ = "0.6.0b"
 
 from sys import argv, exit, stdout, stderr
 from collections import namedtuple
@@ -28,6 +28,11 @@ def parse_args():
             metavar="c", type=float, dest="modifier",
             default=0.20,
             help="Minimum classification score is computed as the classification score of the top ranking hit minus the modifier [%(default)s].")
+    parser.add_argument("-d", "--detect-phiX", metavar="STRING", dest="detect",
+            default="phix,phiX",
+            help="Try to detect contaminant genomes containing STRING "
+                 "(multiple strings can be separated by comma) "
+                 "[%(default)s].")
     parser.add_argument("-i", "--ignore", metavar="STRING", dest="ignore",
             default="phage,plasmid,virus",
             help="Ignore matches to genomes containing STRING "
@@ -60,7 +65,8 @@ def parse_args():
     else:
         loglevel = logging.DEBUG
 
-    logging.basicConfig(level=loglevel)
+    log_format="%(levelname)s: %(message)s"
+    logging.basicConfig(level=loglevel, format=log_format)
 
     return args 
 
@@ -105,14 +111,19 @@ def get_top_hits(mash_hits, min_identity=0.85, classification_score_threshold_fa
             logging.debug("%s failed classification. min_identity=%s, classification_score_threshold=%s", hit, min_identity, classification_score_threshold)
 
 
-def determine_same_species(hits, ignore_set):
+def determine_same_species(hits, detect_set, ignore_set):
     """
     Determine if hits are from the same species.
     """
     if not isinstance(hits, list):
         hits = list(hits)
     found_species = set()
+    phiX_detected = ""
     for hit in hits:
+        detect_matches = [detect_string in hit.comment for detect_string in detect_set]
+        if any(detect_matches):
+            phiX_detected += str(detect_set)
+            logging.warning("Detected potential contamination: %s", hit.comment)
         ignore_matches = [ignore_string in hit.comment for ignore_string in ignore_set]
         if any(ignore_matches):
             continue
@@ -123,9 +134,9 @@ def determine_same_species(hits, ignore_set):
         found_species.add(" ".join(splithit.split()[1:3]))
 
     if len(found_species) > 1:
-        return False, found_species
+        return False, phiX_detected, found_species
     else:
-        return True, found_species
+        return True, phiX_detected, found_species
 
 
 def parse_gram_stains(gram_file):
@@ -145,6 +156,7 @@ def parse_gram_stains(gram_file):
 if __name__ == "__main__":
     args = parse_args()
     sample_name = os.path.basename(args.screen).split(".")[0]
+    detect_set = set(args.detect.split(","))
     ignore_set = set(args.ignore.split(","))
     gram_stains = parse_gram_stains(args.gram)
     top_hits = list(get_top_hits(parse_screen(args.screen), 
@@ -152,7 +164,8 @@ if __name__ == "__main__":
                                  classification_score_threshold_factor=args.modifier,
                                  ))
     unknown_species = True
-    single_species, found_species = determine_same_species(top_hits, ignore_set=ignore_set)
+    single_species, phiX_detected, found_species = determine_same_species(top_hits, detect_set, ignore_set)
+    print_str = "{sample}\t{_pass}\t{phix}\t{gram}\t{species}"
     if args.outfile:
         outfile = open(args.outfile, 'w')
     else:
@@ -163,20 +176,32 @@ if __name__ == "__main__":
             genus = found_species_first[0].split()[0]
             unknown_species = False
         except IndexError:
-            print("Couldn't get genus name from found_species: {}".format(found_species), file=stderr)
+            logging.warning("Couldn't get genus name from found_species: %s", found_species)
             genus = ""
         gram_stain = gram_stains.get(genus, "")
         if args.pipeline:
             print("PASS", end="")
         if unknown_species:
-            print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, "Unknown species", file=outfile))
+            print(print_str.format(sample=sample_name,
+                                   _pass="PASS",
+                                   phix=phiX_detected,
+                                   gram=gram_stain,
+                                   species="Unknown species"), file=outfile)
         else:
-            print("{}\t{}\t{}\t{}".format(sample_name, "PASS", gram_stain, found_species_first, file=outfile))
+            print(print_str.format(sample=sample_name,
+                                   _pass="PASS",
+                                   phix=phiX_detected,
+                                   gram=gram_stain,
+                                   species=found_species_first), file=outfile)
         exit(0)
     else:
         multiple_species_names = ", ".join(name for name in found_species)
         multiple_gram_stain = ", ".join(gram_stains.get(name.split()[0], "") for name in found_species)
         if args.pipeline:
             print("FAIL", end="")
-        print("{}\t{}\t{}\t{}".format(sample_name, "FAIL", multiple_gram_stain, multiple_species_names), file=outfile)
+        print(print_str.format(sample=sample_name,
+                               _pass="PASS",
+                               phix=phiX_detected,
+                               gram=multiple_gram_stain,
+                               species=multiple_species_name), file=outfile)
         exit(3)

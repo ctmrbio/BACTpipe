@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.5b-dev'
+bactpipe_version = '2.5.1b-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -115,7 +115,7 @@ process screen_for_contaminants {
     each file(ref_sketches) from ref_sketches_ch
 
     output:
-    set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka
+    set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka, screening_results_for_phiX
     file("${pair_id}.mash_screen.tsv")
     file("${pair_id}.screening_results.tsv")
 
@@ -151,6 +151,15 @@ pure_isolates = screening_results_for_bbduk.filter {
 }
 bbduk_input = pure_isolates.join(read_pairs).map {[it[0], it[2]]}
 
+phiX_detected = false
+screening_results_for_phiX.filter {
+    phiX = it[1].split("\t")[2]
+    if ( phiX.length() != 0 ) {
+        log.warn "'${it[0]}' appears to be contaminated with phiX! Adding phiX removal to BBDuk filtering."
+        phiX_detected = true
+    }
+}
+
 
 process bbduk {
     tag {pair_id}
@@ -168,6 +177,9 @@ process bbduk {
         bbduk_adapters = params.bbduk_adapters
     } else {
         bbduk_adapters = file(params.bbduk_adapters)
+    }
+    if (phiX_detected) {
+        bbduk_adapters = "phix,${bbduk_adapters}"
     }
     """
     bbduk.sh \
@@ -249,7 +261,7 @@ process shovill {
  * prokka_input = [pair_id, contigs.fa, "sample\tPASS\tneg\tHelicobacter pylori"]
  */
 prokka_input = prokka_channel.join(screening_results_for_prokka).map {
-    [it[0], it[1], it[2].split("\t")[2]]
+    [it[0], it[1], it[2].split("\t")[3]]
 }
 
 
