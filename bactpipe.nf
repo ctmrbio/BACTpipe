@@ -15,18 +15,14 @@ params.help = false
 def printHelp() {
     log.info """
     Example usage:
-    nextflow run ctmrbio/BACTpipe --reads '*_R{1,2}.fastq.gz'
+    nextflow run ctmrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads '*_R{1,2}.fastq.gz'
 
     Mandatory arguments:
-      --reads            Path to input data (must be surrounded with single quotes).
-
-    Reference databases:
-      --mashscreen_database  Path to mash screen database (will be downloaded if not specified).
-      --bbduk_adapters       Path to reference adapter sequences for BBDuk (will be downloaded 
-                             if not specified).
+      --reads                Path to input data (must be surrounded with single quotes).
+      --mashscreen_database  Path to mash screen database (can be omitted if set in config file).
 
     Output options:
-      --output_dir           Output directory, where results will be saved.
+      --output_dir           Output directory, where results will be saved (default: ${params.output_dir}).
 
     Refer to the online manual for more information on available options:
                https://bactpipe.readthedocs.io
