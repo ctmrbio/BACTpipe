@@ -23,8 +23,8 @@ folder mentioned above.
 +-----------------+--------------------------------+----------------------------------------------------------------------------------------------------------------+
 | Output Folder   | File output                    | File Description                                                                                               |
 +=================+================================+================================================================================================================+
-| mash.screen     | - ``*.screening_results.tsv``  | - Initial screening results used to asses if pure or mixed isolate. Tab separated values, four columns:        |
-|                 |                                |   sample name, ``PASS``/``FAIL``, believed gram stain, believed species name                                   |
+| mash.screen     | - ``*.screening_results.tsv``  | - Initial screening results used to asses if pure or mixed isolate. Tab separated values, five columns:        |
+|                 |                                |   sample name, ``PASS``/``FAIL``, phiX detection, believed gram stain, believed species name                   |
 +-----------------+--------------------------------+----------------------------------------------------------------------------------------------------------------+
 | bbduk           | - ``*.trimmed.fastq.gz``       | - Trimmed reads for each sample                                                                                |
 |                 | - ``*.stats.txt``              | - Statistics relating to fraction of reads that matched each reference sequence                                |
