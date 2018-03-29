@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.5.1b-dev'
+bactpipe_version = '2.5.2b-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
