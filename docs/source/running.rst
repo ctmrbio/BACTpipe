@@ -121,6 +121,7 @@ load a profile. BACTpipe comes with a few pre-installed profiles:
 * ``ctmrnas`` -- For use on CTMR's internal analysis server.
 
 .. sidebar:: Cluster profiles
+
     Note that when running profiles that uses a cluster scheduler, for example
     like Slurm that is used on UPPMAX systems in the `rackham` and `milou`
     profiles, you also need to provide what Slurm account/project BACTpipe
