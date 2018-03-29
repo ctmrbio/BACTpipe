@@ -14,7 +14,6 @@ HTML report using MultiQC.
 BACTpipe is implemented in Nextflow and an overview of the workflow can be seen
 below. Output files are marked in blue.
 
-.. image:: img/BACTpipe_flowchart.jpg
-    :alt: Flowchart showing BACTpipe pipeline.
+.. image:: img/BACTpipe_workflow.jpg
+    :alt: Flowchart showing BACTpipe workflow.
     :align: center
-
