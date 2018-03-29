@@ -10,10 +10,10 @@ BACTpipe uses Nexflow as a workflow manager.
 Complete documentation is available at https://bactpipe.readthedocs.io. 
 
 ## Quick-start
-You need to have [Nextflow](https://www.nextflow.io) installed. The easiest way
-to get BACTpipe up and running is to install all other dependencies using
-[conda](https://conda.io/docs/). The following command installs the required
-software:
+You need to have [Nextflow](https://www.nextflow.io) and Python 3.6+ installed.
+The easiest way to get BACTpipe up and running is to install all other
+dependencies using [conda](https://conda.io/docs/). The following command
+installs the required software:
 
     conda install java mash bbmap fastqc shovill multiqc 
 

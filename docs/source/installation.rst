@@ -7,6 +7,7 @@ Dependencies
 In order to run BACTpipe, you need to have the following programs installed:
 
 - `Java v8+`_ for nextflow 
+- Python 3.6 for some of the scripts in the pipeline
 - `Nextflow`_ for workflow management
 - `mash`_ for fast sequence contamination screening
 - `BBMap`_ (specifically; ``bbduk.sh``, ``reformat.sh``, ``statswrapper.sh``) 
