@@ -55,6 +55,13 @@ try {
     exit(1)
 }
 
+if (workflow['profile'] in params.profiles_that_require_project) {
+    if (!params.project) {
+        log.error "BACTpipe requires that you set the 'project' parameter when running the ${workflow['profile']} profile.\n".center(60) +
+                  "Specify --project <project_name> on the command line, or set it in a custom configuration file.".center(60)
+        exit(1)
+    }
+}
 
 if ( params.help ) {
     printHelp()
