@@ -203,5 +203,5 @@ if __name__ == "__main__":
                                _pass="PASS",
                                phix=phiX_detected,
                                gram=multiple_gram_stain,
-                               species=multiple_species_name), file=outfile)
+                               species=multiple_species_names), file=outfile)
         exit(3)
