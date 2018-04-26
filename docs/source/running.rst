@@ -18,6 +18,15 @@ matched by the asterisk will be used as the sample name in BACTpipe, and
 should be in FASTQ, and can be either plain FASTQ, or compressed with gzip or
 bzip2 (with ``.gz`` or ``.bz2`` file suffixes). 
 
+.. note::
+
+    When you run BACTpipe for the first time using a command like the one
+    shown above, Nextflow downloads the current version of the Github repo
+    to your computer. If BACTpipe is updated after your first run, the 
+    subsequent runs will still use the old version that you have downloaded.
+    To get the newest version, tell Nextflow to update your local copy:
+    ``nextflow pull ctmrbio/BACTpipe``.
+
 When BACTpipe is run like this, it by default assumes you want to run
 everything locally, on the current machine.  Note that BACTpipe is capable of
 running on practically any machine, ranging from laptops to powerful multicore
