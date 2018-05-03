@@ -4,7 +4,7 @@ Assess MASH screening results.
 """
 __author__ = "Fredrik Boulund"
 __date__ = "2018"
-__version__ = "0.6.0b"
+__version__ = "0.6.1b"
 
 from sys import argv, exit, stdout, stderr
 from collections import namedtuple
@@ -200,7 +200,7 @@ if __name__ == "__main__":
         if args.pipeline:
             print("FAIL", end="")
         print(print_str.format(sample=sample_name,
-                               _pass="PASS",
+                               _pass="FAIL",
                                phix=phiX_detected,
                                gram=multiple_gram_stain,
                                species=multiple_species_names), file=outfile)
