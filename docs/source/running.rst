@@ -117,8 +117,8 @@ in the Nextflow format, you use ``-c`` on the command line::
 .. note::
 
     There are two different type of commandline arguments when running workflows 
-    using Nextflow: 1) arguments using double dashes (i.e. `--reads`) and 2) 
-    arguments using a single dash (i.e. `-params-file`). Arguments using double
+    using Nextflow: 1) arguments using double dashes (i.e. ``--reads``) and 2) 
+    arguments using a single dash (i.e. ``-params-file``). Arguments using double
     dashes are sent to BACTpipe for evaluation, and are typically configuration
     variables that are defined inside BACTpipe. Arguments using a single dash 
     are not visible to BACTpipe but are instead used by Nextflow itself, and 
