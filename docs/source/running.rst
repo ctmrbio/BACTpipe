@@ -91,13 +91,13 @@ is probably YAML, and is the recommended choice. Here is an example YAML
 configuration file that modifies some shovill parameters and the BBDuk quality
 trimming value, and leaves all other settings to their default values::
 
-    bbduk_qtrim: "20"
+    bbduk_trimq: "20"
     shovill_depth: "100"
     shovill_kmers: "31,33,55,77,99,111,127"
     shovill_minlen: "400"
 
 If you save the above into a plain text file called ``custom_bactpipe_config.yaml`` you
-can provide it when running BACTpipe using the ``--params-file`` command line argument::
+can provide it when running BACTpipe using the ``-params-file`` command line argument::
 
     $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.yaml --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
@@ -114,6 +114,15 @@ in the Nextflow format, you use ``-c`` on the command line::
 
 .. _params.config: https://github.com/ctmrbio/BACTpipe/blob/master/conf/params.config
 
+.. note::
+
+    There are two different type of commandline arguments when running workflows 
+    using Nextflow: 1) arguments using double dashes (i.e. `--reads`) and 2) 
+    arguments using a single dash (i.e. `-params-file`). Arguments using double
+    dashes are sent to BACTpipe for evaluation, and are typically configuration
+    variables that are defined inside BACTpipe. Arguments using a single dash 
+    are not visible to BACTpipe but are instead used by Nextflow itself, and 
+    typically alters how Nextflow executes BACTpipe. 
 
 Profiles
 --------
