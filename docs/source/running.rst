@@ -91,13 +91,13 @@ is probably YAML, and is the recommended choice. Here is an example YAML
 configuration file that modifies some shovill parameters and the BBDuk quality
 trimming value, and leaves all other settings to their default values::
 
-    bbduk_qtrim: "20"
+    bbduk_trimq: "20"
     shovill_depth: "100"
     shovill_kmers: "31,33,55,77,99,111,127"
     shovill_minlen: "400"
 
 If you save the above into a plain text file called ``custom_bactpipe_config.yaml`` you
-can provide it when running BACTpipe using the ``--params-file`` command line argument::
+can provide it when running BACTpipe using the ``-params-file`` command line argument::
 
     $ nextflow run ctmrbio/BACTpipe -params-file path/to/your/custom/params.yaml --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
