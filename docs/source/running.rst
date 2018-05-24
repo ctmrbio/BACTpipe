@@ -135,14 +135,13 @@ load a profile. BACTpipe comes with a few pre-installed profiles:
   is currently preconfigured specifically for use within CTMR project folders,
   and non CTMR users will have to modify some paths (at least mash screen and
   bbduk references).
-* ``milou`` -- For use on UPPMAX's now decomissioned Milou HPC system.
 * ``ctmrnas`` -- For use on CTMR's internal analysis server.
 
 .. sidebar:: Cluster profiles
 
     Note that when running profiles that uses a cluster scheduler, for example
-    like Slurm that is used on UPPMAX systems in the ``rackham`` and ``milou``
-    profiles, you also need to provide what Slurm account/project BACTpipe
+    like Slurm that is used on UPPMAX systems in the ``rackham``
+    profile, you also need to provide what Slurm account/project BACTpipe
     should use when submitting jobs. This can be done with ``--project
     account_name`` on the command line, or by adding it to a custom
     configuration file (see previous section).
