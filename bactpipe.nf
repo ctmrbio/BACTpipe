@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.5.3b-dev'
+bactpipe_version = '2.6.0-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -111,7 +111,7 @@ try {
 process screen_for_contaminants {
     validExitStatus 0,3
     tag { pair_id }
-    publishDir "${params.output_dir}/mash.screen", mode: 'copy'
+    publishDir "${params.output_dir}/mash_screen", mode: 'copy'
 
     input:
     set pair_id, file(reads) from mash_input
@@ -119,8 +119,7 @@ process screen_for_contaminants {
 
     output:
     set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka, screening_results_for_phiX
-    file("${pair_id}.mash_screen.tsv")
-    file("${pair_id}.screening_results.tsv")
+    file("${pair_id}.screening_results.tsv") into screening_results_to_concatenate
 
     script:
     """
@@ -136,6 +135,22 @@ process screen_for_contaminants {
         --gram "$baseDir/resources/gram_stain.txt"  \
         ${pair_id}.mash_screen.tsv \
         | tee ${pair_id}.screening_results.tsv
+    """
+}
+
+
+process concatenate_mash_screen_results {
+    publishDir "${params.output_dir}/mash_screen", mode: 'copy'
+
+    input:
+    file(screening_results) from screening_results_to_concatenate.collect()
+
+    output:
+    file("all_samples.mash_screening_results.tsv")
+
+    script:
+    """
+    cat ${screening_results} > all_samples.mash_screening_results.tsv
     """
 }
 
