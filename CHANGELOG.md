@@ -27,6 +27,8 @@ Changes should fall into one of the following categories:
 ### Changed
 - Created separate `develop` branch to contain future code development separate
   from the `master` branch, which is now considered stable.
+- Renamed `mash.screen` output folder to `mash_screen`, repacing the dot with
+  an underscore.
 - [Docs] Added note about single (e.g. `-profile`) vs double dash (e.g.
   `--reads`) command line arguments.
 
