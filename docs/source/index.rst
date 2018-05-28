@@ -52,7 +52,10 @@ If you find BACTpipe useful and publish something using BACTpipe, please cite:
 | Joseph Kirangwa, Sandra Alvarez-Carretero, Fredrik Boulund, Kaisa Thorell (2017).
 | BACTpipe: bacterial whole genome sequence assembly and annotation pipeline.
 | https://github.com/ctmrbio/BACTpipe
+| DOI: https://doi.org/10.5281/zenodo.1254247
 
+.. image:: https://zenodo.org/badge/83326100.svg
+   :target: https://zenodo.org/badge/latestdoi/83326100
 
 Indices and tables
 ==================
