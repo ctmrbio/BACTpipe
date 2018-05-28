@@ -1,4 +1,6 @@
-# BACTpipe
+[![DOI](https://zenodo.org/badge/83326100.svg)](https://zenodo.org/badge/latestdoi/83326100)
+
+# BACTpipe 
 BACTpipe is a whole genome sequencing workflow. It does quality assessment of
 paired input reads, tries to assess if the sample contains mixed or pure
 isolates, performs *de novo* assembly, and annotates the assembled genome.
