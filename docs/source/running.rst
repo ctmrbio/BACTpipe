@@ -4,7 +4,7 @@ After installing all the required dependencies and downloading the required
 mash sketches of refseq genomes, it is very easy to run BACTpipe. There are
 several ways to run BACTpipe, but we'll start with the easiest::
 
-    $ nextflow run cmtrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads 'path/to/reads/*_R{1,2}.fastq.gz'
+    $ nextflow run ctmrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads 'path/to/reads/*_R{1,2}.fastq.gz'
 
 This will instruct Nextflow to go to the ``ctmrbio`` Github organization to
 download and run the ``BACTpipe`` workflow. The ``--mashscreen_database`` tells
