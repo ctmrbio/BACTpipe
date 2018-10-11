@@ -111,7 +111,6 @@ try {
 process screen_for_contaminants {
     validExitStatus 0,3
     tag { pair_id }
-    publishDir "${params.output_dir}/mash_screen", mode: 'copy'
 
     input:
     set pair_id, file(reads) from mash_input
