@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.6.0-dev'
+bactpipe_version = '2.7.0-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -164,6 +164,10 @@ pure_isolates = screening_results_for_bbduk.filter {
     passed = screening_result == "PASS"
     if ( ! passed ) {
         log.warn "'${it[0]}' might not be a pure isolate! Check screening results in the output folder."
+        if ( params.ignore_contamination_screen ) {
+            log.warn "Ignoring warning for '${it[0]}' (ignore_contamination_screen=true)."
+            passed = true
+        }
     }
     return passed
 }

@@ -48,27 +48,28 @@ when running BACTpipe, e.g.::
 The ``--bbduk_mink`` flag will modify the minimum kmer length for BBDuk. The 
 following parameters can be easily configured from the command line::
 
-    Parameter name        Default setting
-    output_dir            BACTpipe_results
-    reads                 [empty]  
-    mashscreen_database   Path to refseq minhash sketches for Mash screen
-    bbduk_adapters        [default BBDuk adapters]
-    bbduk_minlen          30
-    bbduk_qtrim           rl
-    bbduk_trimq           10
-    bbduk_ktrim           r
-    bbduk_k               30
-    bbduk_mink            11
-    bbduk_hdist           1
-    bbduk_trimbyoverlap   trimbyoverlap
-    bbduk_trimpairsevenly trimpairsevenly
-    shovill_depth         100
-    shovill_kmers         31,33,55,77,99,127
-    shovill_minlen        500
-    prokka_evalue         1e-09
-    prokka_kingdom        Bacteria
-    prokka_reference      [not used]
-    prokka_gram_stain     [not used]
+    Parameter name               Default setting
+    output_dir                   BACTpipe_results
+    reads                        [empty]
+    mashscreen_database          Path to refseq minhash sketches for Mash screen
+    ignore_contamination_screen  [false]
+    bbduk_adapters               [default BBDuk adapters]
+    bbduk_minlen                 30
+    bbduk_qtrim                  rl
+    bbduk_trimq                  10
+    bbduk_ktrim                  r
+    bbduk_k                      30
+    bbduk_mink                   11
+    bbduk_hdist                  1
+    bbduk_trimbyoverlap          trimbyoverlap
+    bbduk_trimpairsevenly        trimpairsevenly
+    shovill_depth                100
+    shovill_kmers                31,33,55,77,99,127
+    shovill_minlen               500
+    prokka_evalue                1e-09
+    prokka_kingdom               Bacteria
+    prokka_reference             [not used]
+    prokka_gram_stain            [not used]
 
 To modify any parameter, just add ``--<parameter_name> <new_setting>`` on the
 command line when running BACTpipe, e.g. ``--shovill_depth 75`` to set
