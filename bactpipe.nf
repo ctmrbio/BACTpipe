@@ -111,7 +111,6 @@ try {
 process screen_for_contaminants {
     validExitStatus 0,3
     tag { pair_id }
-    publishDir "${params.output_dir}/mash_screen", mode: 'copy'
 
     input:
     set pair_id, file(reads) from mash_input
@@ -303,6 +302,12 @@ process prokka {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
     gram_stain_argument = ""
+    # If ignore_contamination_screen is used, gram_stain is a string with
+    # potentially several comma-separated gram stain assignments. We just
+    # use the first one.
+    if ( gram_stain.split(", ").size() > 1 ) {
+        gram_stain = gram_stain.split(", ")[0]
+    }
     if (gram_stain) {
         gram_stain_argument = "--gram ${gram_stain}"
     }
