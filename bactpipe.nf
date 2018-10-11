@@ -164,6 +164,10 @@ pure_isolates = screening_results_for_bbduk.filter {
     passed = screening_result == "PASS"
     if ( ! passed ) {
         log.warn "'${it[0]}' might not be a pure isolate! Check screening results in the output folder."
+        if ignore_contamination_screen {
+            log.warn "Ignoring warning for '${it[0]}' (ignore_contamination_screen=true)."
+            passed = true
+        }
     }
     return passed
 }
