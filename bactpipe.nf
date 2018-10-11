@@ -303,6 +303,12 @@ process prokka {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
     gram_stain_argument = ""
+    # If ignore_contamination_screen is used, gram_stain is a string with
+    # potentially several comma-separated gram stain assignments. We just
+    # use the first one.
+    if ( gram_stain.split(", ").size() > 1 ) {
+        gram_stain = gram_stain.split(", ")[0]
+    }
     if (gram_stain) {
         gram_stain_argument = "--gram ${gram_stain}"
     }
