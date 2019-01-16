@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.6.0-dev'
+bactpipe_version = '2.7.0-dev'
 nf_required_version = '0.26.0'
 
 log.info "".center(60, "=")
@@ -111,7 +111,6 @@ try {
 process screen_for_contaminants {
     validExitStatus 0,3
     tag { pair_id }
-    publishDir "${params.output_dir}/mash_screen", mode: 'copy'
 
     input:
     set pair_id, file(reads) from mash_input
@@ -164,6 +163,10 @@ pure_isolates = screening_results_for_bbduk.filter {
     passed = screening_result == "PASS"
     if ( ! passed ) {
         log.warn "'${it[0]}' might not be a pure isolate! Check screening results in the output folder."
+        if ( params.ignore_contamination_screen ) {
+            log.warn "Ignoring warning for '${it[0]}' (ignore_contamination_screen=true)."
+            passed = true
+        }
     }
     return passed
 }
@@ -299,6 +302,14 @@ process prokka {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
     gram_stain_argument = ""
+    /* 
+     * If ignore_contamination_screen is used, gram_stain is a string with
+     * potentially several comma-separated gram stain assignments. We just
+     * use the first one.
+     */
+    if ( gram_stain.split(", ").size() > 1 ) {
+        gram_stain = gram_stain.split(", ")[0]
+    }
     if (gram_stain) {
         gram_stain_argument = "--gram ${gram_stain}"
     }
