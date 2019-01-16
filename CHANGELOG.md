@@ -25,6 +25,7 @@ Changes should fall into one of the following categories:
 
 ### Changed
 - Set default errorstrategy for Nextflow to `ignore`. 
+- Updated process declarations to use new `withName` syntax.
 
 ### Removed
 - The intermediate output from `mash screen` (i.e.  `<sample>.mash_screen.tsv`)
