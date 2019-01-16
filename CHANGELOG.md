@@ -18,7 +18,17 @@ Changes should fall into one of the following categories:
 - `Fixed`, for any bug fixes.
 
 
-## [2.7.0]
+## [2.8.0]
+### Added
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+
+## [2.7.0] - 2019-01-16
 ### Added
 - New command-line argument `--ignore_contamination_screen` will ignore all inputs
   that `FAIL` mash screen contamination check. 
