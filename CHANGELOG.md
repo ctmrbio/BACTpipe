@@ -17,7 +17,35 @@ Changes should fall into one of the following categories:
 - `Removed`, for now removed features.
 - `Fixed`, for any bug fixes.
 
-## [2.6.0] - In development
+
+## [2.8.0]
+### Added
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+
+## [2.7.0] - 2019-01-16
+### Added
+- New command-line argument `--ignore_contamination_screen` will ignore all inputs
+  that `FAIL` mash screen contamination check. 
+
+### Changed
+- Set default errorstrategy for Nextflow to `ignore`. 
+- Updated process declarations to use new `withName` syntax.
+
+### Removed
+- The intermediate output from `mash screen` (i.e.  `<sample>.mash_screen.tsv`)
+  is now removed from the output directory, in favor of the concatenated table
+  `all_samples.mash_screening_results.tsv`, containing results for all samples.
+
+### Deprecated
+
+
+## [2.6.0] - 2018-05-28
 ### Added
 - Created this changelog.
 - New output file, `all_samples.mash_screening_results.tsv`, which is a concatenation
