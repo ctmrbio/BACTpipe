@@ -15,11 +15,10 @@ params.help = false
 def printHelp() {
     log.info """
     Example usage:
-    nextflow run ctmrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads '*_R{1,2}.fastq.gz'
+    nextflow run ctmrbio/BACTpipe --reads '*_R{1,2}.fastq.gz'
 
     Mandatory arguments:
       --reads                Path to input data (must be surrounded with single quotes).
-      --mashscreen_database  Path to mash screen database (can be omitted if set in config file).
 
     Output options:
       --output_dir           Output directory, where results will be saved (default: ${params.output_dir}).
@@ -80,7 +79,8 @@ try {
             printHelp()
             exit(1)
         }
-        .into { mash_input;
+        .into { sendsketch_input;
+                bbduk_input;
                 read_pairs }
 } catch (all) {
     log.error "It appears params.reads is empty!\n" + 
@@ -90,95 +90,24 @@ try {
 }
 
 
-try {
-    if (file(params.mashscreen_database).exists()) {
-    Channel
-        .fromPath(params.mashscreen_database)
-        .set { ref_sketches_ch }
-    } else { 
-        throw Exception("mashscreen_database error")
-   }
-} catch (all) {
-    mashscreen_db_url = "https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh"
-    log.error "Cannot load mashscreen_database: '${params.mashscreen_database}'\n" +
-              "Did you specify --mashscreen_database on the command line or set\n" +
-              "it in a config file? Download from:\n" +
-              "${mashscreen_db_url}"
-    exit(1)
-}
-
-
 process screen_for_contaminants {
-    validExitStatus 0,3
     tag { pair_id }
+    publishDir "${params.output_dir}/sendsketch", mode: 'copy'
+
 
     input:
-    set pair_id, file(reads) from mash_input
-    each file(ref_sketches) from ref_sketches_ch
+    set pair_id, file(reads) from sendsketch_input
 
     output:
-    set pair_id, stdout into screening_results_for_bbduk, screening_results_for_prokka, screening_results_for_phiX
-    file("${pair_id}.screening_results.tsv") into screening_results_to_concatenate
+    file("${pair_id}.sendsketch.txt")
 
     script:
     """
-    mash screen \
-        -w \
-        -p ${task.cpus} \
-        ${ref_sketches} \
-        ${reads[0]} \
-        ${reads[1]} \
-        > ${pair_id}.mash_screen.tsv \
-    && \
-    assess_mash_screen.py \
-        --gram "$baseDir/resources/gram_stain.txt"  \
-        ${pair_id}.mash_screen.tsv \
-        | tee ${pair_id}.screening_results.tsv
+    sendsketch.sh \
+        in=${reads[0]} \
+        samplerate=0.1 \
+        out=${pair_id}.sendsketch.txt \
     """
-}
-
-
-process concatenate_mash_screen_results {
-    publishDir "${params.output_dir}/mash_screen", mode: 'copy'
-
-    input:
-    file(screening_results) from screening_results_to_concatenate.collect()
-
-    output:
-    file("all_samples.mash_screening_results.tsv")
-
-    script:
-    """
-    cat ${screening_results} > all_samples.mash_screening_results.tsv
-    """
-}
-
-
-/*
- * Check screening results. Print warning for samples that did not pass.
- * Continue only with samples that pass the contaminant screening step.
- */
-pure_isolates = screening_results_for_bbduk.filter {
-    screening_result = it[1].split("\t")[1]
-    passed = screening_result == "PASS"
-    if ( ! passed ) {
-        log.warn "'${it[0]}' might not be a pure isolate! Check screening results in the output folder."
-        if ( params.ignore_contamination_screen ) {
-            log.warn "Ignoring warning for '${it[0]}' (ignore_contamination_screen=true)."
-            passed = true
-        }
-    }
-    return passed
-}
-bbduk_input = pure_isolates.join(read_pairs).map {[it[0], it[2]]}
-
-phiX_detected = false
-screening_results_for_phiX.filter {
-    phiX = it[1].split("\t")[2]
-    if ( phiX.length() != 0 ) {
-        log.warn "'${it[0]}' appears to be contaminated with phiX! Adding phiX removal to BBDuk filtering."
-        phiX_detected = true
-    }
 }
 
 
@@ -251,7 +180,7 @@ process shovill {
     set pair_id, file(reads) from shovill
 
     output:
-    set pair_id, file("${pair_id}.contigs.fa") into prokka_channel
+    set pair_id, file("${pair_id}.contigs.fa") into prokka_input
     file("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}") 
     file("${pair_id}.assembly_stats.txt")
     
@@ -273,25 +202,13 @@ process shovill {
 }
 
 
-/*
- * Read expected gram stain from the assess_mash_screen output,
- * for use in Prokka.
- * Explanation of how this works:
- * from_shovill = [pair_id, contigs.fa]
- * from_screen = [pair_id, "sample\tPASS\tneg\tHelicobacter pylori"]
- * prokka_input = [pair_id, contigs.fa, "sample\tPASS\tneg\tHelicobacter pylori"]
- */
-prokka_input = prokka_channel.join(screening_results_for_prokka).map {
-    [it[0], it[1], it[2].split("\t")[3]]
-}
-
 
 process prokka {
     tag {sample_id}
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    set sample_id, file(renamed_contigs), gram_stain from prokka_input
+    set sample_id, file(renamed_contigs), from prokka_input
 
     output:
     set sample_id, file("${sample_id}_prokka") into prokka_out
@@ -302,20 +219,9 @@ process prokka {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
     gram_stain_argument = ""
-    /* 
-     * If ignore_contamination_screen is used, gram_stain is a string with
-     * potentially several comma-separated gram stain assignments. We just
-     * use the first one.
-     */
-    if ( gram_stain.split(", ").size() > 1 ) {
-        gram_stain = gram_stain.split(", ")[0]
-    }
-    if (gram_stain) {
-        gram_stain_argument = "--gram ${gram_stain}"
-    }
     if (params.prokka_gram_stain) {
         gram_stain_argument = "--gram ${params.prokka_gram_stain}"
-        log.warn "Overriding automatically determined gram stain (${gram_stain}) " +
+        log.warn "Using gram stain (${gram_stain}) " +
                     "due to user configured setting (${params.prokka_gram_stain})."
     }
     
