@@ -208,7 +208,7 @@ process prokka {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    set sample_id, file(renamed_contigs), from prokka_input
+    set sample_id, file(renamed_contigs) from prokka_input
 
     output:
     set sample_id, file("${sample_id}_prokka") into prokka_out
