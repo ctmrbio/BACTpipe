@@ -128,9 +128,6 @@ process bbduk {
     } else {
         bbduk_adapters = file(params.bbduk_adapters)
     }
-    if (phiX_detected) {
-        bbduk_adapters = "phix,${bbduk_adapters}"
-    }
     """
     bbduk.sh \
         in1=${reads[0]} \
