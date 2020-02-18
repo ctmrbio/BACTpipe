@@ -144,7 +144,6 @@ process shovill {
     output:
     tuple pair_id, file("${pair_id}.contigs.fa") into prokka_input, stats_input
     file("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}") 
-    file("${pair_id}.assembly_stats.txt")
     
     """
     shovill \
