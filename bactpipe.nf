@@ -57,7 +57,7 @@ try {
 if (workflow['profile'] in params.profiles_that_require_project) {
     if (!params.project) {
         log.error "BACTpipe requires that you set the 'project' parameter when running the ${workflow['profile']} profile.\n".center(60) +
-                  "Specify --project <project_name> on the command line, or set it in a custom configuration file.".center(60)
+                  "Specify --project <project_name> on the command line, or tuple it in a custom configuration file.".center(60)
         exit(1)
     }
 }
@@ -94,18 +94,18 @@ process fastp {
     publishDir "${params.output_dir}/fastp", mode: 'copy'
 
     input:
-    set pair_id, file(reads) from fastp_input
+    tuple pair_id, file(reads) from fastp_input
 
     output:
-    set pair_id, file("${pair_id}_{1,2}.fq.gz") into sendsketch_input, shovill
+    tuple pair_id, file("${pair_id}_{1,2}.fastp.fq.gz") into sendsketch_input, shovill
     file("${pair_id}.json") into fastp_reports
 
     """
     fastp \
         --in1 ${reads[0]} \
         --in2 ${reads[1]} \
-        --out1 ${pair_id}_1.fq.gz \
-        --out2 ${pair_id}_2.fq.gz \
+        --out1 ${pair_id}_1.fastp.fq.gz \
+        --out2 ${pair_id}_2.fastp.fq.gz \
         --json ${pair_id}.json \
         --html ${pair_id}.html \
         --thread ${task.cpus}
@@ -119,7 +119,7 @@ process screen_for_contaminants {
 
 
     input:
-    set pair_id, file(reads) from sendsketch_input
+    tuple pair_id, file(reads) from sendsketch_input
 
     output:
     file("${pair_id}.sendsketch.txt")
@@ -139,10 +139,10 @@ process shovill {
     publishDir "${params.output_dir}/shovill", mode: 'copy'
 
     input:
-    set pair_id, file(reads) from shovill
+    tuple pair_id, file(reads) from shovill
 
     output:
-    set pair_id, file("${pair_id}.contigs.fa") into prokka_input
+    tuple pair_id, file("${pair_id}.contigs.fa") into prokka_input, stats_input
     file("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}") 
     file("${pair_id}.assembly_stats.txt")
     
@@ -168,10 +168,10 @@ process prokka {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    set sample_id, file(renamed_contigs) from prokka_input
+    tuple sample_id, file(renamed_contigs) from prokka_input
 
     output:
-    set sample_id, file("${sample_id}_prokka") into prokka_out
+    tuple sample_id, file("${sample_id}_prokka") into prokka_out
 
     """
     prokka \
@@ -182,6 +182,25 @@ process prokka {
         --outdir ${sample_id}_prokka \
         --prefix ${sample_id} \
         $renamed_contigs
+    """
+}
+
+
+process assembly_stats {
+    tag {pair_id}
+    publishDir "${params.output_dir}/shovill", mode: 'copy'
+
+    input:
+    file(contigs:"*.contigs.fa") from stats_input.collect()
+
+    output:
+    file("assembly_stats.txt")
+    
+    """
+    statswrapper.sh \
+        *.contigs.fa \
+        format=3 \
+        > assembly_stats.txt
     """
 }
 
