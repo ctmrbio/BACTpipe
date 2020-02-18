@@ -79,8 +79,7 @@ try {
             printHelp()
             exit(1)
         }
-        .into { sendsketch_input;
-                bbduk_input;
+        .into { fastp_input;
                 read_pairs }
 } catch (all) {
     log.error "It appears params.reads is empty!\n" + 
@@ -95,7 +94,7 @@ process fastp {
     publishDir "${params.output_dir}/fastp", mode: 'copy'
 
     input:
-    set pair_id, file(reads) from bbduk_input
+    set pair_id, file(reads) from fastp_input
 
     output:
     set pair_id, file("${pair_id}_{1,2}.fq.gz") into sendsketch_input, shovill
