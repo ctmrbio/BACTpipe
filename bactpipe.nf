@@ -155,9 +155,6 @@ process shovill {
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill
     cp ${pair_id}_shovill/contigs.fa ${pair_id}.contigs.fa
-    statswrapper.sh \
-        in=${pair_id}.contigs.fa \
-        > ${pair_id}.assembly_stats.txt
     """
 }
 
