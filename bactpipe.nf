@@ -1,8 +1,8 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '2.7.0'
-nf_required_version = '0.26.0'
+bactpipe_version = '3.0.0'
+nf_required_version = '19.10.0'
 
 log.info "".center(60, "=")
 log.info "BACTpipe".center(60)
@@ -90,6 +90,30 @@ try {
 }
 
 
+process fastp {
+    tag {pair_id}
+    publishDir "${params.output_dir}/fastp", mode: 'copy'
+
+    input:
+    set pair_id, file(reads) from bbduk_input
+
+    output:
+    set pair_id, file("${pair_id}_{1,2}.fq.gz") into sendsketch_input, shovill
+    file("${pair_id}.json") into fastp_reports
+
+    """
+    fastp \
+        --in1 ${reads[0]} \
+        --in2 ${reads[1]} \
+        --out1 ${pair_id}_1.fq.gz \
+        --out2 ${pair_id}_2.fq.gz \
+        --json ${pair_id}.json \
+        --html ${pair_id}.html \
+        --thread ${task.cpus}
+    """
+}
+
+
 process screen_for_contaminants {
     tag { pair_id }
     publishDir "${params.output_dir}/sendsketch", mode: 'copy'
@@ -107,64 +131,6 @@ process screen_for_contaminants {
         in=${reads[0]} \
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt \
-    """
-}
-
-
-process bbduk {
-    tag {pair_id}
-    publishDir "${params.output_dir}/bbduk", mode: 'copy'
-
-    input:
-    set pair_id, file(reads) from bbduk_input
-
-    output:
-    set pair_id, file("${pair_id}_{1,2}.trimmed.fastq.gz") into fastqc_input, shovill
-    file "${pair_id}.stats.txt"
-
-    script:
-    if (params.bbduk_adapters == "" || params.bbduk_adapters == "adapters") {
-        bbduk_adapters = params.bbduk_adapters
-    } else {
-        bbduk_adapters = file(params.bbduk_adapters)
-    }
-    """
-    bbduk.sh \
-        in1=${reads[0]} \
-        in2=${reads[1]} \
-        ref=${bbduk_adapters} \
-        out1=${pair_id}_1.trimmed.fastq.gz \
-        out2=${pair_id}_2.trimmed.fastq.gz \
-        stats=${pair_id}.stats.txt \
-        threads=${task.cpus} \
-        minlen=${params.bbduk_minlen} \
-        qtrim=${params.bbduk_qtrim} \
-        trimq=${params.bbduk_trimq} \
-        ktrim=${params.bbduk_ktrim} \
-        k=${params.bbduk_k} \
-        mink=${params.bbduk_mink} \
-        hdist=${params.bbduk_hdist} \
-        ${params.bbduk_trimbyoverlap} \
-        ${params.bbduk_trimpairsevenly}
-    """
-}
-
-
-process fastqc {
-    tag {pair_id}
-    publishDir "${params.output_dir}/fastqc", mode: 'copy'
-
-    input:
-    set pair_id, file(clean_reads) from fastqc_input
-
-    output:
-    file("*_fastqc.{zip,html}") into fastqc_output
-
-    """
-    fastqc \
-        --quiet \
-        --threads ${task.cpus} \
-        ${clean_reads} 
     """
 }
 
@@ -208,18 +174,6 @@ process prokka {
     output:
     set sample_id, file("${sample_id}_prokka") into prokka_out
 
-    script:
-    prokka_reference_argument = ""
-    if (params.prokka_reference) {
-        prokka_reference_argument = "--proteins ${params.prokka_reference}"
-    }
-    gram_stain_argument = ""
-    if (params.prokka_gram_stain) {
-        gram_stain_argument = "--gram ${params.prokka_gram_stain}"
-        log.warn "Using gram stain (${gram_stain}) " +
-                    "due to user configured setting (${params.prokka_gram_stain})."
-    }
-    
     """
     prokka \
         --force \
@@ -228,19 +182,16 @@ process prokka {
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
         --prefix ${sample_id} \
-        --strain ${sample_id} \
-        ${params.prokka_reference} \
-        ${prokka_reference_argument} \
-        ${gram_stain_argument} \
         $renamed_contigs
     """
 }
+
 
 process multiqc {
     publishDir "${params.output_dir}/multiqc", mode: 'copy'
 
     input:
-    file(fastqc:'fastqc/*') from fastqc_output.collect()
+    file(fastp:'fastp/*.json') from fastp_reports.collect()
     file(prokka:'prokka/*') from prokka_out.collect()
 
     output:
@@ -249,9 +200,7 @@ process multiqc {
     script:
 
     """
-    
     multiqc . --filename multiqc_report.html
-
     """
 }
 
