@@ -160,23 +160,23 @@ process shovill {
 
 
 process prokka {
-    tag {sample_id}
+    tag {pair_id}
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    tuple sample_id, file("${pair_id}.contigs.fa") from prokka_input
+    tuple pair_id, file("${pair_id}.contigs.fa") from prokka_input
 
     output:
-    tuple sample_id, file("${sample_id}_prokka") into prokka_out
+    tuple pair_id, file("${pair_id}_prokka") into prokka_out
 
     """
     prokka \
         --force \
         --evalue ${params.prokka_evalue} \
         --kingdom ${params.prokka_kingdom} \
-        --locustag ${sample_id} \
-        --outdir ${sample_id}_prokka \
-        --prefix ${sample_id} \
+        --locustag ${pair_id} \
+        --outdir ${pair_id}_prokka \
+        --prefix ${pair_id} \
 	--compliant \
         ${pair_id}.contigs.fa
     """
