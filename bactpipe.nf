@@ -148,7 +148,7 @@ process shovill {
     """
     shovill \
          --depth ${params.shovill_depth} \
-         --kmers ${params.renamed_contigsrenamed_contigsshovill_kmers} \
+         --kmers ${params.shovill_kmers} \
          --minlen ${params.shovill_minlen} \
          --R1 ${reads[0]} \
          --R2 ${reads[1]} \
