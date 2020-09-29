@@ -188,16 +188,16 @@ process assembly_stats {
     publishDir "${params.output_dir}/shovill", mode: 'copy'
 
     input:
-    file(contigs:"*.contigs.fa") from stats_input.collect()
+    tuple pair_id, file("${pair_id}.contigs.fa") from prokka_input
 
     output:
-    file("assembly_stats.txt")
+    file("${pair_id}.assembly_stats.txt")
     
     """
     statswrapper.sh \
-        *.contigs.fa \
-        format=3 \
-        > assembly_stats.txt
+        in=${pair_id}.contigs.fa \
+	format=3 \
+        > ${pair_id}.assembly_stats.txt        
     """
 }
 
