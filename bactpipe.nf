@@ -148,7 +148,7 @@ process shovill {
     """
     shovill \
          --depth ${params.shovill_depth} \
-         --kmers ${params.shovill_kmers} \
+         --kmers ${params.renamed_contigsrenamed_contigsshovill_kmers} \
          --minlen ${params.shovill_minlen} \
          --R1 ${reads[0]} \
          --R2 ${reads[1]} \
@@ -164,7 +164,7 @@ process prokka {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    tuple sample_id, file(renamed_contigs) from prokka_input
+    tuple sample_id, file("${pair_id}.contigs.fa") from prokka_input
 
     output:
     tuple sample_id, file("${sample_id}_prokka") into prokka_out
@@ -177,7 +177,8 @@ process prokka {
         --locustag ${sample_id} \
         --outdir ${sample_id}_prokka \
         --prefix ${sample_id} \
-        $renamed_contigs
+	--compliant \
+        ${pair_id}.contigs.fa
     """
 }
 
