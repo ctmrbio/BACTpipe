@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
-bactpipe_version = '3.0.0'
+bactpipe_version = '3.E'
 nf_required_version = '19.10.0'
 
 log.info "".center(60, "=")
@@ -196,7 +196,6 @@ process assembly_stats {
     """
     statswrapper.sh \
         in=${pair_id}.contigs.fa \
-	format=3 \
         > ${pair_id}.assembly_stats.txt        
     """
 }
