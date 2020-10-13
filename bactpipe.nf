@@ -164,7 +164,7 @@ process prokka {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    tuple pair_id, file("${pair_id}.contigs.fa")
+    tuple pair_id, file("${pair_id}.contigs.fa") from prokka_input
 
     output:
     tuple pair_id, file("${pair_id}_prokka") into prokka_out
