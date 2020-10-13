@@ -185,7 +185,6 @@ process prokka {
         --outdir ${pair_id}_prokka \
         --prefix ${pair_id} \
 	--compliant \
-        ${params.prokka_reference} \
         ${prokka_reference_argument} \
         ${pair_id}.contigs.fa
     """
