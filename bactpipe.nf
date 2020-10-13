@@ -170,6 +170,7 @@ process prokka {
     tuple pair_id, file("${pair_id}_prokka") into prokka_out
 
     script:
+    """
     prokka_reference_argument = ""
     if (params.prokka_reference) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
@@ -192,7 +193,6 @@ process prokka {
                     "due to user configured setting (${params.prokka_gram_stain})."
     }
 
-    """
     prokka \
         --force \
         --evalue ${params.prokka_evalue} \
