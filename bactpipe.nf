@@ -164,35 +164,19 @@ process prokka {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    tuple pair_id, file("${pair_id}.contigs.fa"), gram_stain from prokka_input
+    tuple pair_id, file("${pair_id}.contigs.fa")
 
     output:
     tuple pair_id, file("${pair_id}_prokka") into prokka_out
 
     script:
-    """
+
     prokka_reference_argument = ""
     if (params.prokka_reference) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
-    gram_stain_argument = ""
-    /* 
-     * If ignore_contamination_screen is used, gram_stain is a string with
-     * potentially several comma-separated gram stain assignments. We just
-     * use the first one.
-     */
-    if ( gram_stain.split(", ").size() > 1 ) {
-        gram_stain = gram_stain.split(", ")[0]
-    }
-    if (gram_stain) {
-        gram_stain_argument = "--gram ${gram_stain}"
-    }
-    if (params.prokka_gram_stain) {
-        gram_stain_argument = "--gram ${params.prokka_gram_stain}"
-        log.warn "Overriding automatically determined gram stain (${gram_stain}) " +
-                    "due to user configured setting (${params.prokka_gram_stain})."
-    }
-
+    
+    """
     prokka \
         --force \
         --evalue ${params.prokka_evalue} \
@@ -203,7 +187,6 @@ process prokka {
 	--compliant \
         ${params.prokka_reference} \
         ${prokka_reference_argument} \
-        ${gram_stain_argument} \
         ${pair_id}.contigs.fa
     """
 }
