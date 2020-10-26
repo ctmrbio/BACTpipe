@@ -97,7 +97,7 @@ process fastp {
     tuple pair_id, file(reads) from fastp_input
 
     output:
-    tuple pair_id, file("${pair_id}_{1,2}.fastp.fq.gz") into sendsketch_input, shovill
+    tuple pair_id, file("${pair_id}_{1,2}.fastp.fq.gz") into shovill
     file("${pair_id}.json") into fastp_reports
 
     """
@@ -113,27 +113,6 @@ process fastp {
 }
 
 
-process screen_for_contaminants {
-    tag { pair_id }
-    publishDir "${params.output_dir}/sendsketch", mode: 'copy'
-
-
-    input:
-    tuple pair_id, file(reads) from sendsketch_input
-
-    output:
-    file("${pair_id}.sendsketch.txt")
-
-    script:
-    """
-    sendsketch.sh \
-        in=${reads[0]} \
-        samplerate=0.1 \
-        out=${pair_id}.sendsketch.txt \
-    """
-}
-
-
 process shovill {
     tag {pair_id}
     publishDir "${params.output_dir}/shovill", mode: 'copy'
@@ -142,7 +121,7 @@ process shovill {
     tuple pair_id, file(reads) from shovill
 
     output:
-    tuple pair_id, file("${pair_id}.contigs.fa") into prokka_input, stats_input
+    tuple pair_id, file("${pair_id}.contigs.fa") into prokka_input, stats_input, sendsketch_input
     file("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}") 
     
     """
@@ -154,6 +133,26 @@ process shovill {
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill
     cp ${pair_id}_shovill/contigs.fa ${pair_id}.contigs.fa
+    """
+}
+
+
+process screen_for_contaminants {
+    tag { pair_id }
+    publishDir "${params.output_dir}/sendsketch", mode: 'copy'
+
+    input:
+    tuple pair_id, file("${pair_id}.contigs.fa") from sendsketch_input
+
+    output:
+    file("${pair_id}.sendsketch.txt")
+
+    script:
+    """
+    sendsketch.sh \
+        in=${pair_id}.contigs.fa \
+        samplerate=0.1 \
+        out=${pair_id}.sendsketch.txt \
     """
 }
 
