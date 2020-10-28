@@ -153,14 +153,13 @@ process screen_for_contaminants {
     sendsketch.sh \
         in=${pair_id}.contigs.fa \
         samplerate=0.1 \
-        out=${pair_id}.sendsketch.txt
+        out=${pair_id}.sendsketch.txt \
+    && \
     sendsketch_stainer.py \
         ${pair_id}.sendsketch.txt \ 
-	resources/gramstain.txt
+	"$baseDir/resources/gram_stain.txt"
     """
 }
-
-
 
 process prokka {
     tag {pair_id}
@@ -180,10 +179,10 @@ process prokka {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
     prokka_gramstain_argument = ""
-    if (gramstain == "POS") {
-	    prokka_gramstain_argument = "--gram POS"
-    } else if (gramstain == "NEG") {
-            prokka_gramstain_argument = "--gram NEG"
+    if (gramstain == "pos") {
+	    prokka_gramstain_argument = "--gram pos"
+    } else if (gramstain == "neg") {
+            prokka_gramstain_argument = "--gram neg"
     } else if (gramstain == "Contaminated") {
             prokka_gramstain_argument = ""
     }

@@ -4,7 +4,7 @@ import sys
 
 sketch_file = sys.argv[1]
 stain_file = sys.argv[2]
-output= "No contamination, but genus not in list"
+output= ""
 
 with open(sketch_file, "r") as sketch:
 	sketch_lines = sketch.readlines()
