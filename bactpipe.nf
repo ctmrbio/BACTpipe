@@ -146,13 +146,17 @@ process screen_for_contaminants {
 
     output:
     file("${pair_id}.sendsketch.txt")
+    stdout gramstain_result
 
     script:
     """
     sendsketch.sh \
         in=${pair_id}.contigs.fa \
         samplerate=0.1 \
-        out=${pair_id}.sendsketch.txt \
+        out=${pair_id}.sendsketch.txt
+    sendsketch_stainer.py \
+        ${pair_id}.sendsketch.txt \ 
+	resources/gramstain.txt
     """
 }
 
@@ -164,6 +168,7 @@ process prokka {
 
     input:
     tuple pair_id, file("${pair_id}.contigs.fa") from prokka_input
+    val gramstain from gramstain_result
 
     output:
     tuple pair_id, file("${pair_id}_prokka") into prokka_out
@@ -173,6 +178,14 @@ process prokka {
     prokka_reference_argument = ""
     if (params.prokka_reference) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
+    }
+    prokka_gramstain_argument = ""
+    if (gramstain == "POS") {
+	    prokka_gramstain_argument = "--gram POS"
+    } else if (gramstain == "NEG") {
+            prokka_gramstain_argument = "--gram NEG"
+    } else if (gramstain == "Contaminated") {
+            prokka_gramstain_argument = ""
     }
     
     """
@@ -185,6 +198,7 @@ process prokka {
         --prefix ${pair_id} \
 	--compliant \
         ${prokka_reference_argument} \
+	${prokka_gramstain_argument} \
         ${pair_id}.contigs.fa
     """
 }
