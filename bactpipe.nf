@@ -178,13 +178,14 @@ process prokka {
     if (params.prokka_reference) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
+
     prokka_gramstain_argument = ""
     if (gramstain == "pos") {
-	    prokka_gramstain_argument = "--gram pos"
+        prokka_gramstain_argument = "--gram pos"
     } else if (gramstain == "neg") {
-            prokka_gramstain_argument = "--gram neg"
-    } else if (gramstain == "No_stain") {
-            prokka_gramstain_argument = ""
+        prokka_gramstain_argument = "--gram neg"
+    } else {
+        prokka_gramstain_argument = ""
     }
     
     """
@@ -195,9 +196,9 @@ process prokka {
         --locustag ${pair_id} \
         --outdir ${pair_id}_prokka \
         --prefix ${pair_id} \
-	--compliant \
+        --compliant \
         ${prokka_reference_argument} \
-	${prokka_gramstain_argument} \
+        ${prokka_gramstain_argument} \
         ${pair_id}.contigs.fa
     """
 }
