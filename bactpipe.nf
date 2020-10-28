@@ -183,7 +183,7 @@ process prokka {
 	    prokka_gramstain_argument = "--gram pos"
     } else if (gramstain == "neg") {
             prokka_gramstain_argument = "--gram neg"
-    } else if (gramstain == "Contaminated") {
+    } else if (gramstain == "No_stain") {
             prokka_gramstain_argument = ""
     }
     

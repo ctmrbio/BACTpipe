@@ -4,7 +4,7 @@ import sys
 
 sketch_file = sys.argv[1]
 stain_file = sys.argv[2]
-output= ""
+output= "No_stain"
 
 with open(sketch_file, "r") as sketch:
 	sketch_lines = sketch.readlines()
@@ -22,5 +22,5 @@ with open(sketch_file, "r") as sketch:
 				if line.split("\t")[0] == genus:
 					output= line.rstrip().split("\t")[1]
 	else:
-		output="Contaminated"
+		output="No_stain"
 print(output)
