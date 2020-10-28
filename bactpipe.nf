@@ -157,7 +157,7 @@ process screen_for_contaminants {
     && \
     sendsketch_stainer.py \
         ${pair_id}.sendsketch.txt \ 
-	"$baseDir/resources/gram_stain.txt"
+        "$baseDir/resources/gram_stain.txt"
     """
 }
 
@@ -167,7 +167,7 @@ process prokka {
 
     input:
     tuple pair_id, file("${pair_id}.contigs.fa") from prokka_input
-    val gramstain from gramstain_result
+    val "gramstain" from gramstain_result
 
     output:
     tuple pair_id, file("${pair_id}_prokka") into prokka_out
