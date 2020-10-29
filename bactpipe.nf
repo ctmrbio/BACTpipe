@@ -157,7 +157,7 @@ process screen_for_contaminants {
 
     sendsketch_stainer.py \
         ${pair_id}.sendsketch.txt \ 
-        '$projectDir/resources/gram_stain.txt'
+        $workflow.projectDir/resources/gram_stain.txt
     """
 }
 
