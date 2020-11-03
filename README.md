@@ -17,7 +17,7 @@ The easiest way to get BACTpipe up and running is to install all other
 dependencies using [conda](https://conda.io/docs/). The following command
 installs the required software:
 
-    conda install java-jdk fastp bbmap shovill prokka multiqc 
+    conda install java fastp bbmap shovill prokka multiqc 
 
 ## Run BACTpipe
 Nextflow makes it easy to run BACTpipe:
