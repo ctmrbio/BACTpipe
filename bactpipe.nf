@@ -146,7 +146,6 @@ process screen_for_contaminants {
 
     output:
     file("${pair_id}.sendsketch.txt")
-//  stdout gramstain_result
 
     script:
     """
@@ -155,12 +154,9 @@ process screen_for_contaminants {
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt \
     """
-/*
- *  sendsketch_stainer.py \
- *      ${pair_id}.sendsketch.txt \ 
- *     "$projectDir/resources/gram_stain.txt"
- */
 }
+
+
 
 process prokka {
     tag {pair_id}
@@ -168,7 +164,6 @@ process prokka {
 
     input:
     tuple pair_id, file("${pair_id}.contigs.fa") from prokka_input
-//  val "gramstain" from gramstain_result
 
     output:
     tuple pair_id, file("${pair_id}_prokka") into prokka_out
@@ -179,16 +174,7 @@ process prokka {
     if (params.prokka_reference) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
-/*
- *  prokka_gramstain_argument = ""
- *  if (gramstain == "pos") {
- *      prokka_gramstain_argument = "--gram pos"
- *  } else if (gramstain == "neg") {
- *      prokka_gramstain_argument = "--gram neg"
- *  } else {
- *      prokka_gramstain_argument = ""
- *  }
- */    
+    
     """
     prokka \
         --force \
@@ -197,12 +183,10 @@ process prokka {
         --locustag ${pair_id} \
         --outdir ${pair_id}_prokka \
         --prefix ${pair_id} \
-        --compliant \
+	--compliant \
         ${prokka_reference_argument} \
         ${pair_id}.contigs.fa
     """
-//      ${prokka_gramstain_argument} \
-
 }
 
 
