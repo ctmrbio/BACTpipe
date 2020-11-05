@@ -154,10 +154,6 @@ process screen_for_contaminants {
         in=${pair_id}.contigs.fa \
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt \
-    && \
-    sendsketch_stainer.py \
-        ${pair_id}.sendsketch.txt \ 
-        "$projectDir/resources/gram_stain.txt" \
     """
 }
 
