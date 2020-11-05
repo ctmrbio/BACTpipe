@@ -156,8 +156,8 @@ process screen_for_contaminants {
         out=${pair_id}.sendsketch.txt \
     && \
     sendsketch_stainer.py \
-        "${pair_id}.sendsketch.txt" \ 
-        "$projectDir/resources/gram_stain.txt" \
+        ${pair_id}.sendsketch.txt \ 
+        "${projectDir}/resources/gram_stain.txt" \
     """
 }
 
