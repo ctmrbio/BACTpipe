@@ -169,9 +169,7 @@ process staining {
 
     script:
     """
-    sendsketch_stainer.py \
-        ${pair_id}.sendsketch.txt \ 
-        gram_stain.txt
+    python3 sendsketch_stainer.py ${pair_id}.sendsketch.txt gram_stain.txt        
     """
 }
 
