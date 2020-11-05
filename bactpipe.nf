@@ -145,8 +145,8 @@ process screen_for_contaminants {
     tuple pair_id, file("${pair_id}.contigs.fa") from sendsketch_input
 
     output:
-    file("${pair_id}.sendsketch.txt")
-    stdout into gramstain_result
+    file("${pair_id}.sendsketch.txt") into gramstain_input
+    
 
     script:
     """
@@ -154,13 +154,26 @@ process screen_for_contaminants {
         in=${pair_id}.contigs.fa \
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt \
-    && \
-    sendsketch_stainer.py \
-        ${pair_id}.sendsketch.txt \ 
-        gram_stain.txt \
     """
 }
 
+
+process staining {
+    tag { pair_id }
+
+    input:
+    tuple pair_id, file("${pair_id}.sendsketch.txt") from gramstain_input
+
+    output:
+    stdout into gramstain_result
+
+    script:
+    """
+    sendsketch_stainer.py \
+        ${pair_id}.sendsketch.txt \ 
+        gram_stain.txt
+    """
+}
 
 
 process prokka {
