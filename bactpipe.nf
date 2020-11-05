@@ -146,7 +146,6 @@ process screen_for_contaminants {
 
     output:
     file("${pair_id}.sendsketch.txt")
-    stdout into gramstain_result
 
     script:
     """
