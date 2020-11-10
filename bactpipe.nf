@@ -153,7 +153,7 @@ process screen_for_contaminants {
     sendsketch.sh \
         in=${pair_id}.contigs.fa \
         samplerate=0.1 \
-        out=${pair_id}.sendsketch.txt \
+        out=${pair_id}.sendsketch.txt
 
     python3 "$projectDir/bin/sendsketch_stainer.py" \
         ${pair_id}.sendsketch.txt \
