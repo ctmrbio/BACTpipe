@@ -155,7 +155,7 @@ process screen_for_contaminants {
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt
 
-    python3 "$projectDir/bin/sendsketch_stainer.py" \
+    python3 "bin/sendsketch_stainer.py" \
         ${pair_id}.sendsketch.txt \
         "$projectDir/resources/gram_stain.txt"
     """
