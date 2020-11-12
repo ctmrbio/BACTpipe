@@ -155,7 +155,9 @@ process screen_for_contaminants {
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt
 
-    ls -l bin/
+    ls -l "$projectDir/bin"
+    ls -l ./bin
+    ls -l bin
 
     sendsketch_stainer.py \
         ${pair_id}.sendsketch.txt \
