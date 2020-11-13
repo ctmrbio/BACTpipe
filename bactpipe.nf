@@ -155,6 +155,7 @@ process screen_for_contaminants {
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt
 
+    pwd 
     echo $PATH
 
     sendsketch_stainer.py \
