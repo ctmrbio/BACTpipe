@@ -158,7 +158,7 @@ process screen_for_contaminants {
     type python3
     pwd 
     echo $PATH
-    testscript.py Itsrainingnow
+    python3 testscript.py Itsrainingnow
     type sendsketch_stainer.py
 
     sendsketch_stainer.py \
