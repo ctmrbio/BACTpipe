@@ -155,12 +155,6 @@ process screen_for_contaminants {
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt
 
-    type python3
-    pwd 
-    echo $PATH
-    python3 testscript.py Itsrainingnow
-    type sendsketch_stainer.py
-
     sendsketch_stainer.py \
         ${pair_id}.sendsketch.txt \
         "$projectDir/resources/gram_stain.txt"
