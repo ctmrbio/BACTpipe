@@ -97,7 +97,7 @@ process fastp {
     tuple pair_id, file(reads) from fastp_input
 
     output:
-    tuple pair_id, file("${pair_id}_{1,2}.fastp.fq.gz") into shovill
+    tuple pair_id, file("${pair_id}_{1,2}.fastp.fq.gz") into shovill_input
     file("${pair_id}.json") into fastp_reports
 
     """
@@ -118,7 +118,7 @@ process shovill {
     publishDir "${params.output_dir}/shovill", mode: 'copy'
 
     input:
-    tuple pair_id, file(reads) from shovill
+    tuple pair_id, file(reads) from shovill_input
 
     output:
     tuple pair_id, file("${pair_id}.contigs.fa") into prokka_input, stats_input, sendsketch_input
@@ -138,7 +138,7 @@ process shovill {
 
 
 process screen_for_contaminants {
-    tag { pair_id }
+    tag {pair_id}
     publishDir "${params.output_dir}/sendsketch", mode: 'copy'
 
     input:
