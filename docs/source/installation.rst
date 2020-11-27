@@ -8,7 +8,7 @@ In order to run BACTpipe, you need to have the following programs installed:
 
 - `Java v8+`_ for nextflow 
 - `Nextflow`_ for workflow management
-- _`Conda`_ for installation of workflow tools
+- `Conda`_ for installation of workflow tools
 
 .. _Java v8+: https://www.java.com/sv/download/help/download_options.xml
 .. _Nextflow: https://www.nextflow.io/
