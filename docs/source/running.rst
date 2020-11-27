@@ -4,11 +4,10 @@ After installing all the required dependencies and downloading the required
 mash sketches of refseq genomes, it is very easy to run BACTpipe. There are
 several ways to run BACTpipe, but we'll start with the easiest::
 
-    $ nextflow run ctmrbio/BACTpipe --mashscreen_database path/to/refseq.genomes.k21s1000.msh --reads 'path/to/reads/*_R{1,2}.fastq.gz'
+    $ nextflow run ctmrbio/BACTpipe --reads 'path/to/reads/*_R{1,2}.fastq.gz'
 
 This will instruct Nextflow to go to the ``ctmrbio`` Github organization to
-download and run the ``BACTpipe`` workflow. The ``--mashscreen_database`` tells
-Nextflow where to find the database for the mash screen step. The argument
+download and run the ``BACTpipe`` workflow. The argument
 ``--reads`` is used to tell the workflow which input files you want to run
 BACTpipe on. Note that the path to the reads must be enclosed in single quotes
 (``'``), to prevent the shell from automatically expanding asterisks (``*``)
@@ -43,33 +42,20 @@ possible to modify several settings for how BACTpipe operates using
 configuration parameters. All changes can be added as command-line arguments
 when running BACTpipe, e.g.::
 
-    $ nextflow run ctmrbio/BACTpipe --bbduk_mink 8 --reads 'path/to/reads/*_{1,2}.fastq.gz'
+    $ nextflow run ctmrbio/BACTpipe --shovill_kmers 21,33,55,77 --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
-The ``--bbduk_mink`` flag will modify the minimum kmer length for BBDuk. The 
+The ``--shovill_kmers`` flag will modify the kmer legths that shovill will use in it's SPAdes assembly. The 
 following parameters can be easily configured from the command line::
 
     Parameter name               Default setting
     output_dir                   BACTpipe_results
     reads                        [empty]
-    mashscreen_database          Path to refseq minhash sketches for Mash screen
-    ignore_contamination_screen  [false]
-    bbduk_adapters               [default BBDuk adapters]
-    bbduk_minlen                 30
-    bbduk_qtrim                  rl
-    bbduk_trimq                  10
-    bbduk_ktrim                  r
-    bbduk_k                      30
-    bbduk_mink                   11
-    bbduk_hdist                  1
-    bbduk_trimbyoverlap          trimbyoverlap
-    bbduk_trimpairsevenly        trimpairsevenly
     shovill_depth                100
     shovill_kmers                31,33,55,77,99,127
     shovill_minlen               500
     prokka_evalue                1e-09
     prokka_kingdom               Bacteria
     prokka_reference             [not used]
-    prokka_gram_stain            [not used]
 
 To modify any parameter, just add ``--<parameter_name> <new_setting>`` on the
 command line when running BACTpipe, e.g. ``--shovill_depth 75`` to set
@@ -92,7 +78,6 @@ is probably YAML, and is the recommended choice. Here is an example YAML
 configuration file that modifies some shovill parameters and the BBDuk quality
 trimming value, and leaves all other settings to their default values::
 
-    bbduk_trimq: "20"
     shovill_depth: "100"
     shovill_kmers: "31,33,55,77,99,111,127"
     shovill_minlen: "400"
@@ -132,10 +117,7 @@ load a profile. BACTpipe comes with a few pre-installed profiles:
 
 * ``standard`` -- For local use on e.g. a laptop or Linux server. This is the
   default profile used if no profile is explicitly specified.
-* ``rackham`` -- For use on UPPMAX's Rackham HPC system. Note however, that it
-  is currently preconfigured specifically for use within CTMR project folders,
-  and non CTMR users will have to modify some paths (at least mash screen and
-  bbduk references).
+* ``rackham`` -- For use on the UPPMAX's Rackham HPC system.
 * ``ctmrnas`` -- For use on CTMR's internal analysis server.
 
 .. sidebar:: Cluster profiles
@@ -147,7 +129,7 @@ load a profile. BACTpipe comes with a few pre-installed profiles:
     account_name`` on the command line, or by adding it to a custom
     configuration file (see previous section).
  
-To run BACTpipe with a specific profile, use the ``-profile <profilename>`` argument
+To run BACTpipe with a specific profile, use the ``-profile <profilename>`` argument (note the single dash before ``profile``)
 when running, e.g.::
 
     $ nextflow run ctmrbio/BACTpipe -profile ctmrnas --reads '/proj/projectname/reads/*_{1,2}.fastq.gz'
