@@ -25,7 +25,7 @@ determine the best reference genome to use for contig ordering and annotation.
    
 About
 *****
-:Authors: Joseph Kirangwa, Sandra Alvarez-Carretero, Fredrik Boulund, Kaisa Thorell
+:Authors: Emilio Rudbeck, Joseph Kirangwa, Sandra Alvarez-Carretero, Fredrik Boulund, Kaisa Thorell
 :Contact: kaisa.thorell@ki.se
 :License: MIT
 
