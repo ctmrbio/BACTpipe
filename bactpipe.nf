@@ -57,10 +57,10 @@ if (params.help) {
 
 printSettings()
 
+
 //================================================================================
-// Workflow
+// Prepare channels
 //================================================================================
-workflow {
 
 //    try {
 //        Channel
@@ -82,7 +82,15 @@ workflow {
 //        exit(1)
 //    }
 
-    fastp_input = Channel.fromFilePairs(params.reads)
+fastp_input = Channel.fromFilePairs(params.reads)
+
+
+//================================================================================
+// Main workflow
+//================================================================================
+
+
+workflow {
 
     FASTP(fastp_input)
     SHOVILL(FASTP.out.shovill_input)
