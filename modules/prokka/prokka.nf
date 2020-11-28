@@ -7,7 +7,7 @@ process PROKKA {
     tuple val(pair_id), path("${pair_id}.contigs.fa")
 
     output:
-    tuple val(pair_id), path("${pair_id}_prokka")
+    path("${pair_id}_prokka")
 
     script:
 
