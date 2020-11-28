@@ -62,27 +62,17 @@ printSettings()
 // Prepare channels
 //================================================================================
 
-//    try {
-//        Channel
-//                .fromFilePairs(params.reads)
-//                .ifEmpty {
-//                    log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
-//                            "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
-//                            "Specify --help for a summary of available commands."
-//                    printHelp()
-//                    exit(1)
-//                }
-//                .into {
-//                    fastp_input
-//                }
-//    } catch (all) {
-//        log.error "It appears params.reads is empty!\n" +
-//                "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
-//                "Specify --help for a summary of available commands."
-//        exit(1)
-//    }
 
 fastp_input = Channel.fromFilePairs(params.reads)
+
+fastp_input
+        .ifEmpty {
+            log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
+                    "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+                    "Specify --help for a summary of available commands."
+            printHelp()
+            exit(1)
+        }
 
 
 //================================================================================
