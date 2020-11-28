@@ -4,11 +4,11 @@ process FASTP {
     publishDir "${params.output_dir}/fastp", mode: 'copy'
 
     input:
-    tuple pair_id, path(reads)
+    tuple val(pair_id), path(reads)
 
     output:
-    tuple pair_id, path("${pair_id}_{1,2}.fastp.fq.gz")
-    path("${pair_id}.json")
+    tuple val(pair_id), path("${pair_id}_{1,2}.fastp.fq.gz"), emit: shovill_input
+    path "${pair_id}.json", emit: fastp_reports
 
     """
     fastp \

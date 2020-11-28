@@ -1,6 +1,7 @@
 #!/usr/bin/env nextflow
 // vim: syntax=groovy expandtab
 
+nextflow.enable.dsl = 2
 
 //================================================================================
 // Constants
@@ -61,34 +62,36 @@ printSettings()
 //================================================================================
 workflow {
 
-    try {
-        Channel
-                .fromFilePairs(params.reads)
-                .ifEmpty {
-                    log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
-                            "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
-                            "Specify --help for a summary of available commands."
-                    printHelp()
-                    exit(1)
-                }
-                .into {
-                    fastp_input;
-                    read_pairs
-                }
-    } catch (all) {
-        log.error "It appears params.reads is empty!\n" +
-                "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
-                "Specify --help for a summary of available commands."
-        exit(1)
-    }
+//    try {
+//        Channel
+//                .fromFilePairs(params.reads)
+//                .ifEmpty {
+//                    log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
+//                            "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+//                            "Specify --help for a summary of available commands."
+//                    printHelp()
+//                    exit(1)
+//                }
+//                .into {
+//                    fastp_input
+//                }
+//    } catch (all) {
+//        log.error "It appears params.reads is empty!\n" +
+//                "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+//                "Specify --help for a summary of available commands."
+//        exit(1)
+//    }
 
+    fastp_input = Channel.fromFilePairs(params.reads)
 
-    FASTP
-    SHOVILL
-    SCREEN_FOR_CONTAMINANTS
-    PROKKA
-    ASSEMBLY_STATS
-    MULTIQC
+    FASTP(fastp_input)
+    SHOVILL(FASTP.out.shovill_input)
+    SCREEN_FOR_CONTAMINANTS(SHOVILL.out[0])
+    PROKKA(SHOVILL.out[0])
+    ASSEMBLY_STATS(SHOVILL.out[0])
+    MULTIQC(FASTP.out.fastp_reports.collect(),
+            PROKKA.out.collect()
+    )
 
 
 }

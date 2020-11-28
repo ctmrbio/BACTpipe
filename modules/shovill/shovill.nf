@@ -4,10 +4,10 @@ process SHOVILL {
     publishDir "${params.output_dir}/shovill", mode: 'copy'
 
     input:
-    tuple pair_id, path(reads)
+    tuple val(pair_id), path(reads)
 
     output:
-    tuple pair_id, path("${pair_id}.contigs.fa")
+    tuple val(pair_id), path("${pair_id}.contigs.fa")
     path("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}")
 
     """

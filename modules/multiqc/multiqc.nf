@@ -3,8 +3,8 @@ process MULTIQC {
     publishDir "${params.output_dir}/multiqc", mode: 'copy'
 
     input:
-    path(fastp: 'fastp/*.json')
-    path(prokka: 'prokka/*')
+    path('fastp/*.json')
+    path('prokka/*')
 
     output:
     file('multiqc_report.html')

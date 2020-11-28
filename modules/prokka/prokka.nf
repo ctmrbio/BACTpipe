@@ -4,10 +4,10 @@ process PROKKA {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    tuple pair_id, path("${pair_id}.contigs.fa")
+    tuple val(pair_id), path("${pair_id}.contigs.fa")
 
     output:
-    tuple pair_id, path("${pair_id}_prokka")
+    tuple val(pair_id), path("${pair_id}_prokka")
 
     script:
 

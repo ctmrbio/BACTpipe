@@ -4,7 +4,7 @@ process SCREEN_FOR_CONTAMINANTS {
     publishDir "${params.output_dir}/sendsketch", mode: 'copy'
 
     input:
-    tuple pair_id, path("${pair_id}.contigs.fa")
+    tuple val(pair_id), path("${pair_id}.contigs.fa")
 
     output:
     path("${pair_id}.sendsketch.txt")
