@@ -17,7 +17,7 @@ process SCREEN_FOR_CONTAMINANTS {
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt
 
-    sendsketch_stainer.py \
+    sendsketch_to_prokka.py \
         ${pair_id}.sendsketch.txt \
         "$projectDir/resources/gram_stain.txt"
     """
