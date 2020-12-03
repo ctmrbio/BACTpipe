@@ -22,16 +22,14 @@ folder mentioned above.
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | Output Folder   | File output                                  | File Description                                                                                               |
 +=================+==============================================+================================================================================================================+
-| fastp           | - ``*.fastp.fq.gz``                          | - Trimmed reads for each sample (For R1 and R2 respectively)                                                                               |
-|                 | - ``*.json``                                 | - Quality trimming Statistics
-|
+| fastp           | - ``*.fastp.fq.gz``                          | - Trimmed reads for each sample (For R1 and R2 respectively)                                                   |
+|                 | - ``*.json``                                 | - Quality trimming Statistics                                                                                  |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | shovill         | - ``*.contigs.fa``                           | - Final corrected *de novo* assembly                                                                           |
-|                 | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               
-|
-|                 | - ``*_shovill``                              | - Shovill output directory containing the files contigs.fa, contigs.gfa, shovill.log, and spades.fasta                                                                               |
+|                 | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               |
+|                 | - ``*_shovill``                              | - Shovill output directory containing the files contigs.fa, contigs.gfa, shovill.log, and spades.fasta         |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| sendsketch      | - ``*.sendsketch.txt``                       | - Sendsketch classification output table                                                                          |
+| sendsketch      | - ``*.sendsketch.txt``                       | - Sendsketch classification output table                                                                       |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | prokka          | - ``*.gff``                                  | - Annotation in GFF3 format, containing both sequences and annotations                                         |
 |                 | - ``*.gbk``                                  | - Standard Genbank file                                                                                        |
