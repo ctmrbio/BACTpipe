@@ -7,12 +7,11 @@ directory).
 Output folders
 **************
 
-1. mash_screen
-2. bbduk
-3. fastqc
-4. shovill
-5. prokka
-6. multiqc
+1. fastp
+2. shovill
+3. sendsketch
+4. prokka
+5. multiqc
 
 Description of file outputs
 ***************************
@@ -23,17 +22,16 @@ folder mentioned above.
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | Output Folder   | File output                                  | File Description                                                                                               |
 +=================+==============================================+================================================================================================================+
-| mash_screen     | - ``*.screening_results.tsv``                | - Initial screening results used to asses if pure or mixed isolate. Tab separated values, five columns:        |
-|                 | - ``all_samples.mash_screening_results.tsv`` |   sample name, ``PASS``/``FAIL``, phiX detection, believed gram stain, believed species name                   |
-|                 |                                              | - A concatenation av all the screening result files, five columns tab separated.                               |
-+-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| bbduk           | - ``*.trimmed.fastq.gz``                     | - Trimmed reads for each sample                                                                                |
-|                 | - ``*.stats.txt``                            | - Statistics relating to fraction of reads that matched each reference sequence                                |
-+-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| fastqc          | - ``*.trimmed_fastqc.html``                  | - QC report for each sample showing FASTQ data quality of input data                                           |
+| fastp           | - ``*.fastp.fq.gz``                          | - Trimmed reads for each sample (For R1 and R2 respectively)                                                                               |
+|                 | - ``*.json``                                 | - Quality trimming Statistics
+|
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | shovill         | - ``*.contigs.fa``                           | - Final corrected *de novo* assembly                                                                           |
-|                 | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               |
+|                 | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               
+|
+|                 | - ``*_shovill``                              | - Shovill output directory containing the files contigs.fa, contigs.gfa, shovill.log, and spades.fasta                                                                               |
++-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| sendsketch      | - ``*.sendsketch.txt``                       | - Sendsketch classification output table                                                                          |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | prokka          | - ``*.gff``                                  | - Annotation in GFF3 format, containing both sequences and annotations                                         |
 |                 | - ``*.gbk``                                  | - Standard Genbank file                                                                                        |
