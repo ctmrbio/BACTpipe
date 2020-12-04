@@ -27,4 +27,4 @@ with open(sketch_file, "r") as sketch:
 					output_stain = line.rstrip().split("\t")[1]
 	else:
 		output_stain = "Contaminated"
-print(output_stain+"\t"+genus+"\t"+output_species)
+print(output_stain+","+genus+","+output_species)
