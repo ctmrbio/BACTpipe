@@ -5,7 +5,7 @@ process PROKKA {
 
     input:
     tuple val(pair_id), path("${pair_id}.contigs.fa")
-    sketch_string from SCREEN_FOR_CONTAMINANTS
+    sketch_string
 
     output:
     path("${pair_id}_prokka")
@@ -25,23 +25,28 @@ process PROKKA {
     prokka_genus_argument = ""
     prokka_species_argument = ""
 
-    if (stain == "pos"):
-	prokka_gramstain_argument = "--gram pos"
-    elif (stain == "neg"):
+    if (stain == "pos") {
+        prokka_gramstain_argument = "--gram pos"
+    } else if (stain == "neg") {
         prokka_gramstain_argument = "--gram neg"
-    else:
+    } else {
         prokka_gramstain_argument = ""
+    }
 
-    if (genus != "Multiple"):
-        prokka_genus_argument = "--genus "+genus
-        prokka_species_argument = "--species "+species
-    else:
+
+    if (genus != "Multiple") {
+        prokka_genus_argument = "--genus " + genus
+        prokka_species_argument = "--species " + species
+    } else {
         prokka_genus_argument = "--genus Multiple_taxa"
+    }
 
-    if (stain == "Not_in_list"):
+
+    if (stain == "Not_in_list") {
         print("Genus not found in referencelist and remains unstained!")
-    elif (stain == "Contaminated"):
+    } else if (stain == "Contaminated") {
         print("Sample contains more than one genus!")
+    }
 
     """
     prokka \
