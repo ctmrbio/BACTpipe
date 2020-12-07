@@ -23,4 +23,8 @@ with open(sketch_file, "r") as sketch:
 					output= line.rstrip().split("\t")[1]
 	else:
 		output="No_stain"
-print(output)
+
+# print(output)
+
+with open("sendsketch_stainer_output.txt", "w") as f:
+    f.writelines(output)

@@ -84,9 +84,9 @@ workflow {
 
     FASTP(fastp_input)
     SHOVILL(FASTP.out.shovill_input)
-    SCREEN_FOR_CONTAMINANTS(SHOVILL.out[0])
-    PROKKA(SHOVILL.out[0], SCREEN_FOR_CONTAMINANTS.out[1])
     ASSEMBLY_STATS(SHOVILL.out[0])
+    SCREEN_FOR_CONTAMINANTS(SHOVILL.out[0])
+    PROKKA(SHOVILL.out[0], SCREEN_FOR_CONTAMINANTS.out[0])
     MULTIQC(FASTP.out.fastp_reports.collect(),
             PROKKA.out.collect()
     )
