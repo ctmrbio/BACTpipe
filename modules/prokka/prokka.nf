@@ -5,7 +5,7 @@ process PROKKA {
 
     input:
     tuple val(pair_id), path("${pair_id}.contigs.fa")
-    sketch_string
+    val(sketch_string)
 
     output:
     path("${pair_id}_prokka")
@@ -17,9 +17,9 @@ process PROKKA {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
 
-    stain = sketch_string.split(",")[0]
-    genus = sketch_string.split(",")[1]
-    species = sketch_string.split(",")[2]
+    stain = sketch_string.toString().split(",")[0]
+    genus = sketch_string.toString().split(",")[1]
+    species = sketch_string.toString().split(",")[2]
 
     prokka_gramstain_argument = ""
     prokka_genus_argument = ""
