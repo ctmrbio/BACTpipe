@@ -25,7 +25,6 @@ process SCREEN_FOR_CONTAMINANTS {
         $projectDir/resources/gram_stain.txt
 
     mv stain_genus_species.txt ${pair_id}_stain_genus_species.txt
-    mv sendsketch_stainer_output.txt ${pair_id}_sendsketch_stainer_output.txt
     """
 }
 
