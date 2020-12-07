@@ -14,6 +14,9 @@ process PROKKA {
     script:
 
     prokka_reference_argument = ""
+    if (params.prokka_reference) {
+        prokka_reference_argument = "--proteins ${params.prokka_reference}"
+    }
 
     sketch_string = stain_genus_species.toString().split("\\t")
 
@@ -51,6 +54,7 @@ process PROKKA {
         --prefix ${pair_id} \
         --strain ${pair_id} \
         ${prokka_reference_argument} \
+        ${prokka_gramstain_argument} \
         ${prokka_genus_argument} \
         ${prokka_species_argument} \
         --compliant \
