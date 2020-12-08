@@ -9,7 +9,6 @@ process SCREEN_FOR_CONTAMINANTS {
 
     output:
     stdout
-    path "${pair_id}_stain_genus_species.txt"
     path "${pair_id}.sendsketch.txt"
 
     script:
@@ -24,7 +23,6 @@ process SCREEN_FOR_CONTAMINANTS {
         ${pair_id}.sendsketch.txt \
         $projectDir/resources/gram_stain.txt
 
-    mv stain_genus_species.txt ${pair_id}_stain_genus_species.txt
     """
 }
 

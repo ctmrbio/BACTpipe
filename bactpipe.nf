@@ -86,7 +86,18 @@ workflow {
     SHOVILL(FASTP.out.shovill_input)
     ASSEMBLY_STATS(SHOVILL.out[0])
     SCREEN_FOR_CONTAMINANTS(SHOVILL.out[0])
-    PROKKA(SHOVILL.out[0], SCREEN_FOR_CONTAMINANTS.out[0])
+
+    contamination_profile_ch = SCREEN_FOR_CONTAMINANTS.out[0]
+            .splitCsv(sep: '\t', strip: true)
+            .map { row ->
+                tuple(
+                        row[0], //stain
+                        row[1], //genus
+                        row[2], //species
+                )
+            }
+
+    PROKKA(SHOVILL.out[0], contamination_profile_ch)
     MULTIQC(FASTP.out.fastp_reports.collect(),
             PROKKA.out.collect()
     )

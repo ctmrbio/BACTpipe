@@ -6,7 +6,7 @@ process PROKKA {
 
     input:
     tuple val(pair_id), path(contigs_file)
-    val(stain_genus_species)
+    tuple val(stain), val(genus), val(species)
 
     output:
     path("${pair_id}_prokka")
@@ -17,12 +17,6 @@ process PROKKA {
     if (params.prokka_reference) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
-
-    sketch_string = stain_genus_species.toString().split("\\t")
-
-    stain = sketch_string[0].strip()
-    genus = sketch_string[1].strip()
-    species = sketch_string[2].strip()
 
     prokka_gramstain_argument = ""
 
@@ -73,8 +67,17 @@ workflow test {
     params.prokka_evalue = "1e-09"
     params.prokka_kingdom = 'Bacteria'
 
+    contamination_profile_ch = SCREEN_FOR_CONTAMINANTS.out[0]
+                                                      .splitCsv(sep: '\t', strip: true)
+                                                      .map { row ->
+                                                            tuple(
+                                                                 row[0], //stain
+                                                                 row[1], //genus
+                                                                 row[2], //species
+                                                            )}
+
     PROKKA(["SRR1544630", "$baseDir/test_data/SRR1544630.contigs.fa"],
-            SCREEN_FOR_CONTAMINANTS.out[0]
+            contamination_profile_ch
     )
 
 }
