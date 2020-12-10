@@ -97,7 +97,7 @@ workflow {
                 )
             }
 
-    PROKKA(SHOVILL.out[0], contamination_profile_ch)
+    PROKKA(SCREEN_FOR_CONTAMINANTS.out[1], contamination_profile_ch)
     MULTIQC(FASTP.out.fastp_reports.collect(),
             PROKKA.out.collect()
     )
