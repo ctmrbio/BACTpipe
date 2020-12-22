@@ -14,15 +14,15 @@ process PROKKA {
     script:
 
     prokka_reference_argument = ""
-    if (params.prokka_reference) {
+    if( params.prokka_reference ) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
 
     prokka_gramstain_argument = ""
 
-    if (stain == "pos") {
+    if( params.gram && stain == "pos" ) {
         prokka_gramstain_argument = "--gram pos"
-    } else if (stain == "neg") {
+    } else if( stain == "neg" ) {
         prokka_gramstain_argument = "--gram neg"
     } else {
         prokka_gramstain_argument = ""
@@ -31,7 +31,7 @@ process PROKKA {
     prokka_genus_argument = ""
     prokka_species_argument = ""
 
-    if (genus != "Multiple") {
+    if( genus != "Multiple" ) {
         prokka_genus_argument = "--genus ${genus}"
         prokka_species_argument = "--species ${species}"
     } else {
@@ -41,6 +41,7 @@ process PROKKA {
     """
     prokka \
         --force \
+        --cpus ${task.cpus} \
         --evalue ${params.prokka_evalue} \
         --kingdom ${params.prokka_kingdom} \
         --locustag ${pair_id} \
@@ -68,13 +69,14 @@ workflow test {
     params.prokka_kingdom = 'Bacteria'
 
     contamination_profile_ch = SCREEN_FOR_CONTAMINANTS.out[0]
-                                                      .splitCsv(sep: '\t', strip: true)
-                                                      .map { row ->
-                                                            tuple(
-                                                                 row[0], //stain
-                                                                 row[1], //genus
-                                                                 row[2], //species
-                                                            )}
+            .splitCsv(sep: '\t', strip: true)
+            .map { row ->
+                tuple(
+                        row[0], //stain
+                        row[1], //genus
+                        row[2], //species
+                )
+            }
 
     PROKKA(["SRR1544630", "$baseDir/test_data/SRR1544630.contigs.fa"],
             contamination_profile_ch

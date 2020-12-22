@@ -31,7 +31,7 @@ params.help = false
 include { ASSEMBLY_STATS } from "./modules/assembly_stats/assembly_stats.nf"
 include { FASTP } from "./modules/fastp/fastp.nf"
 include { MULTIQC } from "./modules/multiqc/multiqc.nf"
-include { PROKKA } from "./modules/prokka/prokka.nf"
+include { PROKKA } from "./modules/prokka/prokka.nf", addParams(params.PROKKA)
 include { SCREEN_FOR_CONTAMINANTS } from "./modules/screen_for_contaminants/screen_for_contaminants.nf"
 include { SHOVILL } from "./modules/shovill/shovill.nf"
 include { printHelp; printSettings } from "./modules/utils/utils.nf"
@@ -41,8 +41,8 @@ include { printHelp; printSettings } from "./modules/utils/utils.nf"
 // Pre-flight checks and info
 //================================================================================
 
-if (workflow['profile'] in params.profiles_that_require_project) {
-    if (!params.project) {
+if( workflow['profile'] in params.profiles_that_require_project ) {
+    if( !params.project ) {
         log.error "BACTpipe requires that you set the 'project' parameter when running the ${workflow['profile']} profile.\n".center(60) +
                 "Specify --project <project_name> on the command line, or tuple it in a custom configuration file.".center(60)
         exit(1)
