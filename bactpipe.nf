@@ -31,7 +31,7 @@ params.help = false
 include { ASSEMBLY_STATS } from "./modules/assembly_stats/assembly_stats.nf"
 include { FASTP } from "./modules/fastp/fastp.nf"
 include { MULTIQC } from "./modules/multiqc/multiqc.nf"
-include { PROKKA } from "./modules/prokka/prokka.nf", addParams(params.PROKKA)
+include { PROKKA } from "./modules/prokka/prokka.nf"
 include { SCREEN_FOR_CONTAMINANTS } from "./modules/screen_for_contaminants/screen_for_contaminants.nf"
 include { SHOVILL } from "./modules/shovill/shovill.nf"
 include { printHelp; printSettings } from "./modules/utils/utils.nf"

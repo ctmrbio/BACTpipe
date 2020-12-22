@@ -20,7 +20,7 @@ process PROKKA {
 
     prokka_gramstain_argument = ""
 
-    if( params.gram && stain == "pos" ) {
+    if( params.prokka_gram && stain == "pos" ) {
         prokka_gramstain_argument = "--gram pos"
     } else if( stain == "neg" ) {
         prokka_gramstain_argument = "--gram neg"
