@@ -14,24 +14,28 @@ process PROKKA {
     script:
 
     prokka_reference_argument = ""
-    if (params.prokka_reference) {
+    if( params.prokka_reference ) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
 
     prokka_gramstain_argument = ""
 
-    if (stain == "pos") {
-        prokka_gramstain_argument = "--gram pos"
-    } else if (stain == "neg") {
-        prokka_gramstain_argument = "--gram neg"
+    if( params.prokka_gram ) {
+        if( stain == "pos" ) {
+            prokka_gramstain_argument = "--gram pos"
+        } else if( stain == "neg" ) {
+            prokka_gramstain_argument = "--gram neg"
+        } else {
+            prokka_gramstain_argument = ""
+        }
     } else {
         prokka_gramstain_argument = ""
     }
-
+   
     prokka_genus_argument = ""
     prokka_species_argument = ""
 
-    if (genus != "Multiple") {
+    if( genus != "Multiple" ) {
         prokka_genus_argument = "--genus ${genus}"
         prokka_species_argument = "--species ${species}"
     } else {
