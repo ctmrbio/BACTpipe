@@ -44,6 +44,7 @@ process PROKKA {
 
     """
     prokka \
+        --cpus ${task.cpus} \
         --force \
         --evalue ${params.prokka_evalue} \
         --kingdom ${params.prokka_kingdom} \

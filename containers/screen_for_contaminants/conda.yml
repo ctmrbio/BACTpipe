@@ -1,0 +1,8 @@
+name: screen_for_contaminants
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - bbmap=38.87
+  - python=3.9.0
