@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''Rename contigs of a FASTA file with incremental count.'''
 
