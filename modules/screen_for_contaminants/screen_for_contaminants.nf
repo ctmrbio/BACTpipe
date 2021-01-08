@@ -9,7 +9,7 @@ process SCREEN_FOR_CONTAMINANTS {
 
     output:
     stdout
-    tuple val(pair_id), path(contigs_file)
+    tuple val(pair_id), path("${pair_id}_contig.fa")
     path "${pair_id}.sendsketch.txt"
 
     script:
