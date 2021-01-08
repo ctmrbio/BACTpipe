@@ -14,7 +14,7 @@ process SCREEN_FOR_CONTAMINANTS {
 
     script:
     """
-    python3 rename_fasta.py --input ${contigs_file} --output ${pair_id}_contig.fa --pre ${pair_id}_contig
+    rename_fasta.py --input ${contigs_file} --output ${pair_id}_contig.fa --pre ${pair_id}_contig
 
     sendsketch.sh \
         in=${pair_id}_contig.fa \
