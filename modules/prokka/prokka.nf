@@ -56,7 +56,6 @@ process PROKKA {
         ${prokka_gramstain_argument} \
         ${prokka_genus_argument} \
         ${prokka_species_argument} \
-        --compliant \
         ${contigs_file}
     """
 }
