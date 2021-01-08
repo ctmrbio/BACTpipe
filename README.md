@@ -24,11 +24,13 @@ This will run BACTpipe locally. For more details on how to run BACTpipe, see
 the official documentation at https://bactpipe.readthedocs.io.
 
 ## License
-BACTpipe is published under the MIT license 2018
+BACTpipe is published under the MIT license 2018-2021
 
 ## Authors
-Emilio Rudbeck (@emilio-r)
-Joseph Kirangwa (@b16joski), 
-Sandra Alvarez-Carretero (@sabifo4),
-Fredrik Boulund (@boulund),
-Kaisa Thorell (@thorellk)
+
+- Abhinav Sharma (@abhi18av)
+- Emilio Rudbeck (@emilio-r)
+- Joseph Kirangwa (@b16joski),
+- Sandra Alvarez-Carretero (@sabifo4),
+- Fredrik Boulund (@boulund),
+- Kaisa Thorell (@thorellk)
