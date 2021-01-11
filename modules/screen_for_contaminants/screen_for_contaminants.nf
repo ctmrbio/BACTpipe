@@ -8,7 +8,7 @@ process SCREEN_FOR_CONTAMINANTS {
     tuple val(pair_id), path(contigs_file)
 
     output:
-    stdout
+    path "${pair_id}_stain_genus_species.tsv"
     tuple val(pair_id), path("${pair_id}_contig.fa")
     path "${pair_id}.sendsketch.txt"
 
@@ -25,6 +25,8 @@ process SCREEN_FOR_CONTAMINANTS {
     sendsketch_to_prokka.py \
         ${pair_id}.sendsketch.txt \
         $projectDir/resources/gram_stain.txt
+
+    mv stain_genus_species.txt ${pair_id}_stain_genus_species.txt
 
     """
 }

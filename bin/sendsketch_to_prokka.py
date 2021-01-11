@@ -28,3 +28,7 @@ with open(sketch_file, "r") as sketch:
     else:
         output_stain = "Contaminated"
 print(output_stain+"\t"+genus+"\t"+output_species)
+
+with open("stain_genus_species.tsv", "w") as f:
+    f.writelines(output_stain + "\t" + genus + "\t" + output_species)
+
