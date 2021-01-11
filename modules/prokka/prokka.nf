@@ -5,7 +5,7 @@ process PROKKA {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    path "${pair_id}_stain_genus_species.txt"
+    path "${pair_id}_stain_genus_species.tsv"
     tuple val(pair_id), path(contigs_file)
 
     output:
@@ -13,7 +13,7 @@ process PROKKA {
 
     script:
 
-    def bacterial_profile = file("${pair_id}_stain_genus_species.tsv").getText().split("\t")
+    def bacterial_profile = file("${projectDir}/${params.output_dir}/sendsketch/${pair_id}_stain_genus_species.tsv").getText().split("\t")
     def stain = bacterial_profile[0]
     def genus = bacterial_profile[1]
     def species = bacterial_profile[2]
