@@ -13,7 +13,7 @@ process PROKKA {
 
     script:
 
-    def bacterial_profile = new File("${pair_id}_stain_genus_species.tsv").collect { it.split("\t") }.flatten()
+    def bacterial_profile = file("${pair_id}_stain_genus_species.tsv").getText().split("\t")
     def stain = bacterial_profile[0]
     def genus = bacterial_profile[1]
     def species = bacterial_profile[2]
