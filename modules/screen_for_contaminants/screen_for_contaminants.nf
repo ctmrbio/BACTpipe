@@ -24,18 +24,8 @@ process SCREEN_FOR_CONTAMINANTS {
     # This process yields the main stdout for prokka
     sendsketch_to_prokka.py \
         ${pair_id}.sendsketch.txt \
-        $projectDir/resources/gram_stain.txt
-
-    mv stain_genus_species.txt ${pair_id}_stain_genus_species.txt
+        $projectDir/resources/gram_stain.txt \
+        ${pair_id}_stain_genus_species.tsv
 
     """
-}
-
-workflow test {
-
-
-    input = ["SRR1544630", "$baseDir/test_data/SRR1544630.contigs.fa"]
-
-
-    SCREEN_FOR_CONTAMINANTS(input)
 }
