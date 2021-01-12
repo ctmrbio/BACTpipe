@@ -13,7 +13,7 @@ process PROKKA {
 
     script:
 
-    def bacterial_profile = file(profile_file).getText().split("\t")
+    def bacterial_profile = file(profile_file.resolveSymLink()).getText().split("\t")
     def stain = bacterial_profile[0]
     def genus = bacterial_profile[1]
     def species = bacterial_profile[2]
