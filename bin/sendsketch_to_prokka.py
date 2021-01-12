@@ -3,6 +3,7 @@ import sys
 
 sketch_file = sys.argv[1]
 stain_file = sys.argv[2]
+profile_file = sys.argv[3]
 
 output_stain = "Not_in_list"
 output_species = "taxa"
@@ -28,3 +29,7 @@ with open(sketch_file, "r") as sketch:
     else:
         output_stain = "Contaminated"
 print(output_stain+"\t"+genus+"\t"+output_species)
+
+with open(profile_file, "w") as f:
+    f.writelines(output_stain + "\t" + genus + "\t" + output_species)
+
