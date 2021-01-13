@@ -7,8 +7,8 @@ directory).
 Output folders
 **************
 
-1. fastp
-2. shovill
+1. fastp (optional)
+2. shovill (optional)
 3. sendsketch
 4. prokka
 5. multiqc
@@ -23,11 +23,10 @@ folder mentioned above.
 | Output Folder   | File output                                  | File Description                                                                                               |
 +=================+==============================================+================================================================================================================+
 | fastp           | - ``*.fastp.fq.gz``                          | - Trimmed reads for each sample (For R1 and R2 respectively)                                                   |
-|                 | - ``*.json``                                 | - Quality trimming Statistics                                                                                  |
+| (optional)      | - ``*.json``                                 | - Quality trimming Statistics                                                                                  |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| shovill         | - ``*.contigs.fa``                           | - Final corrected *de novo* assembly                                                                           |
-|                 | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               |
-|                 | - ``*_shovill``                              | - Shovill output directory containing the files contigs.fa, contigs.gfa, shovill.log, and spades.fasta         |
+| shovill         | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               |
+|                 | - ``*_shovill``                              | - Shovill output directory containing the files contigs.fa, contigs.gfa, and shovill.log (optional)            |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | sendsketch      | - ``*.sendsketch.txt``                       | - Sendsketch classification output table                                                                       |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
