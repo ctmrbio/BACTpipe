@@ -25,8 +25,8 @@ determine the best reference genome to use for contig ordering and annotation.
    
 About
 *****
-:Authors: Emilio Rudbeck, Joseph Kirangwa, Sandra Alvarez-Carretero, Fredrik Boulund, Kaisa Thorell
-:Contact: kaisa.thorell@ki.se
+:Authors: Abhinav Sharma, Emilio Rudbeck, Joseph Kirangwa, Sandra Alvarez-Carretero, Fredrik Boulund, Kaisa Thorell
+:Contact: kaisa.thorell@gu.se
 :License: MIT
 
 This is the documentation for BACTpipe version |release|, last updated |today|. 
