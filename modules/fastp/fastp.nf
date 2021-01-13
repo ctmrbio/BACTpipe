@@ -1,14 +1,14 @@
 
 process FASTP {
     tag { pair_id }
-    publishDir "${params.output_dir}/fastp", mode: 'copy', enabled: params.keep_trimmed_fastq 
+    publishDir "${params.output_dir}/fastp", mode: 'copy', enabled: params.keep_trimmed_fastq
 
     input:
     tuple val(pair_id), path(reads)
 
     output:
     tuple val(pair_id), path("${pair_id}_{1,2}.fastp.fq.gz"), emit: shovill_input
-    path "${pair_id}.json", emit: fastp_reports
+    path "${pair_id}.fastp.json", emit: fastp_reports
 
     script:
     """
@@ -17,7 +17,7 @@ process FASTP {
         --in2 ${reads[1]} \
         --out1 ${pair_id}_1.fastp.fq.gz \
         --out2 ${pair_id}_2.fastp.fq.gz \
-        --json ${pair_id}.json \
+        --json ${pair_id}.fastp.json \
         --html ${pair_id}.html \
         --thread ${task.cpus}
     """
@@ -27,6 +27,6 @@ process FASTP {
     touch ${pair_id}_1.fastp.fq.gz
     touch ${pair_id}_2.fastp.fq.gz
     
-    touch ${pair_id}.json
+    touch ${pair_id}.fastp.json
     """
 }
