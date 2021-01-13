@@ -28,4 +28,11 @@ process SCREEN_FOR_CONTAMINANTS {
         ${pair_id}_stain_genus_species.tsv
 
     """
+
+    stub:
+    """
+    touch ${pair_id}_stain_genus_species.tsv
+    touch ${pair_id}_contig.fa
+    path "${pair_id}.sendsketch.txt
+    """
 }
