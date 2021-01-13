@@ -47,17 +47,22 @@ when running BACTpipe, e.g.::
 The ``--shovill_kmers`` flag will modify the kmer legths that shovill will use in it's SPAdes assembly. The 
 following parameters can be easily configured from the command line::
 
-    Parameter name               Default setting
-    output_dir                   BACTpipe_results
-    keep-trimmed                 [FALSE]
-    keep-shovill-output          [FALSE]
-    reads                        [empty]
-    shovill_depth                100
+    Parameter name               Default setting               Description
+    output_dir                   BACTpipe_results              Name of outuput directory
+    keep-trimmed-fastq           [FALSE]                       Output trimmed fastq files from fastp into output_dir
+    keep-shovill-output          [FALSE]                       Output shovill output directory into output_dir
+    reads                        [empty]                       Input fastq files
+    shovill_depth                100                           See the `shovill`_ documentation for details
     shovill_kmers                31,33,55,77,99,127
     shovill_minlen               500
-    prokka_evalue                1e-09
-    prokka_kingdom               Bacteria
+    prokka_evalue                1e-09                         See the `prokka`_ documentation for details
+    prokka_kingdom               Bacteria                      
     prokka_reference             [not used]
+    
+    
+.. _shovill: https://github.com/tseemann/shovill
+.. _prokka: https://github.com/tseemann/prokka
+
 
 To modify any parameter, just add ``--<parameter_name> <new_setting>`` on the
 command line when running BACTpipe, e.g. ``--shovill_depth 75`` to set
@@ -102,7 +107,8 @@ in the Nextflow format, you use ``-c`` on the command line::
 
 .. _params.config: https://github.com/ctmrbio/BACTpipe/blob/master/conf/params.config
 
-.. note::
+Note:
+............................
 
     There are two different type of commandline arguments when running workflows 
     using Nextflow: 1) arguments using double dashes (i.e. ``--reads``) and 2) 
