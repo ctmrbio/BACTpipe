@@ -49,6 +49,8 @@ following parameters can be easily configured from the command line::
 
     Parameter name               Default setting
     output_dir                   BACTpipe_results
+    keep-trimmed                 [FALSE]
+    keep-shovill-output          [FALSE]
     reads                        [empty]
     shovill_depth                100
     shovill_kmers                31,33,55,77,99,127
