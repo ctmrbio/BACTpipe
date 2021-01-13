@@ -45,5 +45,7 @@ In addition to the files listed in the table above, Nextflow also produces two
 report files in the main run folder after the pipeline is finished.  They are
 called ``BACTpipe_report.html`` and ``BACTpipe_timeline.html``. The reports
 shows a summary of overall execution time, resource usage, and all executed
-tasks and their respective run time metrics. 
+tasks and their respective run time metrics. Lastly, Nextflow produces a work 
+directory containing all intermediate files and logs produced in the process. 
+This folder can be removed once the process has completed.
 
