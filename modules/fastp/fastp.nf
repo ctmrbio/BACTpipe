@@ -1,7 +1,7 @@
 
 process FASTP {
     tag { pair_id }
-    publishDir "${params.output_dir}/fastp", mode: 'copy'
+    publishDir "${params.output_dir}/fastp", mode: 'copy', enabled: params.keep_trimmed_fastq 
 
     input:
     tuple val(pair_id), path(reads)
