@@ -10,6 +10,7 @@ process SHOVILL {
     tuple val(pair_id), path("${pair_id}.contigs.fa")
     path("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}")
 
+    script:
     """
     shovill \
          --depth ${params.shovill_depth} \
@@ -19,5 +20,20 @@ process SHOVILL {
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill
     cp ${pair_id}_shovill/contigs.fa ${pair_id}.contigs.fa
+    """
+
+    stub:
+    """
+    touch ${pair_id}.contigs.fa
+
+    mkdir ${pair_id}_shovill/
+    touch ${pair_id}_shovill/${pair_id}.fasta
+    touch ${pair_id}_shovill/${pair_id}.fastg
+    touch ${pair_id}_shovill/${pair_id}.log
+    touch ${pair_id}_shovill/${pair_id}.fa
+    touch ${pair_id}_shovill/${pair_id}.gfa
+    touch ${pair_id}_shovill/${pair_id}.changes
+    touch ${pair_id}_shovill/${pair_id}.hist
+    touch ${pair_id}_shovill/${pair_id}.tab
     """
 }
