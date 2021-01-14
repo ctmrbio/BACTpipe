@@ -1,7 +1,7 @@
 
 process SHOVILL {
     tag { pair_id }
-    publishDir "${params.output_dir}/shovill", mode: 'copy', pattern: "${pair_id}_shovill/*", enabled: params.keep_all_shovill_output
+    publishDir "${params.output_dir}/shovill", mode: 'copy', pattern: "${pair_id}_shovill/*", enabled: params.keep_shovill_output
 
     input:
     tuple val(pair_id), path(reads)
