@@ -10,8 +10,12 @@ process MULTIQC {
     path('multiqc_report.html')
 
     script:
-
     """
     multiqc . --filename multiqc_report.html
+    """
+
+    stub:
+    """
+    touch multiqc_report.html
     """
 }

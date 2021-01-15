@@ -9,9 +9,15 @@ process ASSEMBLY_STATS {
     output:
     file("${pair_id}.assembly_stats.txt")
 
+    script:
     """
     statswrapper.sh \
         in=${pair_id}.contigs.fa \
         > ${pair_id}.assembly_stats.txt        
+    """
+
+    stub:
+    """
+    touch ${pair_id}.assembly_stats.txt
     """
 }

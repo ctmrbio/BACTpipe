@@ -63,5 +63,11 @@ process PROKKA {
         ${prokka_species_argument} \
         ${contigs_file}
     """
+
+    stub:
+    """
+    mkdir ${pair_id}_prokka
+    """
+
 }
 

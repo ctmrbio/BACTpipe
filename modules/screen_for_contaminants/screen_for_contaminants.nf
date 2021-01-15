@@ -2,7 +2,7 @@ nextflow.enable.dsl = 2
 
 process SCREEN_FOR_CONTAMINANTS {
     tag { pair_id }
-    publishDir "${params.output_dir}/sendsketch", mode: 'copy'
+    publishDir "${params.output_dir}/sendsketch", mode: 'copy', pattern: "${pair_id}.sendsketch.txt"
 
     input:
     tuple val(pair_id), path(contigs_file)
@@ -27,5 +27,12 @@ process SCREEN_FOR_CONTAMINANTS {
         $projectDir/resources/gram_stain.txt \
         ${pair_id}_stain_genus_species.tsv
 
+    """
+
+    stub:
+    """
+    touch ${pair_id}_stain_genus_species.tsv
+    touch ${pair_id}_contig.fa
+    touch ${pair_id}.sendsketch.txt
     """
 }
