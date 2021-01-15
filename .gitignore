@@ -1,0 +1,9 @@
+work/
+.nextflow
+.nextflow.log*
+
+*.fastq.gz
+*.fq.gz
+*.fq
+*fastq
+*msh
