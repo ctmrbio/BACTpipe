@@ -25,7 +25,7 @@ folder mentioned above.
 | fastp           | - ``*.fastp.fq.gz``  (optional)              | - Trimmed reads for each sample (For R1 and R2 respectively)                                                   |
 |                 | - ``*fastp.json``                            | - Quality trimming statistics                                                                                  |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| shovill         | - ``*_shovill``   (optional)                 | - Shovill output directory containing the files contigs.fa, contigs.gfa, and shovill.log                       |
+| shovill         | - ``*_shovill``   (optional)                 | - Shovill output directory containing *.fa, *.fasta, *.fastg, *.gfa, *.hist, *.log, *.changes, and *.tab files |
 |                 | - ``*.assembly_stats.txt``                   | - Summary of assembly statistics                                                                               |
 +-----------------+----------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | sendsketch      | - ``*.sendsketch.txt``                       | - Sendsketch classification output table                                                                       |
