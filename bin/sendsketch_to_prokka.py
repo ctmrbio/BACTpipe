@@ -30,11 +30,20 @@ def parse_args():
 
     return args
 
-def parse_sendsketch(sketch_file, stain_file):
+
+def parse_stain_database(stain_file):
+    """Parse gram stain database into dictionary for quick lookups.
+    """
+    stain_db = {}
+    with open(stain_file, "r") as stain:
+        for line in stain:
+            genus, stain = line.split("\t")
+            stain_db[genus.] = stain
+    return stain_db
+
+
+def parse_sendsketch(sketch_file, stain_db):
     """Parse sendsketch.sh output and output if sample is contaminated or not"""
-    output_stain = "Not_in_list"
-    output_species = "taxa"
-    genus = "Multiple"
 
     with open(sketch_file, "r") as sketch:
         sketch_lines = sketch.readlines()
@@ -57,11 +66,10 @@ def parse_sendsketch(sketch_file, stain_file):
         if len(genus_two) == 0 or genus_one == genus_two:
             genus = genus_one
             output_species = species_one.rstrip()
-            with open(stain_file, "r") as stain:
-                for line in stain:
-                    if line.split("\t")[0] == genus:
-                        output_stain = line.rstrip().split("\t")[1]
+            output_stain = stain_db.get(genus, "Not_in_list")
         else:
+            genus = "Multiple"
+            output_species = "taxa"
             output_stain = "Contaminated"
 
     return output_species, genus, output_stain
@@ -70,7 +78,8 @@ def parse_sendsketch(sketch_file, stain_file):
 if __name__ == "__main__":
     args = parse_args()
 
-    output_species, genus, output_stain = parse_sendsketch(args.sketch)
+    stain_db = parse_stain_database(args.stain)
+    output_species, genus, output_stain = parse_sendsketch(args.sketch, stain_db)
 
     with open(args.profile, "w") as f:
         f.writelines(output_stain + "\t" + genus + "\t" + output_species)
