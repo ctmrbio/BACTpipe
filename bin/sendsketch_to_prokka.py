@@ -37,8 +37,8 @@ def parse_stain_database(stain_file):
     stain_db = {}
     with open(stain_file, "r") as stain:
         for line in stain:
-            genus, stain = line.split("\t")
-            stain_db[genus] = stain.rstrip()
+            genus, curr_stain = line.split("\t")
+            stain_db[genus] = curr_stain.rstrip()
     return stain_db
 
 
