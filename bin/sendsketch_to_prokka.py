@@ -30,46 +30,49 @@ def parse_args():
 
     return args
 
-args = parse_args()
+def parse_sendsketch(sketch_file, stain_file):
+    """Parse sendsketch.sh output and output if sample is contaminated or not"""
+    output_stain = "Not_in_list"
+    output_species = "taxa"
+    genus = "Multiple"
 
-sketch_file = args.sketch
-stain_file = args.stain
-profile_file = args.profile
+    with open(sketch_file, "r") as sketch:
+        sketch_lines = sketch.readlines()
 
-output_stain = "Not_in_list"
-output_species = "taxa"
-genus = "Multiple"
+        if not sketch_lines[2].startswith("WKID\t"):
+            print("ERROR: sketch file '{}' does not appear to contain valid sendsketch.sh output".format(args.sketch))
+            exit(1)
 
-with open(sketch_file, "r") as sketch:
-    sketch_lines = sketch.readlines()
+        genus_one_line = sketch_lines[3]
+        try:
+            genus_one = genus_one_line.split("\t")[11].split(" ")[0]
+            species_one = genus_one_line.split("\t")[11].split(" ")[1]
+        except ValueError as e:
+            print("ERROR: Could not parse line 4 of '{}':\n{}".format(args.sketch, genus_one_line))
+            exit(1)
 
-    if not sketch_lines[2].startswith("WKID\t"):
-        print("ERROR: sketch file '{}' does not appear to contain valid sendsketch.sh output".format(args.sketch))
-        exit(1)
+        genus_two_line = sketch_lines[4]
+        genus_two = genus_two_line.split("\t")[11].split(" ")[0]
 
-    genus_one_line = sketch_lines[3]
-    try:
-        genus_one = genus_one_line.split("\t")[11].split(" ")[0]
-        species_one = genus_one_line.split("\t")[11].split(" ")[1]
-    except ValueError as e:
-        print("ERROR: Could not parse line 4 of '{}':\n{}".format(args.sketch, genus_one_line))
-        exit(1)
+        if len(genus_two) == 0 or genus_one == genus_two:
+            genus = genus_one
+            output_species = species_one.rstrip()
+            with open(stain_file, "r") as stain:
+                for line in stain:
+                    if line.split("\t")[0] == genus:
+                        output_stain = line.rstrip().split("\t")[1]
+        else:
+            output_stain = "Contaminated"
 
-    genus_two_line = sketch_lines[4]
-    genus_two = genus_two_line.split("\t")[11].split(" ")[0]
+    return output_species, genus, output_stain
 
-    if len(genus_two) == 0 or genus_one == genus_two:
-        genus = genus_one
-        output_species = species_one.rstrip()
-        with open(stain_file, "r") as stain:
-            for line in stain:
-                if line.split("\t")[0] == genus:
-                    output_stain = line.rstrip().split("\t")[1]
-    else:
-        output_stain = "Contaminated"
 
-print(output_stain+"\t"+genus+"\t"+output_species)
+if __name__ == "__main__":
+    args = parse_args()
 
-with open(profile_file, "w") as f:
-    f.writelines(output_stain + "\t" + genus + "\t" + output_species)
+    output_species, genus, output_stain = parse_sendsketch(args.sketch)
 
+    with open(args.profile, "w") as f:
+        f.writelines(output_stain + "\t" + genus + "\t" + output_species)
+
+    print(output_stain+"\t"+genus+"\t"+output_species)
