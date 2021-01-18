@@ -7,7 +7,7 @@ Actinomyces	pos
 Aermicrobium	pos
 Aerococcus	pos
 Aeromonas	neg
-Aggregatibacter neg
+Aggregatibacter	neg
 Agrobacterium	neg
 Agrococcus	pos
 Alcaligenes	neg
@@ -193,7 +193,7 @@ Tetragenococcus	pos
 Thermotoga	neg
 Vagococcus	pos
 Vampirococcus	neg
-Veillonella neg
+Veillonella	neg
 Verminephrobacter	neg
 Vibrio	neg
 Victivallis	neg
