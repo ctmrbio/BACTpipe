@@ -1,9 +1,40 @@
 #!/usr/bin/env python3
-import sys
+from sys import argv, exit
+import argparse
 
-sketch_file = sys.argv[1]
-stain_file = sys.argv[2]
-profile_file = sys.argv[3]
+"""This script identifies the top ranked genus in output from sendsketch.sh from BBMap.
+
+Script was developed for internal use in the Nextflow pipeline BACTpipe.
+"""
+
+def parse_args():
+    """Parse command line arguments.
+    """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-s", "--sketch",
+        required=True,
+        help="Path to sendsketch.sh output file (txt)")
+    parser.add_argument("-S", "--stain", 
+        required=True,
+        help="Path to text file containing gram staining classifications in "
+            "two-column tab separated format (Genus<TAB>Stain)")
+    parser.add_argument("-p", "--profile", 
+        required=True,
+        help="Path to TSV file with profile information")
+
+    if len(argv) < 2:
+        parser.print_help()
+        exit(1)
+
+    args = parser.parse_args()
+
+    return args
+
+args = parse_args()
+
+sketch_file = args.sketch
+stain_file = args.stain
+profile_file = args.profile
 
 output_stain = "Not_in_list"
 output_species = "taxa"
