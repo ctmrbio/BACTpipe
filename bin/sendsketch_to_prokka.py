@@ -60,8 +60,11 @@ def parse_sendsketch(sketch_file, stain_db):
             print("ERROR: Could not parse line 4 of '{}':\n{}".format(args.sketch, genus_one_line))
             exit(1)
 
-        genus_two_line = sketch_lines[4]
-        genus_two = genus_two_line.split("\t")[11].split(" ")[0]
+        try:
+            genus_two_line = sketch_lines[4]
+            genus_two = genus_two_line.split("\t")[11].split(" ")[0]
+        except ValueError as e:
+            print("ERROR: Could not parse line 5 of '{}':\n{}".format(args.sketch, genus_two_line))
 
         if len(genus_two) == 0 or genus_one == genus_two:
             genus = genus_one
