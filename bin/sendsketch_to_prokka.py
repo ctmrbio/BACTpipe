@@ -43,9 +43,17 @@ genus = "Multiple"
 with open(sketch_file, "r") as sketch:
     sketch_lines = sketch.readlines()
 
+    if not sketch_lines[2].startswith("WKID\t"):
+        print("ERROR: sketch file '{}' does not appear to contain valid sendsketch.sh output".format(args.sketch))
+        exit(1)
+
     genus_one_line = sketch_lines[3]
-    genus_one = genus_one_line.split("\t")[11].split(" ")[0]
-    species_one = genus_one_line.split("\t")[11].split(" ")[1]
+    try:
+        genus_one = genus_one_line.split("\t")[11].split(" ")[0]
+        species_one = genus_one_line.split("\t")[11].split(" ")[1]
+    except ValueError as e:
+        print("ERROR: Could not parse line 4 of '{}':\n{}".format(args.sketch, genus_one_line))
+        exit(1)
 
     genus_two_line = sketch_lines[4]
     genus_two = genus_two_line.split("\t")[11].split(" ")[0]
@@ -59,6 +67,7 @@ with open(sketch_file, "r") as sketch:
                     output_stain = line.rstrip().split("\t")[1]
     else:
         output_stain = "Contaminated"
+
 print(output_stain+"\t"+genus+"\t"+output_species)
 
 with open(profile_file, "w") as f:
