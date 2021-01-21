@@ -109,5 +109,5 @@ workflow.onComplete {
 
 
 workflow.onError {
-    log.error "Oops .. something went wrong!".center(60)
+    println "Oops... Pipeline execution stopped with the following message: ${workflow.errorMessage}".center(60, "=")
 }
