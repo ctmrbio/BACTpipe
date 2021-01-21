@@ -101,13 +101,13 @@ workflow {
 
 workflow.onComplete {
     log.info "".center(60, "=")
-    if (workflow.success) {
-        log.info "BACTpipe workflow completed without errors".center(60)
-    } else {
-        log.error "Oops .. something went wrong!".center(60)
-    }
+    log.info "BACTpipe workflow completed without errors".center(60)
     log.info "Check output files in folder:".center(60)
     log.info "${params.output_dir}".center(60)
     log.info "".center(60, "=")
 }
 
+
+workflow.onError {
+    log.error "Oops .. something went wrong!".center(60)
+}
