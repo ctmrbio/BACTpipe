@@ -23,9 +23,9 @@ process SCREEN_FOR_CONTAMINANTS {
 
     # This process yields the main stdout for prokka
     sendsketch_to_prokka.py \
-        ${pair_id}.sendsketch.txt \
-        $projectDir/resources/gram_stain.txt \
-        ${pair_id}_stain_genus_species.tsv
+        --sketch ${pair_id}.sendsketch.txt \
+        --stain $projectDir/resources/gram_stain.txt \
+        --profile ${pair_id}_stain_genus_species.tsv
 
     """
 
