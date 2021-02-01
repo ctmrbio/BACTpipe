@@ -16,7 +16,7 @@ process SHOVILL {
          --depth ${params.shovill_depth} \
          --kmers ${params.shovill_kmers} \
          --minlen ${params.shovill_minlen} \
-         --cpus ${task.cpus}
+         --cpus ${task.cpus} \
          --R1 ${reads[0]} \
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill
