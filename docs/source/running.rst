@@ -36,10 +36,11 @@ machines to high-performance computing (HPC) clusters.
 
 Changing settings on the command line
 -------------------------------------
-When running BACTpipe, you will most likely have to modify the paths for some
-parameters so that BACTpipe can find reference databases etc. Luckily, it is
-possible to modify several settings for how BACTpipe operates using
-configuration parameters. All changes can be added as command-line arguments
+When running BACTpipe, you may want to modify
+parameters to customize it for your purpose. Luckily, 
+it is possible to modify several settings for how BACTpipe 
+operates using configuration parameters. 
+All changes can be added as command-line arguments
 when running BACTpipe, e.g.::
 
     $ nextflow run ctmrbio/BACTpipe --shovill_kmers 21,33,55,77 --reads 'path/to/reads/*_{1,2}.fastq.gz'
