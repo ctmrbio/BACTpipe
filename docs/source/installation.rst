@@ -7,11 +7,12 @@ Dependencies
 In order to run BACTpipe, you need to have the following programs installed:
 
 - `Java v8+`_ for nextflow 
-- `Nextflow`_ for workflow management
+- `Nextflow`_ for workflow management, more specifically `v21.01.0-edge`_
 - `Conda`_ for installation of workflow tools
 
 .. _Java v8+: https://www.java.com/sv/download/help/download_options.xml
 .. _Nextflow: https://www.nextflow.io/
+.. _v21.01.0-edge: https://github.com/nextflow-io/nextflow/releases/download/v21.01.0-edge/nextflow-21.01.0-edge-all
 .. _Conda: https://docs.conda.io/en/latest/
 
 
