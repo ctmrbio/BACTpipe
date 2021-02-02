@@ -9,15 +9,13 @@ process SCREEN_FOR_CONTAMINANTS {
 
     output:
     path "${pair_id}_stain_genus_species.tsv"
-    tuple val(pair_id), path("${pair_id}_contig.fa")
+    tuple val(pair_id), path("${contigs_file}")
     path "${pair_id}.sendsketch.txt"
 
     script:
     """
-    rename_fasta.py --input ${contigs_file} --output ${pair_id}_contig.fa --pre ${pair_id}_contig
-
     sendsketch.sh \
-        in=${pair_id}_contig.fa \
+        in=${contigs_file} \
         samplerate=0.1 \
         out=${pair_id}.sendsketch.txt
 

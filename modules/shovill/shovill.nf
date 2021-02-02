@@ -8,7 +8,7 @@ process SHOVILL {
     tuple val(pair_id), path(reads)
 
     output:
-    tuple val(pair_id), path("${pair_id}.contigs.fa")
+    tuple val(pair_id), path("${pair_id}_contigs.fa")
     path("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}")
 
     script:
@@ -22,7 +22,10 @@ process SHOVILL {
          --R2 ${reads[1]} \
          --outdir ${pair_id}_shovill
 
-    cp ${pair_id}_shovill/contigs.fa ${pair_id}.contigs.fa
+    rename_fasta.py \
+		--input ${pair_id}_shovill/contigs.fa \
+		--output ${pair_id}_contigs.fa \
+		--pre ${pair_id}_contig
     """
 
     stub:
