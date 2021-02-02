@@ -27,6 +27,8 @@ Changes should fall into one of the following categories:
 - Moved contig renaming script to shovill process from contamination screen
   process.
 - Now publishes `shovill.log` in the output directory by default.
+- Limited the search scope for MultiQC to minimize risk of process timeouts on
+  HPC systems.
 
 ### Removed
 
