@@ -19,6 +19,7 @@ Changes should fall into one of the following categories:
 
 ## [3.1.0] - In development
 ### Added
+- New profile for use on CTMR Gandalf, `ctmr_gandalf`.
 
 ### Changed
 - Renamed profile for CTMR-NAS to `ctmr_nas` to better conform to incoming
