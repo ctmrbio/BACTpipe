@@ -40,6 +40,6 @@ process SHOVILL {
     touch ${pair_id}_shovill/${pair_id}.hist
     touch ${pair_id}_shovill/${pair_id}.tab
 
-    touch ${pair_id}.contigs.fa
+    touch ${pair_id}_contigs.fa
     """
 }
