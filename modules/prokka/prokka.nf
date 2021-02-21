@@ -25,7 +25,7 @@ process PROKKA {
 
     prokka_gramstain_argument = ""
 
-    if( params.prokka_gram ) {
+    if( params.prokka_signal_peptides ) {
         if( stain == "pos" ) {
             prokka_gramstain_argument = "--gram pos"
         } else if( stain == "neg" ) {
