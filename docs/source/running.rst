@@ -59,7 +59,7 @@ following parameters can be easily configured from the command line::
     prokka_evalue                1e-09                         See the `prokka`_ documentation for details
     prokka_kingdom               Bacteria                      
     prokka_reference             [not used]
-    
+    prokka_signal_peptides       false    
     
 .. _shovill: https://github.com/tseemann/shovill
 .. _prokka: https://github.com/tseemann/prokka
