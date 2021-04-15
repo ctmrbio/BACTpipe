@@ -28,12 +28,12 @@ params.help = false
 //================================================================================
 
 
-include { ASSEMBLY_STATS } from "./modules/assembly_stats/assembly_stats.nf"
 include { FASTP } from "./modules/fastp/fastp.nf"
-include { MULTIQC } from "./modules/multiqc/multiqc.nf"
-include { PROKKA } from "./modules/prokka/prokka.nf"
-include { SCREEN_FOR_CONTAMINANTS } from "./modules/screen_for_contaminants/screen_for_contaminants.nf"
+include { CLASSIFY_TAXONOMY } from "./modules/classify_taxonomy/classify_taxonomy.nf"
 include { SHOVILL } from "./modules/shovill/shovill.nf"
+include { ASSEMBLY_STATS } from "./modules/assembly_stats/assembly_stats.nf"
+include { PROKKA } from "./modules/prokka/prokka.nf"
+include { MULTIQC } from "./modules/multiqc/multiqc.nf"
 include { printHelp; printSettings } from "./modules/utils/utils.nf"
 
 
@@ -83,10 +83,10 @@ fastp_input
 workflow {
 
     FASTP(fastp_input)
-    SHOVILL(FASTP.out.shovill_input)
+    CLASSIFY_TAXONOMY(FASTP.out.fastq)
+    SHOVILL(FASTP.out.fastq)
     ASSEMBLY_STATS(SHOVILL.out[0])
-    SCREEN_FOR_CONTAMINANTS(SHOVILL.out[0])
-    PROKKA(SCREEN_FOR_CONTAMINANTS.out[0], SCREEN_FOR_CONTAMINANTS.out[1])
+    PROKKA(SHOVILL.out[0], CLASSIFY_TAXONOMY.out.classification)
     MULTIQC(FASTP.out.fastp_reports.collect(),
             PROKKA.out.collect()
     )
