@@ -13,7 +13,6 @@ BACTPIPE_VERSION = '3.0'
 // Log info
 //================================================================================
 
-
 log.info "".center(60, "=")
 log.info "BACTpipe".center(60)
 log.info "Version ${BACTPIPE_VERSION}".center(60)
@@ -27,7 +26,6 @@ params.help = false
 // Include modules and (soft) override module-level parameters
 //================================================================================
 
-
 include { FASTP } from "./modules/fastp/fastp.nf"
 include { CLASSIFY_TAXONOMY } from "./modules/classify_taxonomy/classify_taxonomy.nf"
 include { SHOVILL } from "./modules/shovill/shovill.nf"
@@ -35,7 +33,6 @@ include { ASSEMBLY_STATS } from "./modules/assembly_stats/assembly_stats.nf"
 include { PROKKA } from "./modules/prokka/prokka.nf"
 include { MULTIQC } from "./modules/multiqc/multiqc.nf"
 include { printHelp; printSettings } from "./modules/utils/utils.nf"
-
 
 //================================================================================
 // Pre-flight checks and info
@@ -54,14 +51,16 @@ if (params.help) {
     exit(0)
 }
 
-
 printSettings()
+
+if ( ! params.kraken2_db ) {
+	log.warn "No Kraken2 database specified. Use --kraken2_db /path/to/db to classify samples and determine gram stain."
+}
 
 
 //================================================================================
 // Prepare channels
 //================================================================================
-
 
 fastp_input = Channel.fromFilePairs(params.reads)
 
@@ -74,14 +73,12 @@ fastp_input
             exit(1)
         }
 
-
 //================================================================================
 // Main workflow
 //================================================================================
 
 
 workflow {
-
     FASTP(fastp_input)
     CLASSIFY_TAXONOMY(FASTP.out.fastq)
     SHOVILL(FASTP.out.fastq)
@@ -94,14 +91,11 @@ workflow {
         FASTP.out.fastp_reports.collect(),
         PROKKA.out.collect()
     )
-
-
 }
 
 //================================================================================
 // Workflow onComplete action
 //================================================================================
-
 
 workflow.onComplete {
     log.info "".center(60, "=")
