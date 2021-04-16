@@ -16,10 +16,11 @@ In order to run BACTpipe, you need to have the following programs installed:
 .. _Conda: https://docs.conda.io/en/latest/
 
 
-
 Install BACTpipe
 ****************
-After installing all the beforementioned dependencies, BACTpipe (`Github repository`_) will itself install the software needed for the process using conda when running the pieline. 
+After installing all the beforementioned dependencies, BACTpipe (`Github
+repository`_) will itself install the software needed for the process using
+conda when running the pieline. 
 
 .. _Github repository: https://github.com/ctmrbio/BACTpipe/tree/master
 

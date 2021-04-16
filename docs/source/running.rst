@@ -7,15 +7,15 @@ several ways to run BACTpipe, but we'll start with the easiest::
     $ nextflow run ctmrbio/BACTpipe --reads 'path/to/reads/*_R{1,2}.fastq.gz'
 
 This will instruct Nextflow to go to the ``ctmrbio`` Github organization to
-download and run the ``BACTpipe`` workflow. The argument
-``--reads`` is used to tell the workflow which input files you want to run
-BACTpipe on. Note that the path to the reads must be enclosed in single quotes
-(``'``), to prevent the shell from automatically expanding asterisks (``*``)
-and curly braces (``{}``).  In the above example, the part of the filename
-matched by the asterisk will be used as the sample name in BACTpipe, and
-``{1,2}`` refers to the pair of FASTQ files for paired-end data.  Input data
-should be in FASTQ, and can be either plain FASTQ, or compressed with gzip or
-bzip2 (with ``.gz`` or ``.bz2`` file suffixes). 
+download and run the ``BACTpipe`` workflow. The argument ``--reads`` is used to
+tell the workflow which input files you want to run BACTpipe on. Note that the
+path to the reads must be enclosed in single quotes (``'``), to prevent the
+shell from automatically expanding asterisks (``*``) and curly braces (``{}``).
+In the above example, the part of the filename matched by the asterisk will be
+used as the sample name in BACTpipe, and ``{1,2}`` refers to the pair of FASTQ
+files for paired-end data.  Input data should be in FASTQ, and can be either
+plain FASTQ, or compressed with gzip or bzip2 (with ``.gz`` or ``.bz2`` file
+suffixes). 
 
 .. note::
 
@@ -36,23 +36,25 @@ machines to high-performance computing (HPC) clusters.
 
 Changing settings on the command line
 -------------------------------------
-When running BACTpipe, you may want to modify
-parameters to customize it for your purpose. Luckily, 
-it is possible to modify several settings for how BACTpipe 
-operates using configuration parameters. 
-All changes can be added as command-line arguments
-when running BACTpipe, e.g.::
+When running BACTpipe, you may want to modify parameters to customize it for
+your purpose. Luckily, it is possible to modify several settings for how
+BACTpipe operates using configuration parameters. All changes can be added as
+command-line arguments when running BACTpipe, e.g.::
 
     $ nextflow run ctmrbio/BACTpipe --shovill_kmers 21,33,55,77 --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
-The ``--shovill_kmers`` flag will modify the kmer legths that shovill will use in it's SPAdes assembly. The 
-following parameters can be easily configured from the command line::
+The ``--shovill_kmers`` flag will modify the kmer lengths that shovill will use
+in its SPAdes assembly. The following parameters can be easily configured from
+the command line::
 
     Parameter name               Default setting               Description
+    reads                        [empty]                       Input fastq files, required!
     output_dir                   BACTpipe_results              Name of outuput directory
     keep-trimmed-fastq           [FALSE]                       Output trimmed fastq files from fastp into output_dir
     keep-shovill-output          [FALSE]                       Output shovill output directory into output_dir
-    reads                        [empty]                       Input fastq files
+    kraken2_db                   [empty]                       Path to Kraken2 database to use for taxonomic classification
+    kraken2_confidence           0.5                           Kraken2 confidence parameter, refer to `kraken2`_ documentation for details
+    kraken2_min_proportion       50.00                         Minimum proportion of reads on sample level to classify sample as containing species 
     shovill_depth                100                           See the `shovill`_ documentation for details
     shovill_kmers                31,33,55,77,99,127
     shovill_minlen               500
@@ -63,7 +65,7 @@ following parameters can be easily configured from the command line::
     
 .. _shovill: https://github.com/tseemann/shovill
 .. _prokka: https://github.com/tseemann/prokka
-
+.. _kraken2: http://ccb.jhu.edu/software/kraken2
 
 To modify any parameter, just add ``--<parameter_name> <new_setting>`` on the
 command line when running BACTpipe, e.g. ``--shovill_depth 75`` to set
@@ -101,8 +103,8 @@ settings at once, since it is possible to download a copy of the default
 configuration settings file directly from Github, `params.config`_, and make
 any changes you want directly in your custom version of ``params.config``. The
 file actually contains some comments explaining how the different variables
-work, to help out when modifying the settings. To run BACTpipe with a custom configuration
-in the Nextflow format, you use ``-c`` on the command line::
+work, to help out when modifying the settings. To run BACTpipe with a custom
+configuration in the Nextflow format, you use ``-c`` on the command line::
 
     $ nextflow run ctmrbio/BACTpipe -c path/to/custom_params.config --reads 'path/to/reads/*_{1,2}.fastq.gz'
 
@@ -111,13 +113,13 @@ in the Nextflow format, you use ``-c`` on the command line::
 Note:
 ............................
 
-There are two different type of commandline arguments when running workflows 
-using Nextflow: 1) arguments using double dashes (i.e. ``--reads``) and 2) 
+There are two different type of commandline arguments when running workflows
+using Nextflow: 1) arguments using double dashes (i.e. ``--reads``) and 2)
 arguments using a single dash (i.e. ``-params-file``). Arguments using double
 dashes are sent to BACTpipe for evaluation, and are typically configuration
-variables that are defined inside BACTpipe. Arguments using a single dash 
-are not visible to BACTpipe but are instead used by Nextflow itself, and 
-typically alters how Nextflow executes BACTpipe. 
+variables that are defined inside BACTpipe. Arguments using a single dash are
+not visible to BACTpipe but are instead used by Nextflow itself, and typically
+alters how Nextflow executes BACTpipe. 
 
 
 Profiles
@@ -128,7 +130,10 @@ load a profile. BACTpipe comes with a few pre-installed profiles:
 * ``standard`` -- For local use on e.g. a laptop or Linux server. This is the
   default profile used if no profile is explicitly specified.
 * ``rackham`` -- For use on the UPPMAX's Rackham HPC system.
-* ``ctmrnas`` -- For use on CTMR's internal analysis server.
+* ``ctmr_nas`` -- For local execution on CTMR's old analysis server.
+* ``ctmr_gandalf`` -- For use on CTMR's Gandalf Slurm HPC system.
+* ``docker`` -- For use with docker containers.
+
 
 .. sidebar:: Cluster profiles
 
@@ -139,8 +144,8 @@ load a profile. BACTpipe comes with a few pre-installed profiles:
     account_name`` on the command line, or by adding it to a custom
     configuration file (see previous section).
  
-To run BACTpipe with a specific profile, use the ``-profile <profilename>`` argument (note the single dash before ``profile``)
-when running, e.g.::
+To run BACTpipe with a specific profile, use the ``-profile <profilename>``
+argument (note the single dash before ``profile``) when running, e.g.::
 
     $ nextflow run ctmrbio/BACTpipe -profile ctmrnas --reads '/proj/projectname/reads/*_{1,2}.fastq.gz'
 
