@@ -39,6 +39,7 @@ Brochothrix	pos
 Budvicia	neg
 Burkholderia	neg
 Caldilinea	neg
+Campylobacter	neg
 Cardiobacterium	neg
 Carnobacterium	pos
 Cellulomonas	pos

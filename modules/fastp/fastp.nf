@@ -8,7 +8,7 @@ process FASTP {
     tuple val(pair_id), path(reads)
 
     output:
-    tuple val(pair_id), path("${pair_id}_{1,2}.fastp.fq.gz"), emit: shovill_input
+    tuple val(pair_id), path("${pair_id}_{1,2}.fastp.fq.gz"), emit: fastq
     path "${pair_id}.fastp.json", emit: fastp_reports
 
     script:
