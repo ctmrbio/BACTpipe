@@ -54,7 +54,7 @@ the command line::
     keep-shovill-output          [FALSE]                       Output shovill output directory into output_dir
     kraken2_db                   [empty]                       Path to Kraken2 database to use for taxonomic classification
     kraken2_confidence           0.5                           Kraken2 confidence parameter, refer to `kraken2`_ documentation for details
-    kraken2_min_proportion       50.00                         Minimum proportion of reads on sample level to classify sample as containing species 
+    kraken2_min_proportion       1.00                          Minimum proportion of reads on sample level to classify sample as containing species 
     shovill_depth                100                           See the `shovill`_ documentation for details
     shovill_kmers                31,33,55,77,99,127
     shovill_minlen               500
