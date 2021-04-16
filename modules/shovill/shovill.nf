@@ -8,7 +8,7 @@ process SHOVILL {
     tuple val(pair_id), path(reads)
 
     output:
-    tuple val(pair_id), path("${pair_id}_contigs.fa")
+    tuple val(pair_id), path("${pair_id}_contigs.fa"), emit: contigs
     path("${pair_id}_shovill/*.{fasta,fastg,log,fa,gfa,changes,hist,tab}")
 
     script:

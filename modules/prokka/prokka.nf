@@ -17,9 +17,34 @@ process PROKKA {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
 
+	genus, species, gramstain = file(classification.resolveSymLink()).getText().split("\t")
+
     prokka_gramstain_argument = ""
+    if( params.prokka_signal_peptides ) {
+        if( gramstain == "pos" ) {
+            prokka_gramstain_argument = "--gram pos"
+        } else if( gramstain == "neg" ) {
+            prokka_gramstain_argument = "--gram neg"
+        } else {
+            prokka_gramstain_argument = ""
+        }
+    } else {
+        prokka_gramstain_argument = ""
+    }
+
     prokka_genus_argument = ""
     prokka_species_argument = ""
+
+    if( genus == "Unknown" ) {
+        prokka_genus_argument = "--genus Unknown"
+    } else {
+        prokka_genus_argument = "--genus ${genus}"
+    }
+    if( species == "unknown" || species == "spp." ) {
+        prokka_species_argument = "--species Unknown"
+    } else {
+        prokka_species_argument = "--species ${species}"
+    }
 
     """
     prokka \

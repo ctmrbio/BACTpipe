@@ -23,8 +23,12 @@ process CLASSIFY_TAXONOMY {
 		--use-names \
 		--paired \
 		${reads[0]} ${reads[1]}
-
-	awk '{if (\$1 > ${params.kraken2_min_proportion} && \$4 == "S") print \$0}' ${pair_id}.kreport > ${pair_id}.taxonomy.txt
+	
+	classify_kreport.py \
+		--kreport ${pair_id}.kreport \
+		--min-proportion ${params.kraken2_min_proportion} \
+		--gramstains ${projectDir}/resources/gram_stain.txt \
+		> ${pair_id}.taxonomy.txt
     """
 
 

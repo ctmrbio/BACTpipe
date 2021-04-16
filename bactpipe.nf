@@ -85,10 +85,14 @@ workflow {
     FASTP(fastp_input)
     CLASSIFY_TAXONOMY(FASTP.out.fastq)
     SHOVILL(FASTP.out.fastq)
-    ASSEMBLY_STATS(SHOVILL.out[0])
-    PROKKA(SHOVILL.out[0], CLASSIFY_TAXONOMY.out.classification)
-    MULTIQC(FASTP.out.fastp_reports.collect(),
-            PROKKA.out.collect()
+    ASSEMBLY_STATS(SHOVILL.out.contigs)
+    PROKKA(
+        SHOVILL.out.contigs,
+        CLASSIFY_TAXONOMY.out.classification
+    )
+    MULTIQC(
+        FASTP.out.fastp_reports.collect(),
+        PROKKA.out.collect()
     )
 
 
