@@ -1,5 +1,9 @@
 nextflow.enable.dsl = 2
 
+if ( ! params.kraken2_db ) {
+	log.warn "No Kraken2 database specified. Use --kraken2_db /path/to/db to classify samples and determine gram stain."
+}
+
 process CLASSIFY_TAXONOMY {
     tag { pair_id }
     publishDir "${params.output_dir}/kraken2", mode: 'copy'
@@ -33,7 +37,6 @@ process CLASSIFY_TAXONOMY {
 		"""
 	}
     else {
-		log.warning "No Kraken2 database specified, sample will not be classified."
 		"""
     	touch ${pair_id}.kreport
         echo "Unknown\tunknown\tUnknown" > ${pair_id}.classification.txt
