@@ -6,7 +6,7 @@ process PROKKA {
 
     input:
     tuple val(pair_id), path(contigs_file)
-	path(classification)
+    path(classification)
 
     output:
     path("${pair_id}_prokka")
@@ -17,7 +17,10 @@ process PROKKA {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
 
-	genus, species, gramstain = file(classification.resolveSymLink()).getText().split("\t")
+    classification = file(classification.resolveSymLink()).getText().split("\t")
+	genus = classification[0]
+	species = classification[1]
+	gramstain = classification[2]
 
     prokka_gramstain_argument = ""
     if( params.prokka_signal_peptides ) {
@@ -28,18 +31,16 @@ process PROKKA {
         } else {
             prokka_gramstain_argument = ""
         }
-    } else {
-        prokka_gramstain_argument = ""
     }
 
     prokka_genus_argument = ""
-    prokka_species_argument = ""
-
     if( genus == "Unknown" ) {
         prokka_genus_argument = "--genus Unknown"
     } else {
         prokka_genus_argument = "--genus ${genus}"
     }
+
+    prokka_species_argument = ""
     if( species == "unknown" || species == "spp." ) {
         prokka_species_argument = "--species Unknown"
     } else {
