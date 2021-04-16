@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from sys import argv, exit, stderr
+from collections import defaultdict
 import argparse
 
 """Identify top ranked genus in output report from Kraken2.
@@ -19,7 +20,6 @@ def parse_args():
         default=50.00,
         help="Minimum proportion on species level [%(default)s].")
     parser.add_argument("-g", "--gramstains", 
-        required=True,
         help="Path to text file containing gram staining classifications in "
             "two-column tab separated format (Genus<TAB>Stain)")
 
@@ -33,11 +33,14 @@ def parse_args():
 
 
 def parse_gramstains(gramstains):
-    gramstain_db = {}
-    with open(gramstains) as f:
-        for line in f:
-            genus, gramstain = line.rstrip().split("\t")
-            gramstain_db[genus] = gramstain
+    gramstain_db = defaultdict(lambda: "Unknown")
+    try:
+        with open(gramstains) as f:
+            for line in f:
+                genus, gramstain = line.rstrip().split("\t")
+                gramstain_db[genus] = gramstain
+    except TypeError as e:
+        print("WARNING: No gramstain database specified, gramstain set to Unknown", file=stderr)
     return gramstain_db
 
 
@@ -72,14 +75,16 @@ def classify(detected_species, min_proportion, gramstain_db):
     output_species = "unknown"
 
     genera = set(genus for genus, species in taxon_names)
-    if len(genera) == 1:
+    if len(genera) > 1:
+        output_genus = "Mixed"
+    elif len(genera) == 1:
         output_genus = genera.pop()
 
     species = set(species for genus, species in taxon_names)
-    if len(species) == 1:
-        output_species = species.pop()
-    elif output_genus != "Unknown":
+    if (len(species) > 1) and output_genus:
         output_species = "spp."
+    elif len(species) == 1:
+        output_species = species.pop()
 
     output_gramstain = gramstain_db.get(output_genus, "Unknown")
 

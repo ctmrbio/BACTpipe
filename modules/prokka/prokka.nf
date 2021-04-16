@@ -36,6 +36,8 @@ process PROKKA {
     prokka_genus_argument = ""
     if( genus == "Unknown" ) {
         prokka_genus_argument = "--genus Unknown"
+    } else if ( genus == "Mixed" ) {
+        prokka_genus_argument = "--genus Mixed"
     } else {
         prokka_genus_argument = "--genus ${genus}"
     }
