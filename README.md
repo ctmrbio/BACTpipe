@@ -6,7 +6,7 @@ paired input reads, tries to assess if the sample contains mixed or pure
 isolates, performs *de novo* assembly, and annotates the assembled genome.
 BACTpipe uses Nextflow as a workflow manager. 
 
-![BACTpipe flowchart](./docs/source/img/BACTpipe_3_flow_new.png)
+![BACTpipe flowchart](./docs/source/img/BACTpipe_3-1_flow.png)
 
 ## Documentation
 Complete documentation is available at https://bactpipe.readthedocs.io. 
