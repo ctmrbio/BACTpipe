@@ -50,8 +50,8 @@ the command line::
     Parameter name               Default setting               Description
     reads                        [empty]                       Input fastq files, required!
     output_dir                   BACTpipe_results              Name of outuput directory
-    keep-trimmed-fastq           [FALSE]                       Output trimmed fastq files from fastp into output_dir
-    keep-shovill-output          [FALSE]                       Output shovill output directory into output_dir
+    keep_trimmed_fastq           [FALSE]                       Output trimmed fastq files from fastp into output_dir
+    keep_shovill_output          [FALSE]                       Output shovill output directory into output_dir
     kraken2_db                   [empty]                       Path to Kraken2 database to use for taxonomic classification
     kraken2_confidence           0.5                           Kraken2 confidence parameter, refer to `kraken2`_ documentation for details
     kraken2_min_proportion       1.00                          Minimum proportion of reads on sample level to classify sample as containing species 
