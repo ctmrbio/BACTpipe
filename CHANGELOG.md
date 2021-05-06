@@ -20,6 +20,9 @@ Changes should fall into one of the following categories:
 ## [3.1.0] - In development
 ### Added
 - New profile for use on CTMR Gandalf, `ctmr_gandalf`.
+- Kraken2 added for taxonomic profiling, replaces sendsketch as contamination
+  screen.
+- Docker profile
 
 ### Changed
 - Renamed profile for CTMR-NAS to `ctmr_nas` to better conform to incoming
@@ -31,6 +34,7 @@ Changes should fall into one of the following categories:
   HPC systems.
 
 ### Removed
+- Sendsketch replaced with Kraken2
 
 ## [3.0.0] - 2021-01-15
 ### Added
