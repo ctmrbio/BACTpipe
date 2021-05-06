@@ -12,7 +12,7 @@ BACTpipe uses Nextflow as a workflow manager.
 Complete documentation is available at https://bactpipe.readthedocs.io. 
 
 ## Quick-start
-You need to have [Nextflow](https://www.nextflow.io), more specifically [v21.01.0-edge](https://github.com/nextflow-io/nextflow/releases/download/v21.01.0-edge/nextflow-21.01.0-edge-all) and [conda](https://conda.io/docs/) installed.
+You need to have [Nextflow](https://www.nextflow.io), more specifically [v21.04.0](https://github.com/nextflow-io/nextflow/releases/download/v21.04.0/nextflow-21.04.0-all) and [conda](https://conda.io/docs/) installed.
 When running with the default local profile all other software will be installed into local environments by conda througout the process. 
 
 ## Run BACTpipe
