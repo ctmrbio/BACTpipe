@@ -4,18 +4,12 @@
 nextflow.enable.dsl = 2
 
 //================================================================================
-// Constants
-//================================================================================
-
-BACTPIPE_VERSION = '3.0'
-
-//================================================================================
 // Log info
 //================================================================================
 
 log.info "".center(60, "=")
 log.info "BACTpipe".center(60)
-log.info "Version ${BACTPIPE_VERSION}".center(60)
+log.info "Version $workflow.manifest.version".center(60)
 log.info "Bacterial whole genome analysis pipeline".center(60)
 log.info "https://bactpipe.readthedocs.io".center(60)
 log.info "".center(60, "=")
@@ -41,7 +35,8 @@ include { printHelp; printSettings } from "./modules/utils/utils.nf"
 if (workflow['profile'] in params.profiles_that_require_project) {
     if (!params.project) {
         log.error "BACTpipe requires that you set the 'project' parameter when running the ${workflow['profile']} profile.\n".center(60) +
-                "Specify --project <project_name> on the command line, or tuple it in a custom configuration file.".center(60)
+                "Specify --project <project_name> on the command line, or add it to a custom configuration file.".center(60) + 
+                "Refer to the official docs for more information."
         exit(1)
     }
 }
@@ -54,7 +49,7 @@ if (params.help) {
 printSettings()
 
 if ( ! params.kraken2_db ) {
-	log.warn "No Kraken2 database specified. Use --kraken2_db /path/to/db to classify samples and determine gram stain."
+	log.warn "No Kraken2 database specified. Use --kraken2_db /path/to/db to use Kraken2 to classify samples and determine gram stain."
 }
 
 
@@ -68,7 +63,8 @@ fastp_input
         .ifEmpty {
             log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
                     "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
-                    "Specify --help for a summary of available commands."
+                    "Specify --help for a summary of available commands. " +
+                    "Refer to the official docs for more information."
             printHelp()
             exit(1)
         }
