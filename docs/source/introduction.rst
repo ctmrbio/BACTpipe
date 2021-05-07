@@ -3,17 +3,21 @@ BACTpipe introduction and overview
 BACTpipe uses whole genome shotgun sequenced, paired end reads, to assemble and
 annotate single bacterial genomes.
 
-BACTpipe's analysis flow starts with pre-processing of
-paired end reads in fastq format using ``fastp``, and *de-novo* assembly using ``Shovill``.
+BACTpipe's analysis flow starts with pre-processing of paired end reads in
+fastq format using ``fastp``, followed by taxonomic classification and gram
+stain identification by ``Kraken2``. This step also identifies if the sample is
+potentially contaminated, i.e. contains more than one species. Then the sample
+is *de-novo* assembled using ``Shovill``. The draft genome fasta file headers
+are renamed to get unique genome-specific headers. 
 
-Next, the draft genome fasta file headers are renamed to get unique genome-specific headers and assessment of the taxonomical classification of the assembly is performed using ``sendsketch.sh``. In this process the assembly will also be flagged if it is contaminated, i.e. contains more than one species. Lastly, the genus, species and Gram-staining information will be extracted for later use in the annotation process.
-
-Finally, genome annotation is performed using ``prokka`` and basic statistics about the assembly and annotation are collected into a
-HTML report using ``MultiQC``.
+Finally, genome annotation is performed using ``prokka`` with genus, species,
+and gram stain information (if possible to uniquely identify in the Kraken2
+step) added. Lastly, basic statistics about the assembly and annotation are
+collected into a HTML report using ``MultiQC``.
 
 BACTpipe is implemented in Nextflow and an overview of the workflow can be seen
-below. Output files are marked in blue.
+below with the different output files at the bottom.
 
-.. image:: img/BACTpipe-flowchart-New.jpg
+.. image:: img/BACTpipe_3-1_flow.png
     :alt: Flowchart showing BACTpipe workflow.
     :align: center

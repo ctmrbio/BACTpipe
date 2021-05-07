@@ -17,6 +17,25 @@ Changes should fall into one of the following categories:
 - `Removed`, for now removed features.
 - `Fixed`, for any bug fixes.
 
+## [3.1.0] - In development
+### Added
+- New profile for use on CTMR Gandalf, `ctmr_gandalf`.
+- Kraken2 added for taxonomic profiling, replaces sendsketch as contamination
+  screen.
+- Docker profile
+
+### Changed
+- Renamed profile for CTMR-NAS to `ctmr_nas` to better conform to incoming
+  profiles.
+- Moved contig renaming script to shovill process from contamination screen
+  process.
+- Now publishes `shovill.log` in the output directory by default.
+- Limited the search scope for MultiQC to minimize risk of process timeouts on
+  HPC systems.
+
+### Removed
+- Sendsketch replaced with Kraken2
+
 ## [3.0.0] - 2021-01-15
 ### Added
 - A script was implemented that renames the headers of fasta-files.
@@ -26,10 +45,12 @@ Changes should fall into one of the following categories:
 	with assembled genomes from prokka (default = only from prokka)
 - Contamination screen is now parsed and used as taxonomic info for prokka.
 - MultiQC now incorporates the trimmed QC reports as well.
-- User now receives a file with compiled assemblystats, generated via BBmap's statswrapper. 
+- User now receives a file with compiled assemblystats, generated via BBmap's
+  statswrapper. 
 
 ### Changed
-- QC and trimming now done by FastP, not BBduk and FastQC, resulting in a much faster runtime.
+- QC and trimming now done by FastP, not BBduk and FastQC, resulting in a much
+  faster runtime.
 - Contamination screening now done by Sendsketch.
 - Contamination now ascertained from assemblies, not trimmed reads.
 - BACTpipe now updated to DLS2-format.
