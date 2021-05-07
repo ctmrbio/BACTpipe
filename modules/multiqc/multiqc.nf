@@ -11,7 +11,7 @@ process MULTIQC {
 
     script:
     """
-    multiqc . --filename multiqc_report.html
+    multiqc *.json */*.txt --filename multiqc_report.html
     """
 
     stub:

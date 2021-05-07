@@ -7,6 +7,7 @@ Actinomyces	pos
 Aermicrobium	pos
 Aerococcus	pos
 Aeromonas	neg
+Aggregatibacter	neg
 Agrobacterium	neg
 Agrococcus	pos
 Alcaligenes	neg
@@ -38,6 +39,7 @@ Brochothrix	pos
 Budvicia	neg
 Burkholderia	neg
 Caldilinea	neg
+Campylobacter	neg
 Cardiobacterium	neg
 Carnobacterium	pos
 Cellulomonas	pos
@@ -192,6 +194,7 @@ Tetragenococcus	pos
 Thermotoga	neg
 Vagococcus	pos
 Vampirococcus	neg
+Veillonella	neg
 Verminephrobacter	neg
 Vibrio	neg
 Victivallis	neg

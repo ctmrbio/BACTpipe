@@ -5,46 +5,48 @@ process PROKKA {
     publishDir "${params.output_dir}/prokka", mode: 'copy'
 
     input:
-    path(profile_file)
     tuple val(pair_id), path(contigs_file)
+    path(classification)
 
     output:
     path("${pair_id}_prokka")
 
     script:
-
-    def bacterial_profile = file(profile_file.resolveSymLink()).getText().split("\t")
-    def stain = bacterial_profile[0]
-    def genus = bacterial_profile[1]
-    def species = bacterial_profile[2]
-
     prokka_reference_argument = ""
     if( params.prokka_reference ) {
         prokka_reference_argument = "--proteins ${params.prokka_reference}"
     }
 
-    prokka_gramstain_argument = ""
+    classification = file(classification.resolveSymLink()).getText().split("\t")
+	genus = classification[0]
+	species = classification[1]
+	gramstain = classification[2]
 
-    if( params.prokka_gram ) {
-        if( stain == "pos" ) {
+    prokka_gramstain_argument = ""
+    if( params.prokka_signal_peptides ) {
+        if( gramstain == "pos" ) {
             prokka_gramstain_argument = "--gram pos"
-        } else if( stain == "neg" ) {
+        } else if( gramstain == "neg" ) {
             prokka_gramstain_argument = "--gram neg"
         } else {
             prokka_gramstain_argument = ""
         }
-    } else {
-        prokka_gramstain_argument = ""
     }
 
     prokka_genus_argument = ""
-    prokka_species_argument = ""
-
-    if( genus != "Multiple" ) {
-        prokka_genus_argument = "--genus ${genus}"
-        prokka_species_argument = "--species ${species}"
+    if( genus == "Unknown" ) {
+        prokka_genus_argument = "--genus Unknown"
+    } else if ( genus == "Mixed" ) {
+        prokka_genus_argument = "--genus Mixed"
     } else {
-        prokka_genus_argument = "--genus Multiple_taxa"
+        prokka_genus_argument = "--genus ${genus}"
+    }
+
+    prokka_species_argument = ""
+    if( species == "unknown" || species == "spp." ) {
+        prokka_species_argument = "--species Unknown"
+    } else {
+        prokka_species_argument = "--species ${species}"
     }
 
     """
