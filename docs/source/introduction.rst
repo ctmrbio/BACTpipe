@@ -16,7 +16,7 @@ step) added. Lastly, basic statistics about the assembly and annotation are
 collected into a HTML report using ``MultiQC``.
 
 BACTpipe is implemented in Nextflow and an overview of the workflow can be seen
-below. Output files are marked in blue.
+below with the different output files at the bottom.
 
 .. image:: img/BACTpipe-3-1_flow.png
     :alt: Flowchart showing BACTpipe workflow.
