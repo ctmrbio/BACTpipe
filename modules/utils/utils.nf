@@ -25,7 +25,7 @@ def printHelp() {
 def printSettings() {
     log.info "Running with the following settings:".center(60)
     for (option in params) {
-        if (option.key in ['cluster-options', 'help']) {
+        if (option.key in ['cluster-options', 'help', 'profiles_that_require_project']) {
             continue
         }
         log.info "${option.key}: ".padLeft(30) + "${option.value}"
