@@ -49,13 +49,13 @@ Citing BACTpipe
 ***************
 If you find BACTpipe useful and publish something using BACTpipe, please cite:
 
-| Joseph Kirangwa, Sandra Alvarez-Carretero, Fredrik Boulund, Kaisa Thorell (2017).
+| Emilio Rudbeck; Abhinav Sharma; Joseph Kirangwa; Yue Hu; Fredrik Boulund; Kaisa Thorell (2017-2021).
 | BACTpipe: bacterial whole genome sequence assembly and annotation pipeline.
 | https://github.com/ctmrbio/BACTpipe
-| DOI: https://doi.org/10.5281/zenodo.1254247
+| DOI: https://doi.org/10.5281/zenodo.4742358
 
-.. image:: https://zenodo.org/badge/83326100.svg
-   :target: https://zenodo.org/badge/latestdoi/83326100
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4742358.svg
+   :target: https://doi.org/10.5281/zenodo.4742358
 
 Indices and tables
 ==================
