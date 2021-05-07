@@ -52,6 +52,10 @@ if ( ! params.kraken2_db ) {
 	log.warn "No Kraken2 database specified. Use --kraken2_db /path/to/db to use Kraken2 to classify samples and determine gram stain."
 }
 
+if ( ! params.reads ) {
+    log.error "No reads specified. It is required to specify --reads 'path/to/*_{1,2}.fastq.gz' (note the single quotes)"
+    exit(1)
+}
 
 //================================================================================
 // Prepare channels
