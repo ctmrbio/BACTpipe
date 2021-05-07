@@ -18,6 +18,6 @@ collected into a HTML report using ``MultiQC``.
 BACTpipe is implemented in Nextflow and an overview of the workflow can be seen
 below. Output files are marked in blue.
 
-.. image:: img/BACTpipe-3-1_flow.jpg
+.. image:: img/BACTpipe-3-1_flow.png
     :alt: Flowchart showing BACTpipe workflow.
     :align: center
