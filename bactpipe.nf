@@ -83,10 +83,11 @@ workflow {
     CLASSIFY_TAXONOMY(FASTP.out.fastq)
     SHOVILL(FASTP.out.fastq)
     ASSEMBLY_STATS(SHOVILL.out.contigs)
-    PROKKA(
-        SHOVILL.out.contigs,
-        CLASSIFY_TAXONOMY.out.classification
-    )
+
+    prokka_ch = (SHOVILL.out.contigs).join(CLASSIFY_TAXONOMY.out.classification)
+
+    PROKKA(prokka_ch)
+
     MULTIQC(
         FASTP.out.fastp_reports.collect(),
         PROKKA.out.collect()
@@ -109,3 +110,4 @@ workflow.onComplete {
 workflow.onError {
     println "Oops... Pipeline execution stopped with the following message: ${workflow.errorMessage}".center(60, "=")
 }
+

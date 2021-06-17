@@ -42,6 +42,6 @@ process CLASSIFY_TAXONOMY {
     stub:
     """
     touch ${pair_id}.kreport
-    touch ${pair_id}.classificaton.txt
+    touch ${pair_id}.classification.txt
     """
 }
