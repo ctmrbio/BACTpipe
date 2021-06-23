@@ -8,8 +8,8 @@ process CLASSIFY_TAXONOMY {
     tuple val(pair_id), path(reads)
 
     output:
-    path "${pair_id}.kreport"
-    path "${pair_id}.classification.txt", emit: classification
+    path("${pair_id}.kreport")
+    tuple val("${pair_id}"), path("${pair_id}.classification.txt"), emit: classification
 
     script:
 	if ( params.kraken2_db ) {
